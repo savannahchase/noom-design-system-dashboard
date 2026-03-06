@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --lagoon: #05727A;
+      --lagoon-dark: #045B62;
+      --blueberry: #15333D;
+      --skylight: #DCF5F0;
+      --sky: #B4E0D8;
+      --off-white: #F6F4EE;
+      --sand: #E4DECE;
+      --black: #191717;
+      --white: #FFFFFF;
+      --grey1: #E8E8E8;
+      --grey2: #AAAAAA;
+      --grey3: #666666;
+      --grey4: #444444;
+      --grey5: #F4F4F4;
+      --kale: #316700;
+      --mint: #C8E3B1;
+      --mint-light: #E3F1D8;
+      --error-red: #C13515;
+      --error-light: #FFEBEE;
+      --warning-amber: #B8860B;
+      --warning-light: #FFF3E0;
+      --font-headline: 'Untitled Serif', Georgia, serif;
+      --font-body: 'Untitled Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-label: 'Untitled Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-pill: 25px;
+      --radius-button: 56px;
+      --shadow-neo: 0px 0px 4px 1px rgba(0,0,0,0.06), 1px 2px 6px 0px rgba(0,0,0,0.08);
+      --sidebar-width: 220px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--grey5);
+      color: var(--black);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+      border-right: 1px solid var(--grey1);
+    }
+
+    .sidebar-header {
+      padding: 28px 20px 20px;
+    }
+
+    .sidebar-header h1 {
+      font-family: var(--font-headline);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--black);
+      line-height: 1.3;
+    }
+
+    .sidebar-header p {
+      font-family: var(--font-label);
+      font-size: 10px;
+      font-weight: 300;
+      color: var(--grey2);
+      margin-top: 2px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 8px 10px;
+      overflow-y: auto;
+    }
+
+    .nav-section-label {
+      font-family: var(--font-label);
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--grey2);
+      padding: 16px 10px 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--grey3);
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .nav-item:hover { background: var(--grey5); color: var(--black); }
+    .nav-item.active { background: var(--grey5); color: var(--black); font-weight: 500; }
+
+    .nav-icon {
+      width: 18px; height: 18px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--grey2);
+    }
+    .nav-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-item.active .nav-icon { color: var(--black); }
+
+    .nav-badge {
+      margin-left: auto;
+      font-family: var(--font-label);
+      font-size: 11px; font-weight: 300;
+      color: var(--grey2);
+      padding: 1px 6px;
+      border-radius: var(--radius-pill);
+    }
+    .nav-item.active .nav-badge { color: var(--black); font-weight: 600; }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--grey1);
+      font-size: 11px;
+      color: var(--grey2);
+    }
+
+    /* ── Main ── */
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--grey1);
+      padding: 20px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
+    }
+
+    .top-bar-left h2 {
+      font-family: var(--font-body);
+      font-size: 20px; font-weight: 600; line-height: 1.3;
+    }
+    .top-bar-left .team-prefix {
+      font-family: var(--font-label);
+      font-size: 11px; font-weight: 300; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--grey2);
+      display: block; margin-bottom: 2px;
+    }
+
+    .top-bar-actions { display: flex; gap: 8px; align-items: center; }
+
+    .content { padding: 32px 40px 64px; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font-body); font-size: 13px; font-weight: 500;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      border: none; cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .btn-primary { background: var(--black); color: var(--white); }
+    .btn-primary:hover { background: var(--grey4); }
+    .btn-secondary { background: var(--white); color: var(--black); border: 1px solid var(--grey1); }
+    .btn-secondary:hover { background: var(--grey5); }
+    .btn-ghost { background: transparent; color: var(--grey3); padding: 6px 10px; }
+    .btn-ghost:hover { color: var(--black); background: var(--grey5); }
+    .btn-sm { font-size: 12px; padding: 5px 12px; }
+
+    /* ── Stat Cards ── */
+    .stat-row { display: flex; gap: 12px; margin-bottom: 28px; }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--grey1);
+      border-radius: var(--radius-md);
+      padding: 16px 20px; flex: 1;
+    }
+    .stat-card .stat-value {
+      font-family: var(--font-body);
+      font-size: 28px; font-weight: 600; color: var(--black);
+    }
+    .stat-card .stat-label {
+      font-family: var(--font-label); font-size: 11px; font-weight: 300;
+      color: var(--grey2); margin-top: 2px;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .stat-card .stat-sub {
+      font-size: 12px; color: var(--grey3); margin-top: 6px;
+    }
+    .stat-card .stat-bar {
+      height: 4px; background: var(--grey1); border-radius: 2px;
+      margin-top: 10px; overflow: hidden;
+    }
+    .stat-card .stat-bar-fill {
+      height: 100%; border-radius: 2px;
+      transition: width 0.6s ease;
+    }
+
+    .stat-card.stat-lagoon { border-left: 3px solid var(--lagoon); }
+    .stat-card.stat-lagoon .stat-value { color: var(--lagoon); }
+    .stat-card.stat-kale { border-left: 3px solid var(--kale); }
+    .stat-card.stat-kale .stat-value { color: var(--kale); }
+    .stat-card.stat-warning { border-left: 3px solid var(--warning-amber); }
+    .stat-card.stat-warning .stat-value { color: var(--warning-amber); }
+    .stat-card.stat-error { border-left: 3px solid var(--error-red); }
+    .stat-card.stat-error .stat-value { color: var(--error-red); }
+
+    /* ── Section Headers ── */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-header h3 {
+      font-family: var(--font-label); font-size: 12px; font-weight: 300;
+      text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey3);
+    }
+    .section-count {
+      font-size: 12px; color: var(--grey2);
+    }
+
+    /* ── Filters ── */
+    .filters {
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .search-input {
+      padding: 7px 12px; border: 1px solid var(--grey1);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body); font-size: 13px;
+      background: var(--white); color: var(--black);
+      outline: none; width: 240px;
+      transition: border-color 0.15s;
+    }
+    .search-input::placeholder { color: var(--grey2); }
+    .search-input:focus { border-color: var(--lagoon); }
+
+    .filter-pill {
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--grey1);
+      background: var(--white);
+      font-family: var(--font-label); font-size: 12px; font-weight: 300;
+      color: var(--grey3);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-pill:hover { border-color: var(--grey2); color: var(--grey4); }
+    .filter-pill.active { background: var(--black); color: var(--white); border-color: var(--black); }
+
+    .filter-divider { width: 1px; height: 20px; background: var(--grey1); }
+
+    .view-toggle { display: flex; }
+    .view-toggle-btn {
+      background: none; border: 1px solid var(--grey1); cursor: pointer;
+      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      color: var(--grey2); transition: all 0.15s;
+    }
+    .view-toggle-btn:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+    .view-toggle-btn:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; border-left: none; }
+    .view-toggle-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+    .view-toggle-btn:hover:not(.active) { border-color: var(--grey2); color: var(--grey3); }
+
+    .spacer { flex: 1; }
+
+    /* ── Component Table ── */
+    .table-wrap {
+      background: var(--white);
+      border: 1px solid var(--grey1);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead th {
+      text-align: left;
+      font-family: var(--font-label);
+      font-size: 10px; font-weight: 300;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--grey2);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--grey1);
+      white-space: nowrap;
+      position: sticky; top: 0;
+      background: var(--white);
+      z-index: 10;
+    }
+    thead th:first-child { padding-left: 20px; }
+
+    tbody tr { transition: background 0.1s; }
+    tbody tr:hover { background: var(--grey5); }
+    tbody td {
+      padding: 10px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--grey5);
+      vertical-align: middle;
+    }
+    tbody td:first-child { padding-left: 20px; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    .comp-name { font-weight: 600; color: var(--black); }
+
+    .category-label {
+      font-family: var(--font-label); font-size: 11px; font-weight: 300;
+      color: var(--grey2); text-transform: uppercase; letter-spacing: 0.04em;
+    }
+
+    /* ── Tier Badges ── */
+    .tier {
+      font-family: var(--font-label); font-size: 10px; font-weight: 300;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      padding: 2px 8px; border-radius: var(--radius-pill);
+    }
+    .tier-1 { background: var(--error-light); color: var(--error-red); }
+    .tier-2 { background: var(--warning-light); color: var(--warning-amber); }
+    .tier-3 { background: var(--skylight); color: var(--lagoon); }
+    .tier-solid { background: var(--mint-light); color: var(--kale); }
+
+    /* ── Status Pills ── */
+    .pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: var(--radius-pill);
+      font-family: var(--font-label); font-size: 11px; font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+    .pill-dot {
+      width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+    }
+    .pill-done { background: var(--mint-light); color: var(--kale); }
+    .pill-done .pill-dot { background: var(--kale); }
+    .pill-partial { background: var(--warning-light); color: var(--warning-amber); }
+    .pill-partial .pill-dot { background: var(--warning-amber); }
+    .pill-missing { background: var(--error-light); color: var(--error-red); }
+    .pill-missing .pill-dot { background: var(--error-red); }
+    .pill-na { background: var(--grey5); color: var(--grey2); }
+    .pill-na .pill-dot { background: var(--grey2); }
+
+    /* ── Code Location ── */
+    .loc {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: var(--radius-pill);
+      font-family: var(--font-label); font-size: 11px; font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+    .loc-wax { background: var(--mint-light); color: var(--kale); }
+    .loc-buyflow { background: #F3E8FF; color: #7C3AED; }
+    .loc-both { background: var(--warning-light); color: var(--warning-amber); }
+    .loc-proto { background: #E8F0FE; color: #1565C0; }
+    .loc-none { background: var(--error-light); color: var(--error-red); }
+    .loc-na { background: var(--grey5); color: var(--grey2); }
+
+    /* ── Readiness Bar ── */
+    .readiness {
+      display: flex; height: 4px; border-radius: 2px;
+      overflow: hidden; background: var(--grey1); width: 72px;
+    }
+    .readiness-seg { height: 100%; }
+    .readiness-seg.r-done { background: var(--kale); }
+    .readiness-seg.r-partial { background: var(--warning-amber); }
+
+    /* ── Section Group Row ── */
+    .group-row td {
+      background: var(--grey5);
+      font-family: var(--font-label);
+      font-weight: 300; font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--grey3);
+      padding: 8px 20px;
+      border-bottom: 1px solid var(--grey1);
+    }
+
+    /* ── Card Grid View ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 12px;
+    }
+
+    .comp-card {
+      background: var(--white);
+      border: 1px solid var(--grey1);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .comp-card:hover { border-color: var(--grey2); }
+
+    .comp-card-head {
+      padding: 14px 16px 10px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--grey5);
+    }
+    .comp-card-head .comp-name { font-size: 14px; }
+
+    .comp-card-body { padding: 12px 16px; }
+
+    .comp-card-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 0; font-size: 13px; color: var(--grey4);
+    }
+    .comp-card-row + .comp-card-row { border-top: 1px solid var(--grey5); }
+    .comp-card-row .row-label { font-family: var(--font-label); font-size: 11px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.04em; color: var(--grey2); }
+
+    /* ── Token Cards ── */
+    .tokens-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 12px;
+    }
+
+    .token-card {
+      background: var(--white);
+      border: 1px solid var(--grey1);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .token-card-head {
+      padding: 14px 16px;
+      font-size: 14px; font-weight: 600;
+      border-bottom: 1px solid var(--grey1);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .token-card-head .token-count {
+      font-family: var(--font-label); font-size: 11px; font-weight: 300;
+      color: var(--grey2); text-transform: uppercase; letter-spacing: 0.04em;
+    }
+
+    .token-card-body { padding: 12px 16px; }
+
+    .token-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 5px 0; font-size: 13px;
+    }
+    .token-row + .token-row { border-top: 1px solid var(--grey5); }
+    .token-name { font-weight: 500; display: flex; align-items: center; gap: 8px; }
+    .token-val { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; color: var(--grey3); }
+    .token-swatch {
+      width: 16px; height: 16px; border-radius: 3px;
+      border: 1px solid var(--grey1); flex-shrink: 0;
+    }
+    .token-pills { display: flex; gap: 4px; }
+
+    /* ── Phase Strip ── */
+    .phase-strip {
+      display: flex; gap: 6px; flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .phase-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: var(--radius-pill);
+      font-family: var(--font-label); font-size: 11px; font-weight: 300;
+      letter-spacing: 0.02em;
+      border: 1px solid var(--grey1); background: var(--white);
+      color: var(--grey3); cursor: pointer; transition: all 0.15s;
+      user-select: none;
+    }
+    .phase-chip:hover { border-color: var(--grey2); }
+    .phase-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+    .phase-chip.p-done { border-color: var(--kale); background: var(--mint-light); color: var(--kale); }
+    .phase-chip.p-done .phase-dot { background: var(--kale); }
+    .phase-chip.p-active { border-color: var(--lagoon); background: var(--skylight); color: var(--lagoon); }
+    .phase-chip.p-active .phase-dot { background: var(--lagoon); animation: pulse 2s infinite; }
+    .phase-chip.p-upcoming .phase-dot { background: var(--grey2); }
+
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* ── Legend ── */
+    .legend {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      margin-bottom: 20px; padding: 12px 16px;
+      background: var(--white); border: 1px solid var(--grey1);
+      border-radius: var(--radius-md);
+    }
+    .legend-group { display: flex; align-items: center; gap: 12px; }
+    .legend-title {
+      font-family: var(--font-label); font-size: 10px; font-weight: 300;
+      text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey2);
+    }
+    .legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--grey3); }
+
+    /* ── Empty ── */
+    .empty { text-align: center; padding: 40px; color: var(--grey2); font-size: 13px; }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .content { padding: 24px 16px 48px; }
+      .top-bar { padding: 16px; }
+      .stat-row { flex-wrap: wrap; }
+      .stat-card { min-width: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h1>Noom Neo</h1>
+    <p>Design System Dashboard</p>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Views</div>
+    <div class="nav-item active" onclick="navigate('overview')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+      Overview
+    </div>
+    <div class="nav-item" onclick="navigate('components')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+      Components
+      <span class="nav-badge" id="nav-comp-count">0</span>
+    </div>
+    <div class="nav-item" onclick="navigate('tokens')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
+      Tokens
+    </div>
+
+    <div class="nav-section-label">Filter by Category</div>
+    <div class="nav-item" onclick="filterCategory('all')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>
+      All Categories
+    </div>
+    <div id="category-nav"></div>
+  </nav>
+  <div class="sidebar-footer">
+    Last updated: Mar 5, 2026
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <span class="team-prefix">Wax Component Library</span>
+      <h2 id="page-title">Overview</h2>
+    </div>
+    <div class="top-bar-actions">
+      <button class="btn btn-secondary btn-sm" onclick="exportData()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══ OVERVIEW PAGE ═══ -->
+    <div class="page active" id="page-overview">
+      <div class="phase-strip" id="phase-strip"></div>
+      <div class="stat-row" id="overview-stats"></div>
+
+      <div class="section-header">
+        <h3>Needs Attention</h3>
+        <span class="section-count" id="attention-count"></span>
+      </div>
+      <div id="attention-list"></div>
+    </div>
+
+    <!-- ═══ COMPONENTS PAGE ═══ -->
+    <div class="page" id="page-components">
+      <div class="stat-row" id="comp-stats"></div>
+
+      <div class="legend">
+        <div class="legend-group">
+          <span class="legend-title">Status</span>
+          <span class="legend-item"><span class="pill-dot" style="background:var(--kale)"></span>Done</span>
+          <span class="legend-item"><span class="pill-dot" style="background:var(--warning-amber)"></span>Partial</span>
+          <span class="legend-item"><span class="pill-dot" style="background:var(--error-red)"></span>Missing</span>
+          <span class="legend-item"><span class="pill-dot" style="background:var(--grey2)"></span>N/A</span>
+        </div>
+        <div class="legend-group">
+          <span class="legend-title">Code</span>
+          <span class="legend-item"><span class="pill-dot" style="background:var(--kale)"></span>Wax</span>
+          <span class="legend-item"><span class="pill-dot" style="background:#7C3AED"></span>Buyflow v1</span>
+          <span class="legend-item"><span class="pill-dot" style="background:#1565C0"></span>Prototypes</span>
+          <span class="legend-item"><span class="pill-dot" style="background:var(--error-red)"></span>None</span>
+        </div>
+      </div>
+
+      <div class="filters">
+        <input type="text" class="search-input" placeholder="Search components..." oninput="applyFilters()" id="search">
+        <span class="filter-divider"></span>
+        <button class="filter-pill active" onclick="setFilter(this,'tier','all')">All</button>
+        <button class="filter-pill" onclick="setFilter(this,'tier','1')">Tier 1</button>
+        <button class="filter-pill" onclick="setFilter(this,'tier','2')">Tier 2</button>
+        <button class="filter-pill" onclick="setFilter(this,'tier','3')">Tier 3</button>
+        <button class="filter-pill" onclick="setFilter(this,'tier','done')">Solid</button>
+        <span class="filter-divider"></span>
+        <button class="filter-pill active" onclick="setFilter(this,'status','all')">All Statuses</button>
+        <button class="filter-pill" onclick="setFilter(this,'status','done')">Done</button>
+        <button class="filter-pill" onclick="setFilter(this,'status','partial')">Partial</button>
+        <button class="filter-pill" onclick="setFilter(this,'status','missing')">Missing</button>
+        <span class="spacer"></span>
+        <div class="view-toggle">
+          <button class="view-toggle-btn active" onclick="setView('table')" title="Table">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18"/></svg>
+          </button>
+          <button class="view-toggle-btn" onclick="setView('cards')" title="Cards">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="table-view">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Category</th>
+                <th>Tier</th>
+                <th>Figma</th>
+                <th>Code</th>
+                <th>Storybook</th>
+                <th>Code Connect</th>
+                <th>Readiness</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="card-view" class="card-grid" style="display:none"></div>
+    </div>
+
+    <!-- ═══ TOKENS PAGE ═══ -->
+    <div class="page" id="page-tokens">
+      <div class="stat-row" id="token-stats"></div>
+      <div class="tokens-grid" id="tokens-grid"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════
+// DATA
+// ═══════════════════════════════════
+
+const PHASES = [
+  { id: 0, name: "Get Wax in Workspace", status: "upcoming" },
+  { id: 1, name: "Token Alignment", status: "upcoming" },
+  { id: 2, name: "Figma Components", status: "upcoming" },
+  { id: 3, name: "Wax Components", status: "upcoming" },
+  { id: 4, name: "Code Connect", status: "upcoming" },
+  { id: 5, name: "Storybook", status: "upcoming" },
+  { id: 6, name: "AI Integration", status: "upcoming" },
+  { id: 7, name: "Governance", status: "upcoming" },
+];
+
+const C = [
+  { name:"Button", cat:"Core", tier:"done", figma:"done", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Input", cat:"Core", tier:"1", figma:"partial", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Password Input", cat:"Core", tier:"3", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Number Input", cat:"Core", tier:"3", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Date Input", cat:"Core", tier:"3", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Text Area", cat:"Core", tier:"3", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Select / Dropdown", cat:"Core", tier:"done", figma:"done", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Checkbox", cat:"Core", tier:"1", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Radio", cat:"Core", tier:"1", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Switch", cat:"Core", tier:"1", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Segmented Control", cat:"Core", tier:"3", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Chip", cat:"Core", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Tag", cat:"Core", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Label", cat:"Core", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Badge / Pill", cat:"Core", tier:"1", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"iOS Status Bar", cat:"Navigation", tier:"done", figma:"done", code:"na", sb:"na", cc:"na" },
+  { name:"Page Header", cat:"Navigation", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Tab Bar", cat:"Navigation", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"iOS Home Indicator", cat:"Navigation", tier:"done", figma:"done", code:"na", sb:"na", cc:"na" },
+  { name:"Bottom Pagination", cat:"Navigation", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Subpage Header", cat:"Navigation", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Toast", cat:"Feedback", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Status Banner", cat:"Feedback", tier:"1", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Spinner", cat:"Feedback", tier:"1", figma:"missing", code:"none", sb:"missing", cc:"missing" },
+  { name:"Empty State", cat:"Feedback", tier:"3", figma:"missing", code:"none", sb:"missing", cc:"missing" },
+  { name:"Card", cat:"Layout", tier:"2", figma:"partial", code:"none", sb:"missing", cc:"missing" },
+  { name:"Modal", cat:"Layout", tier:"1", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Bottom Sheet", cat:"Layout", tier:"done", figma:"partial", code:"wax", sb:"missing", cc:"missing" },
+  { name:"Divider", cat:"Layout", tier:"1", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Section Header", cat:"Layout", tier:"1", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"List / Line Item", cat:"Data Display", tier:"done", figma:"done", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Meal List Item", cat:"Data Display", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Meal Review", cat:"Data Display", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Food Search", cat:"Data Display", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Amount Pill", cat:"Data Display", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Bullet List", cat:"Data Display", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Comparison Table", cat:"Data Display", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Progress Bar", cat:"Progress", tier:"done", figma:"done", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Progress Steps", cat:"Progress", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Circular Progress", cat:"Progress", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Progress + Loading Text", cat:"Progress", tier:"3", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Hero Image Area", cat:"Media", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Image Pagination Dots", cat:"Media", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Image + Text Overlay", cat:"Media", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Trust Badges Bar", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Price Display", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Pricing Module", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Pricing Tier Card", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Radio Selection Card", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Tabs (Purchase)", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"CTA Module", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Sticky CTA Footer", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Order Summary Card", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Order Line Item", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Future Charges Card", cat:"Commerce", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Promo Code", cat:"Commerce", tier:"2", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Payment Selector", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Saved Payment", cat:"Commerce", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Consent Checkbox", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Checkout Accordion", cat:"Checkout", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Section Header (Checkout)", cat:"Checkout", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Address Display", cat:"Checkout", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Trust Signals", cat:"Checkout", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Legal Text Block", cat:"Checkout", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Billing Timeline", cat:"Checkout", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Survey Question Layout", cat:"Survey", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Question Progress Bar", cat:"Survey", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Interstitial Screen", cat:"Survey", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Weight Graph", cat:"Survey", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Testimonial Card", cat:"Survey", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Plan Selection Card", cat:"Survey", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Social Proof Bar", cat:"Social Proof", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Money-Back Guarantee", cat:"Social Proof", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Reservation Timer", cat:"Social Proof", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Subscription Status Card", cat:"Subscription", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Accordion", cat:"Content", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Step Card", cat:"Content", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Benefit Card", cat:"Content", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Pillar Card", cat:"Content", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Stat Callout", cat:"Content", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Full Screen Interstitial", cat:"Specialized", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Chat Components", cat:"Specialized", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Med Lockups", cat:"Specialized", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Animation", cat:"Specialized", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Data / Charts", cat:"Specialized", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Calorie Budget Bar", cat:"Specialized", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+];
+
+const TOKENS = {
+  colors: [
+    { n:"Lagoon", v:"#05727A", f:true },{ n:"Lagoon Dark", v:"#045B62", f:true },
+    { n:"Blueberry", v:"#15333D", f:true },{ n:"Skylight", v:"#DCF5F0", f:true },
+    { n:"Sky", v:"#B4E0D8", f:false },{ n:"Off-White", v:"#F6F4EE", f:true },
+    { n:"Sand", v:"#E4DECE", f:true },{ n:"Black", v:"#191717", f:true },
+    { n:"White", v:"#FFFFFF", f:true },{ n:"Grey 1", v:"#DEDEDE", f:true },
+    { n:"Grey 2", v:"#AAAAAA", f:true },{ n:"Grey 3", v:"#666666", f:true },
+    { n:"Grey 4", v:"#444444", f:true },{ n:"Grey 5", v:"#F4F4F4", f:true },
+    { n:"Kale", v:"#316700", f:false },{ n:"Mint", v:"#C8E3B1", f:true },
+    { n:"Mint Light", v:"#E3F1D8", f:false },{ n:"Error Red", v:"#C13515", f:false },
+    { n:"Warning Amber", v:"#B8860B", f:false },{ n:"Warning Light", v:"#FFF3E0", f:false },
+  ],
+  spacing: [
+    { n:"4", v:"4px", f:false },{ n:"8", v:"8px", f:false },{ n:"12", v:"12px", f:false },
+    { n:"16", v:"16px", f:true },{ n:"20", v:"20px", f:false },{ n:"24", v:"24px", f:false },
+    { n:"32", v:"32px", f:false },{ n:"40", v:"40px", f:false },{ n:"48", v:"48px", f:false },
+  ],
+  typography: [
+    { n:"Headline/2xl", v:"Serif 64px", f:true },{ n:"Headline/xl", v:"Serif 56px", f:true },
+    { n:"Headline/lg", v:"Serif 40px", f:true },{ n:"Headline/md", v:"Serif 32px", f:true },
+    { n:"Headline/sm", v:"Serif 28px", f:true },{ n:"Headline/xs", v:"Serif 24px", f:true },
+    { n:"Headline/2xs", v:"Serif 20px", f:true },{ n:"Paragraph/lg", v:"Sans 18px", f:true },
+    { n:"Paragraph/md", v:"Sans 16px", f:true },{ n:"Paragraph/sm", v:"Sans 14px", f:true },
+    { n:"Paragraph/xs", v:"Sans 12px", f:true },{ n:"Accent/lg", v:"Brown 16px", f:true },
+    { n:"Accent/md", v:"Brown 14px", f:true },{ n:"Accent/sm", v:"Brown 12px", f:true },
+    { n:"Accent/xs", v:"Brown 10px", f:true },
+  ],
+  radii: [
+    { n:"sm", v:"6px", f:true },{ n:"md", v:"8px", f:true },{ n:"lg", v:"12px", f:true },
+    { n:"xl", v:"16px", f:true },{ n:"pill", v:"25px", f:false },{ n:"full", v:"56px", f:true },
+    { n:"circle", v:"100px", f:true },
+  ],
+};
+
+// ═══════════════════════════════════
+// STATE
+// ═══════════════════════════════════
+let currentPage = "overview";
+let currentView = "table";
+let filters = { tier: "all", status: "all", category: "all" };
+
+// ═══════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════
+const SL = { done:"Done", partial:"Partial", missing:"Missing", na:"N/A" };
+const CL = { wax:"Wax", buyflow:"Buyflow v1", both:"Both", proto:"Prototypes", none:"None", na:"N/A" };
+const TL = { "1":"T1", "2":"T2", "3":"T3", done:"Solid" };
+const TC = { "1":"tier-1", "2":"tier-2", "3":"tier-3", done:"tier-solid" };
+const LC = { wax:"loc-wax", buyflow:"loc-buyflow", both:"loc-both", proto:"loc-proto", none:"loc-none", na:"loc-na" };
+
+function score(c) {
+  let s=0, t=0;
+  if(c.figma!=="na"){t+=2;if(c.figma==="done")s+=2;else if(c.figma==="partial")s+=1;}
+  if(c.code!=="na"){t+=2;if(c.code==="wax")s+=2;else if(c.code==="buyflow"||c.code==="both")s+=1;}
+  if(c.sb!=="na"){t+=1;if(c.sb==="done")s+=1;}
+  if(c.cc!=="na"){t+=1;if(c.cc==="done")s+=1;}
+  return t>0?s/t:0;
+}
+
+function overall(c) { const s=score(c); return s>=0.9?"done":s>=0.3?"partial":"missing"; }
+
+function matches(c) {
+  const q=(document.getElementById("search")?.value||"").toLowerCase();
+  if(q&&!c.name.toLowerCase().includes(q)&&!c.cat.toLowerCase().includes(q))return false;
+  if(filters.tier!=="all"&&c.tier!==filters.tier)return false;
+  if(filters.status!=="all"&&overall(c)!==filters.status)return false;
+  if(filters.category!=="all"&&c.cat!==filters.category)return false;
+  return true;
+}
+
+function dot(){return '<span class="pill-dot"></span>';}
+function pill(s){return `<span class="pill pill-${s}">${dot()}${SL[s]}</span>`;}
+function loc(s){return `<span class="loc ${LC[s]}">${CL[s]}</span>`;}
+function tierBadge(t){return `<span class="tier ${TC[t]}">${TL[t]}</span>`;}
+function pct(n,d){return d>0?Math.round(n/d*100):0;}
+
+// ═══════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════
+function navigate(page) {
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.sidebar-nav .nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelector(`.nav-item[onclick="navigate('${page}')"]`)?.classList.add('active');
+  const titles = { overview:"Overview", components:"Components", tokens:"Tokens" };
+  document.getElementById('page-title').textContent = titles[page]||page;
+}
+
+function filterCategory(cat) {
+  filters.category = cat;
+  navigate('components');
+  applyFilters();
+}
+
+// ═══════════════════════════════════
+// RENDER: OVERVIEW
+// ═══════════════════════════════════
+function renderOverview() {
+  const total=C.length;
+  const applicable=C.filter(c=>c.figma!=="na").length;
+  const figmaDone=C.filter(c=>c.figma==="done").length;
+  const inWax=C.filter(c=>c.code==="wax"||c.code==="both").length;
+  const inBuyflow=C.filter(c=>c.code==="buyflow"||c.code==="both").length;
+  const sbDone=C.filter(c=>c.sb==="done").length;
+  const vibeReady=C.filter(c=>overall(c)==="done").length;
+
+  document.getElementById('phase-strip').innerHTML = PHASES.map(p=>`<div class="phase-chip p-${p.status}"><span class="phase-dot"></span>P${p.id}: ${p.name}</div>`).join('');
+
+  document.getElementById('overview-stats').innerHTML = `
+    <div class="stat-card stat-lagoon">
+      <div class="stat-value">${figmaDone}/${applicable}</div>
+      <div class="stat-label">Figma Components</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(figmaDone,applicable)}%;background:var(--lagoon)"></div></div>
+    </div>
+    <div class="stat-card stat-kale">
+      <div class="stat-value">${inWax}/${total}</div>
+      <div class="stat-label">In Wax</div>
+      <div class="stat-sub">${inBuyflow} still in Buyflow v1</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(inWax,total)}%;background:var(--kale)"></div></div>
+    </div>
+    <div class="stat-card stat-warning">
+      <div class="stat-value">${sbDone}/${total}</div>
+      <div class="stat-label">Storybook</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(sbDone,total)}%;background:var(--warning-amber)"></div></div>
+    </div>
+    <div class="stat-card stat-error">
+      <div class="stat-value">0/${total}</div>
+      <div class="stat-label">Code Connect</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:0%;background:var(--error-red)"></div></div>
+    </div>
+    <div class="stat-card" style="border-left:3px solid var(--black)">
+      <div class="stat-value">${vibeReady}/${total}</div>
+      <div class="stat-label">Vibe-Ready</div>
+      <div class="stat-sub">Figma + Wax + Stories + CC</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(vibeReady,total)}%;background:var(--black)"></div></div>
+    </div>
+  `;
+
+  const t1missing = C.filter(c=>c.tier==="1"&&overall(c)!=="done");
+  document.getElementById('attention-count').textContent = `${t1missing.length} Tier 1 items`;
+
+  if(t1missing.length===0){
+    document.getElementById('attention-list').innerHTML = '<div class="empty">All Tier 1 components are complete.</div>';
+    return;
+  }
+
+  let html = '<div class="table-wrap"><table><thead><tr><th>Component</th><th>Figma</th><th>Code</th><th>Storybook</th><th>Code Connect</th></tr></thead><tbody>';
+  t1missing.forEach(c=>{
+    html+=`<tr><td><span class="comp-name">${c.name}</span></td><td>${pill(c.figma)}</td><td>${loc(c.code)}</td><td>${pill(c.sb)}</td><td>${pill(c.cc)}</td></tr>`;
+  });
+  html+='</tbody></table></div>';
+  document.getElementById('attention-list').innerHTML = html;
+}
+
+// ═══════════════════════════════════
+// RENDER: COMPONENTS
+// ═══════════════════════════════════
+function renderComponents() {
+  const total=C.length;
+  const applicable=C.filter(c=>c.figma!=="na").length;
+  const figmaDone=C.filter(c=>c.figma==="done").length;
+  const inWax=C.filter(c=>c.code==="wax"||c.code==="both").length;
+  const sbDone=C.filter(c=>c.sb==="done").length;
+  const ccDone=C.filter(c=>c.cc==="done").length;
+
+  document.getElementById('comp-stats').innerHTML = `
+    <div class="stat-card stat-lagoon"><div class="stat-value">${figmaDone}/${applicable}</div><div class="stat-label">Figma</div></div>
+    <div class="stat-card stat-kale"><div class="stat-value">${inWax}/${total}</div><div class="stat-label">In Wax</div></div>
+    <div class="stat-card stat-warning"><div class="stat-value">${sbDone}/${total}</div><div class="stat-label">Storybook</div></div>
+    <div class="stat-card stat-error"><div class="stat-value">${ccDone}/${total}</div><div class="stat-label">Code Connect</div></div>
+  `;
+
+  document.getElementById('nav-comp-count').textContent = total;
+  renderTable();
+  renderCards();
+}
+
+function renderTable() {
+  const filtered = C.filter(matches);
+  if(!filtered.length){ document.getElementById('table-body').innerHTML='<tr><td colspan="8" class="empty">No components match.</td></tr>'; return; }
+
+  let last="", html="";
+  filtered.forEach(c=>{
+    if(c.cat!==last){ last=c.cat; html+=`<tr class="group-row"><td colspan="8">${c.cat}</td></tr>`; }
+    const s=score(c), dw=Math.round(s*100), pw=c.figma==="partial"||c.code==="buyflow"?Math.min(25,100-dw):0;
+    html+=`<tr>
+      <td><span class="comp-name">${c.name}</span></td>
+      <td><span class="category-label">${c.cat}</span></td>
+      <td>${tierBadge(c.tier)}</td>
+      <td>${pill(c.figma)}</td>
+      <td>${loc(c.code)}</td>
+      <td>${pill(c.sb)}</td>
+      <td>${pill(c.cc)}</td>
+      <td><div class="readiness"><div class="readiness-seg r-done" style="width:${dw}%"></div><div class="readiness-seg r-partial" style="width:${pw}%"></div></div></td>
+    </tr>`;
+  });
+  document.getElementById('table-body').innerHTML=html;
+}
+
+function renderCards() {
+  const filtered=C.filter(matches);
+  if(!filtered.length){ document.getElementById('card-view').innerHTML='<div class="empty" style="grid-column:1/-1">No components match.</div>'; return; }
+  document.getElementById('card-view').innerHTML = filtered.map(c=>`
+    <div class="comp-card">
+      <div class="comp-card-head"><span class="comp-name">${c.name}</span>${tierBadge(c.tier)}</div>
+      <div class="comp-card-body">
+        <div class="comp-card-row"><span class="row-label">Figma</span>${pill(c.figma)}</div>
+        <div class="comp-card-row"><span class="row-label">Code</span>${loc(c.code)}</div>
+        <div class="comp-card-row"><span class="row-label">Storybook</span>${pill(c.sb)}</div>
+        <div class="comp-card-row"><span class="row-label">Code Connect</span>${pill(c.cc)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════
+// RENDER: TOKENS
+// ═══════════════════════════════════
+function renderTokens() {
+  const groups = [
+    { key:"colors", title:"Color Tokens" },
+    { key:"spacing", title:"Spacing Tokens" },
+    { key:"typography", title:"Typography Tokens" },
+    { key:"radii", title:"Radius Tokens" },
+  ];
+
+  let statHtml="", gridHtml="";
+
+  const statColors = ["stat-lagoon","stat-warning","stat-lagoon","stat-kale"];
+
+  groups.forEach((g,i)=>{
+    const tokens=TOKENS[g.key], inF=tokens.filter(t=>t.f).length, total=tokens.length;
+    statHtml+=`<div class="stat-card ${statColors[i]}"><div class="stat-value">${inF}/${total}</div><div class="stat-label">${g.title}</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(inF,total)}%;background:${i===1?'var(--warning-amber)':'var(--lagoon)'}"></div></div></div>`;
+
+    gridHtml+=`<div class="token-card"><div class="token-card-head">${g.title}<span class="token-count">${inF}/${total} in Figma</span></div><div class="token-card-body">`;
+    tokens.forEach(t=>{
+      const swatch = g.key==="colors"?`<span class="token-swatch" style="background:${t.v}"></span>`:"";
+      const fp = t.f ? '<span class="pill pill-done" style="font-size:10px;padding:2px 7px">'+dot()+'Figma</span>' : '<span class="pill pill-missing" style="font-size:10px;padding:2px 7px">'+dot()+'Missing</span>';
+      const wp = '<span class="pill pill-na" style="font-size:10px;padding:2px 7px">'+dot()+'Audit</span>';
+      gridHtml+=`<div class="token-row"><span class="token-name">${swatch}${t.n}</span><span style="display:flex;gap:6px;align-items:center"><span class="token-val">${t.v}</span><span class="token-pills">${fp}${wp}</span></span></div>`;
+    });
+    gridHtml+=`</div></div>`;
+  });
+
+  document.getElementById('token-stats').innerHTML = statHtml;
+  document.getElementById('tokens-grid').innerHTML = gridHtml;
+}
+
+// ═══════════════════════════════════
+// RENDER: SIDEBAR CATEGORIES
+// ═══════════════════════════════════
+function renderCategoryNav() {
+  const cats = [...new Set(C.map(c=>c.cat))];
+  document.getElementById('category-nav').innerHTML = cats.map(cat=>{
+    const count = C.filter(c=>c.cat===cat).length;
+    return `<div class="nav-item" onclick="filterCategory('${cat}')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/></svg></span>
+      ${cat}
+      <span class="nav-badge">${count}</span>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════
+// INTERACTIONS
+// ═══════════════════════════════════
+function setFilter(btn, group, value) {
+  filters[group] = value;
+  const pills = group==="tier"
+    ? document.querySelectorAll('.filter-pill:nth-child(-n+7)')
+    : document.querySelectorAll('.filter-pill:nth-last-child(-n+4)');
+  btn.closest('.filters').querySelectorAll('.filter-pill').forEach(p=>{
+    const isTier = ['All','Tier 1','Tier 2','Tier 3','Solid'].includes(p.textContent);
+    const isStatus = ['All Statuses','Done','Partial','Missing'].includes(p.textContent);
+    if(group==='tier'&&isTier) p.classList.remove('active');
+    if(group==='status'&&isStatus) p.classList.remove('active');
+  });
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() { renderTable(); renderCards(); }
+
+function setView(view) {
+  currentView = view;
+  document.querySelectorAll('.view-toggle-btn').forEach(b=>b.classList.remove('active'));
+  if(view==='table'){
+    document.querySelector('.view-toggle-btn:first-child').classList.add('active');
+    document.getElementById('table-view').style.display='block';
+    document.getElementById('card-view').style.display='none';
+  } else {
+    document.querySelector('.view-toggle-btn:last-child').classList.add('active');
+    document.getElementById('table-view').style.display='none';
+    document.getElementById('card-view').style.display='grid';
+  }
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify({components:C,tokens:TOKENS,phases:PHASES},null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='design-system-data.json'; a.click();
+}
+
+// ═══════════════════════════════════
+// INIT
+// ═══════════════════════════════════
+renderCategoryNav();
+renderOverview();
+renderComponents();
+renderTokens();
+</script>
+</body>
+</html>
