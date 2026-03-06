@@ -28,504 +28,239 @@
       --error-light: #FFEBEE;
       --warning-amber: #B8860B;
       --warning-light: #FFF3E0;
+      --purple: #7C3AED;
+      --purple-light: #F3E8FF;
+      --blue: #1565C0;
+      --blue-light: #E8F0FE;
       --font-headline: 'Untitled Serif', Georgia, serif;
       --font-body: 'Untitled Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-label: 'Untitled Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --radius-sm: 6px;
       --radius-md: 8px;
       --radius-lg: 12px;
-      --radius-xl: 16px;
       --radius-pill: 25px;
-      --radius-button: 56px;
-      --shadow-neo: 0px 0px 4px 1px rgba(0,0,0,0.06), 1px 2px 6px 0px rgba(0,0,0,0.08);
       --sidebar-width: 220px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--grey5); color: var(--black); min-height: 100vh; display: flex; }
 
-    body {
-      font-family: var(--font-body);
-      background: var(--grey5);
-      color: var(--black);
-      min-height: 100vh;
-      display: flex;
-    }
-
-    /* ── Sidebar ── */
-    .sidebar {
-      width: var(--sidebar-width);
-      background: var(--white);
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0; left: 0; bottom: 0;
-      z-index: 100;
-      border-right: 1px solid var(--grey1);
-    }
-
-    .sidebar-header {
-      padding: 28px 20px 20px;
-    }
-
-    .sidebar-header h1 {
-      font-family: var(--font-headline);
-      font-size: 18px;
-      font-weight: 500;
-      color: var(--black);
-      line-height: 1.3;
-    }
-
-    .sidebar-header p {
-      font-family: var(--font-label);
-      font-size: 10px;
-      font-weight: 300;
-      color: var(--grey2);
-      margin-top: 2px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .sidebar-nav {
-      flex: 1;
-      padding: 8px 10px;
-      overflow-y: auto;
-    }
-
-    .nav-section-label {
-      font-family: var(--font-label);
-      font-size: 10px;
-      font-weight: 300;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--grey2);
-      padding: 16px 10px 4px;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--grey3);
-      transition: all 0.15s ease;
-      user-select: none;
-    }
-
+    .sidebar { width: var(--sidebar-width); background: var(--white); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; border-right: 1px solid var(--grey1); }
+    .sidebar-header { padding: 28px 20px 20px; }
+    .sidebar-header h1 { font-family: var(--font-headline); font-size: 18px; font-weight: 500; color: var(--black); line-height: 1.3; }
+    .sidebar-header p { font-family: var(--font-label); font-size: 10px; font-weight: 300; color: var(--grey2); margin-top: 2px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .sidebar-nav { flex: 1; padding: 8px 10px; overflow-y: auto; }
+    .nav-section-label { font-family: var(--font-label); font-size: 10px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey2); padding: 16px 10px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; font-weight: 400; color: var(--grey3); transition: all 0.15s ease; user-select: none; }
     .nav-item:hover { background: var(--grey5); color: var(--black); }
     .nav-item.active { background: var(--grey5); color: var(--black); font-weight: 500; }
-
-    .nav-icon {
-      width: 18px; height: 18px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      color: var(--grey2);
-    }
+    .nav-icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--grey2); }
     .nav-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
     .nav-item.active .nav-icon { color: var(--black); }
-
-    .nav-badge {
-      margin-left: auto;
-      font-family: var(--font-label);
-      font-size: 11px; font-weight: 300;
-      color: var(--grey2);
-      padding: 1px 6px;
-      border-radius: var(--radius-pill);
-    }
+    .nav-badge { margin-left: auto; font-family: var(--font-label); font-size: 11px; font-weight: 300; color: var(--grey2); padding: 1px 6px; border-radius: var(--radius-pill); }
     .nav-item.active .nav-badge { color: var(--black); font-weight: 600; }
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--grey1); font-size: 11px; color: var(--grey2); }
 
-    .sidebar-footer {
-      padding: 16px 20px;
-      border-top: 1px solid var(--grey1);
-      font-size: 11px;
-      color: var(--grey2);
-    }
-
-    /* ── Main ── */
-    .main {
-      margin-left: var(--sidebar-width);
-      flex: 1;
-      min-height: 100vh;
-    }
-
-    .top-bar {
-      background: var(--white);
-      border-bottom: 1px solid var(--grey1);
-      padding: 20px 40px;
-      display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 50;
-    }
-
-    .top-bar-left h2 {
-      font-family: var(--font-body);
-      font-size: 20px; font-weight: 600; line-height: 1.3;
-    }
-    .top-bar-left .team-prefix {
-      font-family: var(--font-label);
-      font-size: 11px; font-weight: 300; letter-spacing: 0.06em;
-      text-transform: uppercase; color: var(--grey2);
-      display: block; margin-bottom: 2px;
-    }
-
+    .main { margin-left: var(--sidebar-width); flex: 1; min-height: 100vh; }
+    .top-bar { background: var(--white); border-bottom: 1px solid var(--grey1); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .top-bar-left h2 { font-family: var(--font-body); font-size: 20px; font-weight: 600; line-height: 1.3; }
+    .top-bar-left .team-prefix { font-family: var(--font-label); font-size: 11px; font-weight: 300; letter-spacing: 0.06em; text-transform: uppercase; color: var(--grey2); display: block; margin-bottom: 2px; }
     .top-bar-actions { display: flex; gap: 8px; align-items: center; }
-
     .content { padding: 32px 40px 64px; }
     .page { display: none; }
     .page.active { display: block; }
 
-    /* ── Buttons ── */
-    .btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-family: var(--font-body); font-size: 13px; font-weight: 500;
-      padding: 8px 16px;
-      border-radius: var(--radius-md);
-      border: none; cursor: pointer;
-      transition: all 0.15s ease;
-      user-select: none;
-    }
+    .btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-body); font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: var(--radius-md); border: none; cursor: pointer; transition: all 0.15s ease; user-select: none; }
     .btn-primary { background: var(--black); color: var(--white); }
     .btn-primary:hover { background: var(--grey4); }
     .btn-secondary { background: var(--white); color: var(--black); border: 1px solid var(--grey1); }
     .btn-secondary:hover { background: var(--grey5); }
-    .btn-ghost { background: transparent; color: var(--grey3); padding: 6px 10px; }
-    .btn-ghost:hover { color: var(--black); background: var(--grey5); }
     .btn-sm { font-size: 12px; padding: 5px 12px; }
 
-    /* ── Stat Cards ── */
-    .stat-row { display: flex; gap: 12px; margin-bottom: 28px; }
+    .stat-row { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
+    .stat-card { background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); padding: 16px 20px; flex: 1; min-width: 140px; }
+    .stat-card .stat-value { font-family: var(--font-body); font-size: 28px; font-weight: 600; color: var(--black); }
+    .stat-card .stat-label { font-family: var(--font-label); font-size: 11px; font-weight: 300; color: var(--grey2); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .stat-card .stat-sub { font-size: 12px; color: var(--grey3); margin-top: 6px; }
+    .stat-card .stat-bar { height: 4px; background: var(--grey1); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+    .stat-card .stat-bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+    .stat-card.stat-lagoon { border-left: 3px solid var(--lagoon); } .stat-card.stat-lagoon .stat-value { color: var(--lagoon); }
+    .stat-card.stat-kale { border-left: 3px solid var(--kale); } .stat-card.stat-kale .stat-value { color: var(--kale); }
+    .stat-card.stat-warning { border-left: 3px solid var(--warning-amber); } .stat-card.stat-warning .stat-value { color: var(--warning-amber); }
+    .stat-card.stat-error { border-left: 3px solid var(--error-red); } .stat-card.stat-error .stat-value { color: var(--error-red); }
 
-    .stat-card {
-      background: var(--white);
-      border: 1px solid var(--grey1);
-      border-radius: var(--radius-md);
-      padding: 16px 20px; flex: 1;
-    }
-    .stat-card .stat-value {
-      font-family: var(--font-body);
-      font-size: 28px; font-weight: 600; color: var(--black);
-    }
-    .stat-card .stat-label {
-      font-family: var(--font-label); font-size: 11px; font-weight: 300;
-      color: var(--grey2); margin-top: 2px;
-      text-transform: uppercase; letter-spacing: 0.04em;
-    }
-    .stat-card .stat-sub {
-      font-size: 12px; color: var(--grey3); margin-top: 6px;
-    }
-    .stat-card .stat-bar {
-      height: 4px; background: var(--grey1); border-radius: 2px;
-      margin-top: 10px; overflow: hidden;
-    }
-    .stat-card .stat-bar-fill {
-      height: 100%; border-radius: 2px;
-      transition: width 0.6s ease;
-    }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .section-header h3 { font-family: var(--font-label); font-size: 12px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey3); }
+    .section-count { font-size: 12px; color: var(--grey2); }
 
-    .stat-card.stat-lagoon { border-left: 3px solid var(--lagoon); }
-    .stat-card.stat-lagoon .stat-value { color: var(--lagoon); }
-    .stat-card.stat-kale { border-left: 3px solid var(--kale); }
-    .stat-card.stat-kale .stat-value { color: var(--kale); }
-    .stat-card.stat-warning { border-left: 3px solid var(--warning-amber); }
-    .stat-card.stat-warning .stat-value { color: var(--warning-amber); }
-    .stat-card.stat-error { border-left: 3px solid var(--error-red); }
-    .stat-card.stat-error .stat-value { color: var(--error-red); }
-
-    /* ── Section Headers ── */
-    .section-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 16px;
-    }
-    .section-header h3 {
-      font-family: var(--font-label); font-size: 12px; font-weight: 300;
-      text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey3);
-    }
-    .section-count {
-      font-size: 12px; color: var(--grey2);
-    }
-
-    /* ── Filters ── */
-    .filters {
-      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-
-    .search-input {
-      padding: 7px 12px; border: 1px solid var(--grey1);
-      border-radius: var(--radius-sm);
-      font-family: var(--font-body); font-size: 13px;
-      background: var(--white); color: var(--black);
-      outline: none; width: 240px;
-      transition: border-color 0.15s;
-    }
+    .filters { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+    .search-input { padding: 7px 12px; border: 1px solid var(--grey1); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 13px; background: var(--white); color: var(--black); outline: none; width: 240px; transition: border-color 0.15s; }
     .search-input::placeholder { color: var(--grey2); }
     .search-input:focus { border-color: var(--lagoon); }
-
-    .filter-pill {
-      padding: 5px 14px;
-      border-radius: var(--radius-pill);
-      border: 1px solid var(--grey1);
-      background: var(--white);
-      font-family: var(--font-label); font-size: 12px; font-weight: 300;
-      color: var(--grey3);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
+    .filter-pill { padding: 5px 14px; border-radius: var(--radius-pill); border: 1px solid var(--grey1); background: var(--white); font-family: var(--font-label); font-size: 12px; font-weight: 300; color: var(--grey3); cursor: pointer; transition: all 0.15s; }
     .filter-pill:hover { border-color: var(--grey2); color: var(--grey4); }
     .filter-pill.active { background: var(--black); color: var(--white); border-color: var(--black); }
-
     .filter-divider { width: 1px; height: 20px; background: var(--grey1); }
-
+    .spacer { flex: 1; }
     .view-toggle { display: flex; }
-    .view-toggle-btn {
-      background: none; border: 1px solid var(--grey1); cursor: pointer;
-      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
-      color: var(--grey2); transition: all 0.15s;
-    }
+    .view-toggle-btn { background: none; border: 1px solid var(--grey1); cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: var(--grey2); transition: all 0.15s; }
     .view-toggle-btn:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
     .view-toggle-btn:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; border-left: none; }
     .view-toggle-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
-    .view-toggle-btn:hover:not(.active) { border-color: var(--grey2); color: var(--grey3); }
 
-    .spacer { flex: 1; }
-
-    /* ── Component Table ── */
-    .table-wrap {
-      background: var(--white);
-      border: 1px solid var(--grey1);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-    }
-
+    .table-wrap { background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); overflow: hidden; }
     table { width: 100%; border-collapse: collapse; }
-
-    thead th {
-      text-align: left;
-      font-family: var(--font-label);
-      font-size: 10px; font-weight: 300;
-      text-transform: uppercase; letter-spacing: 0.06em;
-      color: var(--grey2);
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--grey1);
-      white-space: nowrap;
-      position: sticky; top: 0;
-      background: var(--white);
-      z-index: 10;
-    }
+    thead th { text-align: left; font-family: var(--font-label); font-size: 10px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey2); padding: 12px 16px; border-bottom: 1px solid var(--grey1); white-space: nowrap; position: sticky; top: 0; background: var(--white); z-index: 10; }
     thead th:first-child { padding-left: 20px; }
-
-    tbody tr { transition: background 0.1s; }
-    tbody tr:hover { background: var(--grey5); }
-    tbody td {
-      padding: 10px 16px;
-      font-size: 13px;
-      border-bottom: 1px solid var(--grey5);
-      vertical-align: middle;
-    }
+    tbody tr { transition: background 0.1s; } tbody tr:hover { background: var(--grey5); }
+    tbody td { padding: 10px 16px; font-size: 13px; border-bottom: 1px solid var(--grey5); vertical-align: middle; }
     tbody td:first-child { padding-left: 20px; }
     tbody tr:last-child td { border-bottom: none; }
-
     .comp-name { font-weight: 600; color: var(--black); }
+    .category-label { font-family: var(--font-label); font-size: 11px; font-weight: 300; color: var(--grey2); text-transform: uppercase; letter-spacing: 0.04em; }
+    .group-row td { background: var(--grey5); font-family: var(--font-label); font-weight: 300; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--grey3); padding: 8px 20px; border-bottom: 1px solid var(--grey1); }
 
-    .category-label {
-      font-family: var(--font-label); font-size: 11px; font-weight: 300;
-      color: var(--grey2); text-transform: uppercase; letter-spacing: 0.04em;
-    }
+    .pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: var(--radius-pill); font-family: var(--font-label); font-size: 11px; font-weight: 300; letter-spacing: 0.02em; }
+    .pill-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .pill-done { background: var(--mint-light); color: var(--kale); } .pill-done .pill-dot { background: var(--kale); }
+    .pill-partial { background: var(--warning-light); color: var(--warning-amber); } .pill-partial .pill-dot { background: var(--warning-amber); }
+    .pill-missing { background: var(--error-light); color: var(--error-red); } .pill-missing .pill-dot { background: var(--error-red); }
+    .pill-na { background: var(--grey5); color: var(--grey2); } .pill-na .pill-dot { background: var(--grey2); }
 
-    /* ── Tier Badges ── */
-    .tier {
-      font-family: var(--font-label); font-size: 10px; font-weight: 300;
-      text-transform: uppercase; letter-spacing: 0.04em;
-      padding: 2px 8px; border-radius: var(--radius-pill);
-    }
-    .tier-1 { background: var(--error-light); color: var(--error-red); }
-    .tier-2 { background: var(--warning-light); color: var(--warning-amber); }
-    .tier-3 { background: var(--skylight); color: var(--lagoon); }
-    .tier-solid { background: var(--mint-light); color: var(--kale); }
-
-    /* ── Status Pills ── */
-    .pill {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 3px 10px; border-radius: var(--radius-pill);
-      font-family: var(--font-label); font-size: 11px; font-weight: 300;
-      letter-spacing: 0.02em;
-    }
-    .pill-dot {
-      width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-    }
-    .pill-done { background: var(--mint-light); color: var(--kale); }
-    .pill-done .pill-dot { background: var(--kale); }
-    .pill-partial { background: var(--warning-light); color: var(--warning-amber); }
-    .pill-partial .pill-dot { background: var(--warning-amber); }
-    .pill-missing { background: var(--error-light); color: var(--error-red); }
-    .pill-missing .pill-dot { background: var(--error-red); }
-    .pill-na { background: var(--grey5); color: var(--grey2); }
-    .pill-na .pill-dot { background: var(--grey2); }
-
-    /* ── Code Location ── */
-    .loc {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 3px 10px; border-radius: var(--radius-pill);
-      font-family: var(--font-label); font-size: 11px; font-weight: 300;
-      letter-spacing: 0.02em;
-    }
+    .loc { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: var(--radius-pill); font-family: var(--font-label); font-size: 11px; font-weight: 300; letter-spacing: 0.02em; }
     .loc-wax { background: var(--mint-light); color: var(--kale); }
-    .loc-buyflow { background: #F3E8FF; color: #7C3AED; }
+    .loc-buyflow { background: var(--purple-light); color: var(--purple); }
     .loc-both { background: var(--warning-light); color: var(--warning-amber); }
-    .loc-proto { background: #E8F0FE; color: #1565C0; }
+    .loc-proto { background: var(--blue-light); color: var(--blue); }
     .loc-none { background: var(--error-light); color: var(--error-red); }
     .loc-na { background: var(--grey5); color: var(--grey2); }
 
-    /* ── Readiness Bar ── */
-    .readiness {
-      display: flex; height: 4px; border-radius: 2px;
-      overflow: hidden; background: var(--grey1); width: 72px;
-    }
-    .readiness-seg { height: 100%; }
-    .readiness-seg.r-done { background: var(--kale); }
-    .readiness-seg.r-partial { background: var(--warning-amber); }
+    .readiness { display: flex; height: 4px; border-radius: 2px; overflow: hidden; background: var(--grey1); width: 72px; }
+    .readiness-seg { height: 100%; } .readiness-seg.r-done { background: var(--kale); } .readiness-seg.r-partial { background: var(--warning-amber); }
 
-    /* ── Section Group Row ── */
-    .group-row td {
-      background: var(--grey5);
-      font-family: var(--font-label);
-      font-weight: 300; font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--grey3);
-      padding: 8px 20px;
-      border-bottom: 1px solid var(--grey1);
-    }
-
-    /* ── Card Grid View ── */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 12px;
-    }
-
-    .comp-card {
-      background: var(--white);
-      border: 1px solid var(--grey1);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      transition: border-color 0.15s;
-    }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+    .comp-card { background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); overflow: hidden; transition: border-color 0.15s; }
     .comp-card:hover { border-color: var(--grey2); }
-
-    .comp-card-head {
-      padding: 14px 16px 10px;
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid var(--grey5);
-    }
+    .comp-card-head { padding: 14px 16px 10px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--grey5); }
     .comp-card-head .comp-name { font-size: 14px; }
-
     .comp-card-body { padding: 12px 16px; }
-
-    .comp-card-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 6px 0; font-size: 13px; color: var(--grey4);
-    }
+    .comp-card-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; font-size: 13px; color: var(--grey4); }
     .comp-card-row + .comp-card-row { border-top: 1px solid var(--grey5); }
     .comp-card-row .row-label { font-family: var(--font-label); font-size: 11px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.04em; color: var(--grey2); }
 
-    /* ── Token Cards ── */
-    .tokens-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 12px;
-    }
-
-    .token-card {
-      background: var(--white);
-      border: 1px solid var(--grey1);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-    }
-
-    .token-card-head {
-      padding: 14px 16px;
-      font-size: 14px; font-weight: 600;
-      border-bottom: 1px solid var(--grey1);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .token-card-head .token-count {
-      font-family: var(--font-label); font-size: 11px; font-weight: 300;
-      color: var(--grey2); text-transform: uppercase; letter-spacing: 0.04em;
-    }
-
+    .tokens-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 12px; }
+    .token-card { background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); overflow: hidden; }
+    .token-card-head { padding: 14px 16px; font-size: 14px; font-weight: 600; border-bottom: 1px solid var(--grey1); display: flex; align-items: center; justify-content: space-between; }
+    .token-card-head .token-count { font-family: var(--font-label); font-size: 11px; font-weight: 300; color: var(--grey2); text-transform: uppercase; letter-spacing: 0.04em; }
     .token-card-body { padding: 12px 16px; }
-
-    .token-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 5px 0; font-size: 13px;
-    }
+    .token-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; font-size: 13px; }
     .token-row + .token-row { border-top: 1px solid var(--grey5); }
     .token-name { font-weight: 500; display: flex; align-items: center; gap: 8px; }
     .token-val { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; color: var(--grey3); }
-    .token-swatch {
-      width: 16px; height: 16px; border-radius: 3px;
-      border: 1px solid var(--grey1); flex-shrink: 0;
-    }
+    .token-swatch { width: 16px; height: 16px; border-radius: 3px; border: 1px solid var(--grey1); flex-shrink: 0; }
     .token-pills { display: flex; gap: 4px; }
 
-    /* ── Phase Strip ── */
-    .phase-strip {
-      display: flex; gap: 6px; flex-wrap: wrap;
-      margin-bottom: 28px;
-    }
-    .phase-chip {
-      display: flex; align-items: center; gap: 6px;
-      padding: 6px 14px; border-radius: var(--radius-pill);
-      font-family: var(--font-label); font-size: 11px; font-weight: 300;
-      letter-spacing: 0.02em;
-      border: 1px solid var(--grey1); background: var(--white);
-      color: var(--grey3); cursor: pointer; transition: all 0.15s;
-      user-select: none;
-    }
-    .phase-chip:hover { border-color: var(--grey2); }
+    .phase-strip { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; }
+    .phase-chip { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: var(--radius-pill); font-family: var(--font-label); font-size: 11px; font-weight: 300; letter-spacing: 0.02em; border: 1px solid var(--grey1); background: var(--white); color: var(--grey3); cursor: pointer; transition: all 0.15s; user-select: none; }
     .phase-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-
-    .phase-chip.p-done { border-color: var(--kale); background: var(--mint-light); color: var(--kale); }
-    .phase-chip.p-done .phase-dot { background: var(--kale); }
-    .phase-chip.p-active { border-color: var(--lagoon); background: var(--skylight); color: var(--lagoon); }
-    .phase-chip.p-active .phase-dot { background: var(--lagoon); animation: pulse 2s infinite; }
+    .phase-chip.p-done { border-color: var(--kale); background: var(--mint-light); color: var(--kale); } .phase-chip.p-done .phase-dot { background: var(--kale); }
+    .phase-chip.p-active { border-color: var(--lagoon); background: var(--skylight); color: var(--lagoon); } .phase-chip.p-active .phase-dot { background: var(--lagoon); animation: pulse 2s infinite; }
     .phase-chip.p-upcoming .phase-dot { background: var(--grey2); }
-
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-    /* ── Legend ── */
-    .legend {
-      display: flex; gap: 20px; flex-wrap: wrap;
-      margin-bottom: 20px; padding: 12px 16px;
-      background: var(--white); border: 1px solid var(--grey1);
-      border-radius: var(--radius-md);
-    }
+    .legend { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; padding: 12px 16px; background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); }
     .legend-group { display: flex; align-items: center; gap: 12px; }
-    .legend-title {
-      font-family: var(--font-label); font-size: 10px; font-weight: 300;
-      text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey2);
-    }
+    .legend-title { font-family: var(--font-label); font-size: 10px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey2); }
     .legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--grey3); }
 
-    /* ── Empty ── */
     .empty { text-align: center; padding: 40px; color: var(--grey2); font-size: 13px; }
+
+    /* ── Prioritize Page ── */
+    .pri-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px;
+      background: var(--white);
+      border: 1px solid var(--grey1);
+      border-radius: var(--radius-md);
+      margin-bottom: 6px;
+      transition: all 0.15s;
+    }
+    .pri-item:hover { border-color: var(--grey2); }
+    .pri-item.dragging { opacity: 0.4; }
+    .pri-item.drag-over { border-top: 2px solid var(--lagoon); margin-top: -1px; }
+
+    .pri-handle { cursor: grab; color: var(--grey2); font-size: 14px; flex-shrink: 0; padding: 2px; user-select: none; line-height: 1; }
+    .pri-handle:active { cursor: grabbing; }
+
+    .pri-rank {
+      font-family: var(--font-label); font-size: 11px; font-weight: 300;
+      color: var(--grey2); width: 24px; text-align: center; flex-shrink: 0;
+    }
+
+    .pri-name { font-weight: 600; font-size: 14px; color: var(--black); min-width: 160px; flex-shrink: 0; }
+    .pri-cat { font-family: var(--font-label); font-size: 11px; font-weight: 300; color: var(--grey2); text-transform: uppercase; letter-spacing: 0.04em; min-width: 80px; flex-shrink: 0; }
+
+    .pri-fields { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+
+    .pri-field {
+      font-family: var(--font-body); font-size: 12px;
+      padding: 4px 10px; border: 1px solid var(--grey1);
+      border-radius: var(--radius-sm); background: var(--white);
+      color: var(--black); outline: none;
+      transition: border-color 0.15s;
+      min-width: 0;
+    }
+    .pri-field:focus { border-color: var(--lagoon); }
+    .pri-field::placeholder { color: var(--grey2); }
+    .pri-field-project { width: 130px; }
+    .pri-field-team { width: 110px; }
+    .pri-field-eng { width: 120px; }
+
+    .pri-status {
+      font-family: var(--font-label); font-size: 11px; font-weight: 300;
+      padding: 4px 10px; border: 1px solid var(--grey1);
+      border-radius: var(--radius-sm); background: var(--white);
+      color: var(--grey4); outline: none; cursor: pointer;
+      -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23AAA' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 24px;
+      flex-shrink: 0;
+    }
+    .pri-status:focus { border-color: var(--lagoon); }
+
+    .pri-status-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px; border-radius: var(--radius-pill);
+      font-family: var(--font-label); font-size: 10px; font-weight: 300;
+      letter-spacing: 0.02em; flex-shrink: 0;
+    }
+    .ws-not_started { background: var(--grey5); color: var(--grey3); }
+    .ws-in_progress { background: var(--skylight); color: var(--lagoon); }
+    .ws-in_review { background: var(--purple-light); color: var(--purple); }
+    .ws-done { background: var(--mint-light); color: var(--kale); }
+    .ws-blocked { background: var(--error-light); color: var(--error-red); }
+
+    .pri-figma-status { flex-shrink: 0; }
+
+    .pri-empty {
+      padding: 32px; text-align: center; color: var(--grey2);
+      font-size: 13px; background: var(--white);
+      border: 1px dashed var(--grey1); border-radius: var(--radius-md);
+    }
 
     @media (max-width: 900px) {
       .sidebar { display: none; }
       .main { margin-left: 0; }
       .content { padding: 24px 16px 48px; }
       .top-bar { padding: 16px; }
-      .stat-row { flex-wrap: wrap; }
-      .stat-card { min-width: 140px; }
+      .pri-fields { flex-wrap: wrap; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── SIDEBAR ── -->
 <div class="sidebar">
   <div class="sidebar-header">
     <h1>Noom Neo</h1>
@@ -537,6 +272,11 @@
       <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
       Overview
     </div>
+    <div class="nav-item" onclick="navigate('prioritize')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h6"/></svg></span>
+      Prioritize
+      <span class="nav-badge" id="nav-pri-count">0</span>
+    </div>
     <div class="nav-item" onclick="navigate('components')">
       <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
       Components
@@ -546,7 +286,6 @@
       <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
       Tokens
     </div>
-
     <div class="nav-section-label">Filter by Category</div>
     <div class="nav-item" onclick="filterCategory('all')">
       <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>
@@ -554,44 +293,47 @@
     </div>
     <div id="category-nav"></div>
   </nav>
-  <div class="sidebar-footer">
-    Last updated: Mar 5, 2026
-  </div>
+  <div class="sidebar-footer">Last updated: Mar 5, 2026</div>
 </div>
 
-<!-- ── MAIN ── -->
 <div class="main">
   <div class="top-bar">
     <div class="top-bar-left">
       <span class="team-prefix">Wax Component Library</span>
       <h2 id="page-title">Overview</h2>
     </div>
-    <div class="top-bar-actions">
-      <button class="btn btn-secondary btn-sm" onclick="exportData()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Export
-      </button>
-    </div>
+    <div class="top-bar-actions" id="top-actions"></div>
   </div>
 
   <div class="content">
 
-    <!-- ═══ OVERVIEW PAGE ═══ -->
+    <!-- ═══ OVERVIEW ═══ -->
     <div class="page active" id="page-overview">
       <div class="phase-strip" id="phase-strip"></div>
       <div class="stat-row" id="overview-stats"></div>
-
-      <div class="section-header">
-        <h3>Needs Attention</h3>
-        <span class="section-count" id="attention-count"></span>
-      </div>
+      <div class="section-header"><h3>Needs Attention</h3><span class="section-count" id="attention-count"></span></div>
       <div id="attention-list"></div>
     </div>
 
-    <!-- ═══ COMPONENTS PAGE ═══ -->
+    <!-- ═══ PRIORITIZE ═══ -->
+    <div class="page" id="page-prioritize">
+      <div class="stat-row" id="pri-stats"></div>
+      <div class="filters">
+        <input type="text" class="search-input" placeholder="Search backlog..." oninput="renderPrioritize()" id="pri-search">
+        <span class="filter-divider"></span>
+        <button class="filter-pill active" onclick="setPriFilter(this,'all')">All</button>
+        <button class="filter-pill" onclick="setPriFilter(this,'not_started')">Not Started</button>
+        <button class="filter-pill" onclick="setPriFilter(this,'in_progress')">In Progress</button>
+        <button class="filter-pill" onclick="setPriFilter(this,'in_review')">In Review</button>
+        <button class="filter-pill" onclick="setPriFilter(this,'done')">Done</button>
+        <button class="filter-pill" onclick="setPriFilter(this,'blocked')">Blocked</button>
+      </div>
+      <div id="pri-list"></div>
+    </div>
+
+    <!-- ═══ COMPONENTS ═══ -->
     <div class="page" id="page-components">
       <div class="stat-row" id="comp-stats"></div>
-
       <div class="legend">
         <div class="legend-group">
           <span class="legend-title">Status</span>
@@ -603,20 +345,13 @@
         <div class="legend-group">
           <span class="legend-title">Code</span>
           <span class="legend-item"><span class="pill-dot" style="background:var(--kale)"></span>Wax</span>
-          <span class="legend-item"><span class="pill-dot" style="background:#7C3AED"></span>Buyflow v1</span>
-          <span class="legend-item"><span class="pill-dot" style="background:#1565C0"></span>Prototypes</span>
+          <span class="legend-item"><span class="pill-dot" style="background:var(--purple)"></span>Buyflow v1</span>
+          <span class="legend-item"><span class="pill-dot" style="background:var(--blue)"></span>Prototypes</span>
           <span class="legend-item"><span class="pill-dot" style="background:var(--error-red)"></span>None</span>
         </div>
       </div>
-
       <div class="filters">
         <input type="text" class="search-input" placeholder="Search components..." oninput="applyFilters()" id="search">
-        <span class="filter-divider"></span>
-        <button class="filter-pill active" onclick="setFilter(this,'tier','all')">All</button>
-        <button class="filter-pill" onclick="setFilter(this,'tier','1')">Tier 1</button>
-        <button class="filter-pill" onclick="setFilter(this,'tier','2')">Tier 2</button>
-        <button class="filter-pill" onclick="setFilter(this,'tier','3')">Tier 3</button>
-        <button class="filter-pill" onclick="setFilter(this,'tier','done')">Solid</button>
         <span class="filter-divider"></span>
         <button class="filter-pill active" onclick="setFilter(this,'status','all')">All Statuses</button>
         <button class="filter-pill" onclick="setFilter(this,'status','done')">Done</button>
@@ -624,38 +359,15 @@
         <button class="filter-pill" onclick="setFilter(this,'status','missing')">Missing</button>
         <span class="spacer"></span>
         <div class="view-toggle">
-          <button class="view-toggle-btn active" onclick="setView('table')" title="Table">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18"/></svg>
-          </button>
-          <button class="view-toggle-btn" onclick="setView('cards')" title="Cards">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          </button>
+          <button class="view-toggle-btn active" onclick="setView('table')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18"/></svg></button>
+          <button class="view-toggle-btn" onclick="setView('cards')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
         </div>
       </div>
-
-      <div id="table-view">
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Component</th>
-                <th>Category</th>
-                <th>Tier</th>
-                <th>Figma</th>
-                <th>Code</th>
-                <th>Storybook</th>
-                <th>Code Connect</th>
-                <th>Readiness</th>
-              </tr>
-            </thead>
-            <tbody id="table-body"></tbody>
-          </table>
-        </div>
-      </div>
+      <div id="table-view"><div class="table-wrap"><table><thead><tr><th>Component</th><th>Category</th><th>Figma</th><th>Code</th><th>Storybook</th><th>Code Connect</th><th>Readiness</th></tr></thead><tbody id="table-body"></tbody></table></div></div>
       <div id="card-view" class="card-grid" style="display:none"></div>
     </div>
 
-    <!-- ═══ TOKENS PAGE ═══ -->
+    <!-- ═══ TOKENS ═══ -->
     <div class="page" id="page-tokens">
       <div class="stat-row" id="token-stats"></div>
       <div class="tokens-grid" id="tokens-grid"></div>
@@ -665,307 +377,330 @@
 </div>
 
 <script>
-// ═══════════════════════════════════
-// DATA
-// ═══════════════════════════════════
-
 const PHASES = [
-  { id: 0, name: "Get Wax in Workspace", status: "upcoming" },
-  { id: 1, name: "Token Alignment", status: "upcoming" },
-  { id: 2, name: "Figma Components", status: "upcoming" },
-  { id: 3, name: "Wax Components", status: "upcoming" },
-  { id: 4, name: "Code Connect", status: "upcoming" },
-  { id: 5, name: "Storybook", status: "upcoming" },
-  { id: 6, name: "AI Integration", status: "upcoming" },
-  { id: 7, name: "Governance", status: "upcoming" },
+  { id:0, name:"Get Wax in Workspace", status:"upcoming" },
+  { id:1, name:"Token Alignment", status:"upcoming" },
+  { id:2, name:"Figma Components", status:"upcoming" },
+  { id:3, name:"Wax Components", status:"upcoming" },
+  { id:4, name:"Code Connect", status:"upcoming" },
+  { id:5, name:"Storybook", status:"upcoming" },
+  { id:6, name:"AI Integration", status:"upcoming" },
+  { id:7, name:"Governance", status:"upcoming" },
 ];
 
 const C = [
-  { name:"Button", cat:"Core", tier:"done", figma:"done", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Input", cat:"Core", tier:"1", figma:"partial", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Password Input", cat:"Core", tier:"3", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Number Input", cat:"Core", tier:"3", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Date Input", cat:"Core", tier:"3", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Text Area", cat:"Core", tier:"3", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Select / Dropdown", cat:"Core", tier:"done", figma:"done", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Checkbox", cat:"Core", tier:"1", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Radio", cat:"Core", tier:"1", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Switch", cat:"Core", tier:"1", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Segmented Control", cat:"Core", tier:"3", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Chip", cat:"Core", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Tag", cat:"Core", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Label", cat:"Core", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Badge / Pill", cat:"Core", tier:"1", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"iOS Status Bar", cat:"Navigation", tier:"done", figma:"done", code:"na", sb:"na", cc:"na" },
-  { name:"Page Header", cat:"Navigation", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Tab Bar", cat:"Navigation", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"iOS Home Indicator", cat:"Navigation", tier:"done", figma:"done", code:"na", sb:"na", cc:"na" },
-  { name:"Bottom Pagination", cat:"Navigation", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Subpage Header", cat:"Navigation", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Toast", cat:"Feedback", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Status Banner", cat:"Feedback", tier:"1", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Spinner", cat:"Feedback", tier:"1", figma:"missing", code:"none", sb:"missing", cc:"missing" },
-  { name:"Empty State", cat:"Feedback", tier:"3", figma:"missing", code:"none", sb:"missing", cc:"missing" },
-  { name:"Card", cat:"Layout", tier:"2", figma:"partial", code:"none", sb:"missing", cc:"missing" },
-  { name:"Modal", cat:"Layout", tier:"1", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Bottom Sheet", cat:"Layout", tier:"done", figma:"partial", code:"wax", sb:"missing", cc:"missing" },
-  { name:"Divider", cat:"Layout", tier:"1", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Section Header", cat:"Layout", tier:"1", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"List / Line Item", cat:"Data Display", tier:"done", figma:"done", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Meal List Item", cat:"Data Display", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Meal Review", cat:"Data Display", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Food Search", cat:"Data Display", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Amount Pill", cat:"Data Display", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Bullet List", cat:"Data Display", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Comparison Table", cat:"Data Display", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
-  { name:"Progress Bar", cat:"Progress", tier:"done", figma:"done", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Progress Steps", cat:"Progress", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Circular Progress", cat:"Progress", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
-  { name:"Progress + Loading Text", cat:"Progress", tier:"3", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
-  { name:"Hero Image Area", cat:"Media", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Image Pagination Dots", cat:"Media", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Image + Text Overlay", cat:"Media", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
-  { name:"Trust Badges Bar", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Price Display", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Pricing Module", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Pricing Tier Card", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Radio Selection Card", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Tabs (Purchase)", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"CTA Module", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Sticky CTA Footer", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Order Summary Card", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Order Line Item", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Future Charges Card", cat:"Commerce", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Promo Code", cat:"Commerce", tier:"2", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
-  { name:"Payment Selector", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Saved Payment", cat:"Commerce", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Consent Checkbox", cat:"Commerce", tier:"2", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Checkout Accordion", cat:"Checkout", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
-  { name:"Section Header (Checkout)", cat:"Checkout", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Address Display", cat:"Checkout", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Trust Signals", cat:"Checkout", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Legal Text Block", cat:"Checkout", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Billing Timeline", cat:"Checkout", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Survey Question Layout", cat:"Survey", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
-  { name:"Question Progress Bar", cat:"Survey", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
-  { name:"Interstitial Screen", cat:"Survey", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
-  { name:"Weight Graph", cat:"Survey", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
-  { name:"Testimonial Card", cat:"Survey", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
-  { name:"Plan Selection Card", cat:"Survey", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
-  { name:"Social Proof Bar", cat:"Social Proof", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Money-Back Guarantee", cat:"Social Proof", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Reservation Timer", cat:"Social Proof", tier:"3", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
-  { name:"Subscription Status Card", cat:"Subscription", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Accordion", cat:"Content", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Step Card", cat:"Content", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Benefit Card", cat:"Content", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Pillar Card", cat:"Content", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Stat Callout", cat:"Content", tier:"3", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
-  { name:"Full Screen Interstitial", cat:"Specialized", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Chat Components", cat:"Specialized", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Med Lockups", cat:"Specialized", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Animation", cat:"Specialized", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Data / Charts", cat:"Specialized", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
-  { name:"Calorie Budget Bar", cat:"Specialized", tier:"done", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Button", cat:"Core", figma:"done", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Input", cat:"Core", figma:"partial", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Password Input", cat:"Core", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Number Input", cat:"Core", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Date Input", cat:"Core", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Text Area", cat:"Core", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Select / Dropdown", cat:"Core", figma:"done", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Checkbox", cat:"Core", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Radio", cat:"Core", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Switch", cat:"Core", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Segmented Control", cat:"Core", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Chip", cat:"Core", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Tag", cat:"Core", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Label", cat:"Core", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Badge / Pill", cat:"Core", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"iOS Status Bar", cat:"Navigation", figma:"done", code:"na", sb:"na", cc:"na" },
+  { name:"Page Header", cat:"Navigation", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Tab Bar", cat:"Navigation", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"iOS Home Indicator", cat:"Navigation", figma:"done", code:"na", sb:"na", cc:"na" },
+  { name:"Bottom Pagination", cat:"Navigation", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Subpage Header", cat:"Navigation", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Toast", cat:"Feedback", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Status Banner", cat:"Feedback", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Spinner", cat:"Feedback", figma:"missing", code:"none", sb:"missing", cc:"missing" },
+  { name:"Empty State", cat:"Feedback", figma:"missing", code:"none", sb:"missing", cc:"missing" },
+  { name:"Card", cat:"Layout", figma:"partial", code:"none", sb:"missing", cc:"missing" },
+  { name:"Modal", cat:"Layout", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Bottom Sheet", cat:"Layout", figma:"partial", code:"wax", sb:"missing", cc:"missing" },
+  { name:"Divider", cat:"Layout", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Section Header", cat:"Layout", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"List / Line Item", cat:"Data Display", figma:"done", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Meal List Item", cat:"Data Display", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Meal Review", cat:"Data Display", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Food Search", cat:"Data Display", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Amount Pill", cat:"Data Display", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Bullet List", cat:"Data Display", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Comparison Table", cat:"Data Display", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Progress Bar", cat:"Progress", figma:"done", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Progress Steps", cat:"Progress", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Circular Progress", cat:"Progress", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Progress + Loading Text", cat:"Progress", figma:"missing", code:"buyflow", sb:"done", cc:"missing" },
+  { name:"Hero Image Area", cat:"Media", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Image Pagination Dots", cat:"Media", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Image + Text Overlay", cat:"Media", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Trust Badges Bar", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Price Display", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Pricing Module", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Pricing Tier Card", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Radio Selection Card", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Tabs (Purchase)", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"CTA Module", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Sticky CTA Footer", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Order Summary Card", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Order Line Item", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Future Charges Card", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Promo Code", cat:"Commerce", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Payment Selector", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Saved Payment", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Consent Checkbox", cat:"Commerce", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Checkout Accordion", cat:"Checkout", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Section Header (Checkout)", cat:"Checkout", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Address Display", cat:"Checkout", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Trust Signals", cat:"Checkout", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Legal Text Block", cat:"Checkout", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Billing Timeline", cat:"Checkout", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Survey Question Layout", cat:"Survey", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Question Progress Bar", cat:"Survey", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Interstitial Screen", cat:"Survey", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Weight Graph", cat:"Survey", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Testimonial Card", cat:"Survey", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Plan Selection Card", cat:"Survey", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Social Proof Bar", cat:"Social Proof", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Money-Back Guarantee", cat:"Social Proof", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Reservation Timer", cat:"Social Proof", figma:"missing", code:"buyflow", sb:"missing", cc:"missing" },
+  { name:"Subscription Status Card", cat:"Subscription", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Accordion", cat:"Content", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Step Card", cat:"Content", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Benefit Card", cat:"Content", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Pillar Card", cat:"Content", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Stat Callout", cat:"Content", figma:"missing", code:"proto", sb:"missing", cc:"missing" },
+  { name:"Full Screen Interstitial", cat:"Specialized", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Chat Components", cat:"Specialized", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Med Lockups", cat:"Specialized", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Animation", cat:"Specialized", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Data / Charts", cat:"Specialized", figma:"done", code:"none", sb:"missing", cc:"missing" },
+  { name:"Calorie Budget Bar", cat:"Specialized", figma:"done", code:"none", sb:"missing", cc:"missing" },
 ];
 
 const TOKENS = {
-  colors: [
-    { n:"Lagoon", v:"#05727A", f:true },{ n:"Lagoon Dark", v:"#045B62", f:true },
-    { n:"Blueberry", v:"#15333D", f:true },{ n:"Skylight", v:"#DCF5F0", f:true },
-    { n:"Sky", v:"#B4E0D8", f:false },{ n:"Off-White", v:"#F6F4EE", f:true },
-    { n:"Sand", v:"#E4DECE", f:true },{ n:"Black", v:"#191717", f:true },
-    { n:"White", v:"#FFFFFF", f:true },{ n:"Grey 1", v:"#DEDEDE", f:true },
-    { n:"Grey 2", v:"#AAAAAA", f:true },{ n:"Grey 3", v:"#666666", f:true },
-    { n:"Grey 4", v:"#444444", f:true },{ n:"Grey 5", v:"#F4F4F4", f:true },
-    { n:"Kale", v:"#316700", f:false },{ n:"Mint", v:"#C8E3B1", f:true },
-    { n:"Mint Light", v:"#E3F1D8", f:false },{ n:"Error Red", v:"#C13515", f:false },
-    { n:"Warning Amber", v:"#B8860B", f:false },{ n:"Warning Light", v:"#FFF3E0", f:false },
-  ],
-  spacing: [
-    { n:"4", v:"4px", f:false },{ n:"8", v:"8px", f:false },{ n:"12", v:"12px", f:false },
-    { n:"16", v:"16px", f:true },{ n:"20", v:"20px", f:false },{ n:"24", v:"24px", f:false },
-    { n:"32", v:"32px", f:false },{ n:"40", v:"40px", f:false },{ n:"48", v:"48px", f:false },
-  ],
-  typography: [
-    { n:"Headline/2xl", v:"Serif 64px", f:true },{ n:"Headline/xl", v:"Serif 56px", f:true },
-    { n:"Headline/lg", v:"Serif 40px", f:true },{ n:"Headline/md", v:"Serif 32px", f:true },
-    { n:"Headline/sm", v:"Serif 28px", f:true },{ n:"Headline/xs", v:"Serif 24px", f:true },
-    { n:"Headline/2xs", v:"Serif 20px", f:true },{ n:"Paragraph/lg", v:"Sans 18px", f:true },
-    { n:"Paragraph/md", v:"Sans 16px", f:true },{ n:"Paragraph/sm", v:"Sans 14px", f:true },
-    { n:"Paragraph/xs", v:"Sans 12px", f:true },{ n:"Accent/lg", v:"Brown 16px", f:true },
-    { n:"Accent/md", v:"Brown 14px", f:true },{ n:"Accent/sm", v:"Brown 12px", f:true },
-    { n:"Accent/xs", v:"Brown 10px", f:true },
-  ],
-  radii: [
-    { n:"sm", v:"6px", f:true },{ n:"md", v:"8px", f:true },{ n:"lg", v:"12px", f:true },
-    { n:"xl", v:"16px", f:true },{ n:"pill", v:"25px", f:false },{ n:"full", v:"56px", f:true },
-    { n:"circle", v:"100px", f:true },
-  ],
+  colors: [{n:"Lagoon",v:"#05727A",f:true},{n:"Lagoon Dark",v:"#045B62",f:true},{n:"Blueberry",v:"#15333D",f:true},{n:"Skylight",v:"#DCF5F0",f:true},{n:"Sky",v:"#B4E0D8",f:false},{n:"Off-White",v:"#F6F4EE",f:true},{n:"Sand",v:"#E4DECE",f:true},{n:"Black",v:"#191717",f:true},{n:"White",v:"#FFFFFF",f:true},{n:"Grey 1",v:"#DEDEDE",f:true},{n:"Grey 2",v:"#AAAAAA",f:true},{n:"Grey 3",v:"#666666",f:true},{n:"Grey 4",v:"#444444",f:true},{n:"Grey 5",v:"#F4F4F4",f:true},{n:"Kale",v:"#316700",f:false},{n:"Mint",v:"#C8E3B1",f:true},{n:"Mint Light",v:"#E3F1D8",f:false},{n:"Error Red",v:"#C13515",f:false},{n:"Warning Amber",v:"#B8860B",f:false},{n:"Warning Light",v:"#FFF3E0",f:false}],
+  spacing: [{n:"4",v:"4px",f:false},{n:"8",v:"8px",f:false},{n:"12",v:"12px",f:false},{n:"16",v:"16px",f:true},{n:"20",v:"20px",f:false},{n:"24",v:"24px",f:false},{n:"32",v:"32px",f:false},{n:"40",v:"40px",f:false},{n:"48",v:"48px",f:false}],
+  typography: [{n:"Headline/2xl",v:"Serif 64px",f:true},{n:"Headline/xl",v:"Serif 56px",f:true},{n:"Headline/lg",v:"Serif 40px",f:true},{n:"Headline/md",v:"Serif 32px",f:true},{n:"Headline/sm",v:"Serif 28px",f:true},{n:"Headline/xs",v:"Serif 24px",f:true},{n:"Headline/2xs",v:"Serif 20px",f:true},{n:"Paragraph/lg",v:"Sans 18px",f:true},{n:"Paragraph/md",v:"Sans 16px",f:true},{n:"Paragraph/sm",v:"Sans 14px",f:true},{n:"Paragraph/xs",v:"Sans 12px",f:true},{n:"Accent/lg",v:"Brown 16px",f:true},{n:"Accent/md",v:"Brown 14px",f:true},{n:"Accent/sm",v:"Brown 12px",f:true},{n:"Accent/xs",v:"Brown 10px",f:true}],
+  radii: [{n:"sm",v:"6px",f:true},{n:"md",v:"8px",f:true},{n:"lg",v:"12px",f:true},{n:"xl",v:"16px",f:true},{n:"pill",v:"25px",f:false},{n:"full",v:"56px",f:true},{n:"circle",v:"100px",f:true}],
 };
 
-// ═══════════════════════════════════
-// STATE
-// ═══════════════════════════════════
+// ═══ STATE ═══
 let currentPage = "overview";
 let currentView = "table";
-let filters = { tier: "all", status: "all", category: "all" };
+let filters = { status: "all", category: "all" };
+let priFilter = "all";
 
-// ═══════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════
+let backlog = JSON.parse(localStorage.getItem('ds-backlog') || 'null');
+if (!backlog) {
+  backlog = C.map((c, i) => ({ id: i, name: c.name, cat: c.cat, project: "", team: "", engineer: "", workStatus: "not_started" }));
+  saveBacklog();
+}
+if (backlog.length < C.length) {
+  const existing = new Set(backlog.map(b => b.name));
+  C.forEach((c, i) => {
+    if (!existing.has(c.name)) backlog.push({ id: backlog.length, name: c.name, cat: c.cat, project: "", team: "", engineer: "", workStatus: "not_started" });
+  });
+  saveBacklog();
+}
+
+function saveBacklog() { localStorage.setItem('ds-backlog', JSON.stringify(backlog)); }
+
+// ═══ HELPERS ═══
 const SL = { done:"Done", partial:"Partial", missing:"Missing", na:"N/A" };
 const CL = { wax:"Wax", buyflow:"Buyflow v1", both:"Both", proto:"Prototypes", none:"None", na:"N/A" };
-const TL = { "1":"T1", "2":"T2", "3":"T3", done:"Solid" };
-const TC = { "1":"tier-1", "2":"tier-2", "3":"tier-3", done:"tier-solid" };
 const LC = { wax:"loc-wax", buyflow:"loc-buyflow", both:"loc-both", proto:"loc-proto", none:"loc-none", na:"loc-na" };
+const WSL = { not_started:"Not Started", in_progress:"In Progress", in_review:"In Review", done:"Done", blocked:"Blocked" };
 
 function score(c) {
-  let s=0, t=0;
+  let s=0,t=0;
   if(c.figma!=="na"){t+=2;if(c.figma==="done")s+=2;else if(c.figma==="partial")s+=1;}
   if(c.code!=="na"){t+=2;if(c.code==="wax")s+=2;else if(c.code==="buyflow"||c.code==="both")s+=1;}
   if(c.sb!=="na"){t+=1;if(c.sb==="done")s+=1;}
   if(c.cc!=="na"){t+=1;if(c.cc==="done")s+=1;}
   return t>0?s/t:0;
 }
-
 function overall(c) { const s=score(c); return s>=0.9?"done":s>=0.3?"partial":"missing"; }
-
 function matches(c) {
   const q=(document.getElementById("search")?.value||"").toLowerCase();
   if(q&&!c.name.toLowerCase().includes(q)&&!c.cat.toLowerCase().includes(q))return false;
-  if(filters.tier!=="all"&&c.tier!==filters.tier)return false;
   if(filters.status!=="all"&&overall(c)!==filters.status)return false;
   if(filters.category!=="all"&&c.cat!==filters.category)return false;
   return true;
 }
-
 function dot(){return '<span class="pill-dot"></span>';}
 function pill(s){return `<span class="pill pill-${s}">${dot()}${SL[s]}</span>`;}
 function loc(s){return `<span class="loc ${LC[s]}">${CL[s]}</span>`;}
-function tierBadge(t){return `<span class="tier ${TC[t]}">${TL[t]}</span>`;}
 function pct(n,d){return d>0?Math.round(n/d*100):0;}
 
-// ═══════════════════════════════════
-// NAVIGATION
-// ═══════════════════════════════════
+// ═══ NAVIGATION ═══
 function navigate(page) {
   currentPage = page;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
   document.querySelectorAll('.sidebar-nav .nav-item').forEach(n=>n.classList.remove('active'));
   document.querySelector(`.nav-item[onclick="navigate('${page}')"]`)?.classList.add('active');
-  const titles = { overview:"Overview", components:"Components", tokens:"Tokens" };
+  const titles = { overview:"Overview", prioritize:"Prioritize", components:"Components", tokens:"Tokens" };
   document.getElementById('page-title').textContent = titles[page]||page;
+
+  const actions = document.getElementById('top-actions');
+  if (page === 'prioritize') {
+    actions.innerHTML = '<button class="btn btn-secondary btn-sm" onclick="exportData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</button>';
+  } else {
+    actions.innerHTML = '<button class="btn btn-secondary btn-sm" onclick="exportData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</button>';
+  }
+  if (page === 'prioritize') renderPrioritize();
 }
 
-function filterCategory(cat) {
-  filters.category = cat;
-  navigate('components');
-  applyFilters();
+function filterCategory(cat) { filters.category = cat; navigate('components'); applyFilters(); }
+
+// ═══ DRAG & DROP ═══
+let dragIdx = null;
+function priDragStart(e, idx) { dragIdx = idx; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; }
+function priDragEnd(e) { dragIdx = null; document.querySelectorAll('.pri-item').forEach(el => { el.classList.remove('dragging','drag-over'); }); }
+function priDragOver(e, idx) {
+  e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.pri-item').forEach(el => el.classList.remove('drag-over'));
+  if (idx !== dragIdx) e.currentTarget.classList.add('drag-over');
+}
+function priDrop(e, idx) {
+  e.preventDefault();
+  if (dragIdx === null || dragIdx === idx) return;
+  const item = backlog.splice(dragIdx, 1)[0];
+  backlog.splice(idx, 0, item);
+  saveBacklog();
+  renderPrioritize();
 }
 
-// ═══════════════════════════════════
-// RENDER: OVERVIEW
-// ═══════════════════════════════════
+// ═══ PRIORITIZE FIELD UPDATES ═══
+function updateField(idx, field, value) {
+  backlog[idx][field] = value;
+  saveBacklog();
+  renderPriStats();
+}
+
+function setPriFilter(btn, val) {
+  priFilter = val;
+  document.querySelectorAll('#page-prioritize .filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  renderPrioritize();
+}
+
+// ═══ RENDER: PRIORITIZE ═══
+function renderPrioritize() {
+  renderPriStats();
+  const q = (document.getElementById('pri-search')?.value || '').toLowerCase();
+  const filtered = backlog.map((b, i) => ({ ...b, _idx: i })).filter(b => {
+    if (q && !b.name.toLowerCase().includes(q) && !b.cat.toLowerCase().includes(q) && !b.project.toLowerCase().includes(q) && !b.team.toLowerCase().includes(q) && !b.engineer.toLowerCase().includes(q)) return false;
+    if (priFilter !== 'all' && b.workStatus !== priFilter) return false;
+    return true;
+  });
+
+  if (!filtered.length) {
+    document.getElementById('pri-list').innerHTML = '<div class="pri-empty">No items match your filters.</div>';
+    return;
+  }
+
+  const cMap = {};
+  C.forEach(c => cMap[c.name] = c);
+
+  document.getElementById('pri-list').innerHTML = filtered.map((b, vi) => {
+    const comp = cMap[b.name];
+    const figmaP = comp ? pill(comp.figma) : '';
+    const codeP = comp ? loc(comp.code) : '';
+    return `<div class="pri-item" draggable="true"
+      ondragstart="priDragStart(event,${b._idx})"
+      ondragend="priDragEnd(event)"
+      ondragover="priDragOver(event,${b._idx})"
+      ondrop="priDrop(event,${b._idx})">
+      <span class="pri-handle">⠿</span>
+      <span class="pri-rank">${b._idx + 1}</span>
+      <span class="pri-name">${b.name}</span>
+      <span class="pri-cat">${b.cat}</span>
+      <div class="pri-fields">
+        <input class="pri-field pri-field-project" placeholder="Project" value="${esc(b.project)}" onchange="updateField(${b._idx},'project',this.value)">
+        <input class="pri-field pri-field-team" placeholder="Team" value="${esc(b.team)}" onchange="updateField(${b._idx},'team',this.value)">
+        <input class="pri-field pri-field-eng" placeholder="Engineer" value="${esc(b.engineer)}" onchange="updateField(${b._idx},'engineer',this.value)">
+        <select class="pri-status" onchange="updateField(${b._idx},'workStatus',this.value)">
+          <option value="not_started" ${b.workStatus==='not_started'?'selected':''}>Not Started</option>
+          <option value="in_progress" ${b.workStatus==='in_progress'?'selected':''}>In Progress</option>
+          <option value="in_review" ${b.workStatus==='in_review'?'selected':''}>In Review</option>
+          <option value="done" ${b.workStatus==='done'?'selected':''}>Done</option>
+          <option value="blocked" ${b.workStatus==='blocked'?'selected':''}>Blocked</option>
+        </select>
+        <span class="pri-figma-status">${figmaP}</span>
+        <span class="pri-figma-status">${codeP}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderPriStats() {
+  const total = backlog.length;
+  const ip = backlog.filter(b => b.workStatus === 'in_progress').length;
+  const ir = backlog.filter(b => b.workStatus === 'in_review').length;
+  const done = backlog.filter(b => b.workStatus === 'done').length;
+  const blocked = backlog.filter(b => b.workStatus === 'blocked').length;
+  document.getElementById('pri-stats').innerHTML = `
+    <div class="stat-card stat-lagoon"><div class="stat-value">${ip}</div><div class="stat-label">In Progress</div></div>
+    <div class="stat-card" style="border-left:3px solid var(--purple)"><div class="stat-value" style="color:var(--purple)">${ir}</div><div class="stat-label">In Review</div></div>
+    <div class="stat-card stat-kale"><div class="stat-value">${done}/${total}</div><div class="stat-label">Done</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(done,total)}%;background:var(--kale)"></div></div></div>
+    <div class="stat-card stat-error"><div class="stat-value">${blocked}</div><div class="stat-label">Blocked</div></div>
+  `;
+  document.getElementById('nav-pri-count').textContent = total - done;
+}
+
+function esc(s) { return String(s).replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+// ═══ RENDER: OVERVIEW ═══
 function renderOverview() {
-  const total=C.length;
-  const applicable=C.filter(c=>c.figma!=="na").length;
+  const total=C.length, applicable=C.filter(c=>c.figma!=="na").length;
   const figmaDone=C.filter(c=>c.figma==="done").length;
   const inWax=C.filter(c=>c.code==="wax"||c.code==="both").length;
   const inBuyflow=C.filter(c=>c.code==="buyflow"||c.code==="both").length;
   const sbDone=C.filter(c=>c.sb==="done").length;
   const vibeReady=C.filter(c=>overall(c)==="done").length;
-
   document.getElementById('phase-strip').innerHTML = PHASES.map(p=>`<div class="phase-chip p-${p.status}"><span class="phase-dot"></span>P${p.id}: ${p.name}</div>`).join('');
-
   document.getElementById('overview-stats').innerHTML = `
-    <div class="stat-card stat-lagoon">
-      <div class="stat-value">${figmaDone}/${applicable}</div>
-      <div class="stat-label">Figma Components</div>
-      <div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(figmaDone,applicable)}%;background:var(--lagoon)"></div></div>
-    </div>
-    <div class="stat-card stat-kale">
-      <div class="stat-value">${inWax}/${total}</div>
-      <div class="stat-label">In Wax</div>
-      <div class="stat-sub">${inBuyflow} still in Buyflow v1</div>
-      <div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(inWax,total)}%;background:var(--kale)"></div></div>
-    </div>
-    <div class="stat-card stat-warning">
-      <div class="stat-value">${sbDone}/${total}</div>
-      <div class="stat-label">Storybook</div>
-      <div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(sbDone,total)}%;background:var(--warning-amber)"></div></div>
-    </div>
-    <div class="stat-card stat-error">
-      <div class="stat-value">0/${total}</div>
-      <div class="stat-label">Code Connect</div>
-      <div class="stat-bar"><div class="stat-bar-fill" style="width:0%;background:var(--error-red)"></div></div>
-    </div>
-    <div class="stat-card" style="border-left:3px solid var(--black)">
-      <div class="stat-value">${vibeReady}/${total}</div>
-      <div class="stat-label">Vibe-Ready</div>
-      <div class="stat-sub">Figma + Wax + Stories + CC</div>
-      <div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(vibeReady,total)}%;background:var(--black)"></div></div>
-    </div>
-  `;
-
-  const t1missing = C.filter(c=>c.tier==="1"&&overall(c)!=="done");
-  document.getElementById('attention-count').textContent = `${t1missing.length} Tier 1 items`;
-
-  if(t1missing.length===0){
-    document.getElementById('attention-list').innerHTML = '<div class="empty">All Tier 1 components are complete.</div>';
-    return;
-  }
-
-  let html = '<div class="table-wrap"><table><thead><tr><th>Component</th><th>Figma</th><th>Code</th><th>Storybook</th><th>Code Connect</th></tr></thead><tbody>';
-  t1missing.forEach(c=>{
-    html+=`<tr><td><span class="comp-name">${c.name}</span></td><td>${pill(c.figma)}</td><td>${loc(c.code)}</td><td>${pill(c.sb)}</td><td>${pill(c.cc)}</td></tr>`;
+    <div class="stat-card stat-lagoon"><div class="stat-value">${figmaDone}/${applicable}</div><div class="stat-label">Figma Components</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(figmaDone,applicable)}%;background:var(--lagoon)"></div></div></div>
+    <div class="stat-card stat-kale"><div class="stat-value">${inWax}/${total}</div><div class="stat-label">In Wax</div><div class="stat-sub">${inBuyflow} still in Buyflow v1</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(inWax,total)}%;background:var(--kale)"></div></div></div>
+    <div class="stat-card stat-warning"><div class="stat-value">${sbDone}/${total}</div><div class="stat-label">Storybook</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(sbDone,total)}%;background:var(--warning-amber)"></div></div></div>
+    <div class="stat-card stat-error"><div class="stat-value">0/${total}</div><div class="stat-label">Code Connect</div><div class="stat-bar"><div class="stat-bar-fill" style="width:0%"></div></div></div>
+    <div class="stat-card" style="border-left:3px solid var(--black)"><div class="stat-value">${vibeReady}/${total}</div><div class="stat-label">Vibe-Ready</div><div class="stat-sub">Figma + Wax + Stories + CC</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(vibeReady,total)}%;background:var(--black)"></div></div></div>`;
+  const incomplete = backlog.filter(b => b.workStatus !== 'done').slice(0, 10);
+  document.getElementById('attention-count').textContent = `Top ${incomplete.length} priority items`;
+  if (!incomplete.length) { document.getElementById('attention-list').innerHTML = '<div class="empty">All items are complete.</div>'; return; }
+  const cMap = {}; C.forEach(c => cMap[c.name] = c);
+  let html = '<div class="table-wrap"><table><thead><tr><th>#</th><th>Component</th><th>Project</th><th>Team</th><th>Engineer</th><th>Status</th><th>Figma</th><th>Code</th></tr></thead><tbody>';
+  incomplete.forEach((b, i) => {
+    const comp = cMap[b.name];
+    html += `<tr><td>${i+1}</td><td><span class="comp-name">${b.name}</span></td><td>${b.project||'<span style="color:var(--grey2)">—</span>'}</td><td>${b.team||'<span style="color:var(--grey2)">—</span>'}</td><td>${b.engineer||'<span style="color:var(--grey2)">—</span>'}</td><td><span class="pri-status-pill ws-${b.workStatus}">${WSL[b.workStatus]}</span></td><td>${comp?pill(comp.figma):''}</td><td>${comp?loc(comp.code):''}</td></tr>`;
   });
-  html+='</tbody></table></div>';
+  html += '</tbody></table></div>';
   document.getElementById('attention-list').innerHTML = html;
 }
 
-// ═══════════════════════════════════
-// RENDER: COMPONENTS
-// ═══════════════════════════════════
+// ═══ RENDER: COMPONENTS ═══
 function renderComponents() {
-  const total=C.length;
-  const applicable=C.filter(c=>c.figma!=="na").length;
-  const figmaDone=C.filter(c=>c.figma==="done").length;
-  const inWax=C.filter(c=>c.code==="wax"||c.code==="both").length;
-  const sbDone=C.filter(c=>c.sb==="done").length;
-  const ccDone=C.filter(c=>c.cc==="done").length;
-
+  const total=C.length, applicable=C.filter(c=>c.figma!=="na").length;
+  const figmaDone=C.filter(c=>c.figma==="done").length, inWax=C.filter(c=>c.code==="wax"||c.code==="both").length;
+  const sbDone=C.filter(c=>c.sb==="done").length, ccDone=C.filter(c=>c.cc==="done").length;
   document.getElementById('comp-stats').innerHTML = `
     <div class="stat-card stat-lagoon"><div class="stat-value">${figmaDone}/${applicable}</div><div class="stat-label">Figma</div></div>
     <div class="stat-card stat-kale"><div class="stat-value">${inWax}/${total}</div><div class="stat-label">In Wax</div></div>
     <div class="stat-card stat-warning"><div class="stat-value">${sbDone}/${total}</div><div class="stat-label">Storybook</div></div>
-    <div class="stat-card stat-error"><div class="stat-value">${ccDone}/${total}</div><div class="stat-label">Code Connect</div></div>
-  `;
-
+    <div class="stat-card stat-error"><div class="stat-value">${ccDone}/${total}</div><div class="stat-label">Code Connect</div></div>`;
   document.getElementById('nav-comp-count').textContent = total;
-  renderTable();
-  renderCards();
+  renderTable(); renderCards();
 }
 
 function renderTable() {
   const filtered = C.filter(matches);
-  if(!filtered.length){ document.getElementById('table-body').innerHTML='<tr><td colspan="8" class="empty">No components match.</td></tr>'; return; }
-
+  if(!filtered.length){ document.getElementById('table-body').innerHTML='<tr><td colspan="7" class="empty">No components match.</td></tr>'; return; }
   let last="", html="";
   filtered.forEach(c=>{
-    if(c.cat!==last){ last=c.cat; html+=`<tr class="group-row"><td colspan="8">${c.cat}</td></tr>`; }
+    if(c.cat!==last){ last=c.cat; html+=`<tr class="group-row"><td colspan="7">${c.cat}</td></tr>`; }
     const s=score(c), dw=Math.round(s*100), pw=c.figma==="partial"||c.code==="buyflow"?Math.min(25,100-dw):0;
-    html+=`<tr>
-      <td><span class="comp-name">${c.name}</span></td>
-      <td><span class="category-label">${c.cat}</span></td>
-      <td>${tierBadge(c.tier)}</td>
-      <td>${pill(c.figma)}</td>
-      <td>${loc(c.code)}</td>
-      <td>${pill(c.sb)}</td>
-      <td>${pill(c.cc)}</td>
-      <td><div class="readiness"><div class="readiness-seg r-done" style="width:${dw}%"></div><div class="readiness-seg r-partial" style="width:${pw}%"></div></div></td>
-    </tr>`;
+    html+=`<tr><td><span class="comp-name">${c.name}</span></td><td><span class="category-label">${c.cat}</span></td><td>${pill(c.figma)}</td><td>${loc(c.code)}</td><td>${pill(c.sb)}</td><td>${pill(c.cc)}</td><td><div class="readiness"><div class="readiness-seg r-done" style="width:${dw}%"></div><div class="readiness-seg r-partial" style="width:${pw}%"></div></div></td></tr>`;
   });
   document.getElementById('table-body').innerHTML=html;
 }
@@ -974,112 +709,64 @@ function renderCards() {
   const filtered=C.filter(matches);
   if(!filtered.length){ document.getElementById('card-view').innerHTML='<div class="empty" style="grid-column:1/-1">No components match.</div>'; return; }
   document.getElementById('card-view').innerHTML = filtered.map(c=>`
-    <div class="comp-card">
-      <div class="comp-card-head"><span class="comp-name">${c.name}</span>${tierBadge(c.tier)}</div>
-      <div class="comp-card-body">
-        <div class="comp-card-row"><span class="row-label">Figma</span>${pill(c.figma)}</div>
-        <div class="comp-card-row"><span class="row-label">Code</span>${loc(c.code)}</div>
-        <div class="comp-card-row"><span class="row-label">Storybook</span>${pill(c.sb)}</div>
-        <div class="comp-card-row"><span class="row-label">Code Connect</span>${pill(c.cc)}</div>
-      </div>
-    </div>
-  `).join('');
+    <div class="comp-card"><div class="comp-card-head"><span class="comp-name">${c.name}</span><span class="category-label">${c.cat}</span></div>
+    <div class="comp-card-body">
+      <div class="comp-card-row"><span class="row-label">Figma</span>${pill(c.figma)}</div>
+      <div class="comp-card-row"><span class="row-label">Code</span>${loc(c.code)}</div>
+      <div class="comp-card-row"><span class="row-label">Storybook</span>${pill(c.sb)}</div>
+      <div class="comp-card-row"><span class="row-label">Code Connect</span>${pill(c.cc)}</div>
+    </div></div>`).join('');
 }
 
-// ═══════════════════════════════════
-// RENDER: TOKENS
-// ═══════════════════════════════════
+// ═══ RENDER: TOKENS ═══
 function renderTokens() {
-  const groups = [
-    { key:"colors", title:"Color Tokens" },
-    { key:"spacing", title:"Spacing Tokens" },
-    { key:"typography", title:"Typography Tokens" },
-    { key:"radii", title:"Radius Tokens" },
-  ];
-
+  const groups = [{key:"colors",title:"Color Tokens"},{key:"spacing",title:"Spacing Tokens"},{key:"typography",title:"Typography Tokens"},{key:"radii",title:"Radius Tokens"}];
   let statHtml="", gridHtml="";
-
-  const statColors = ["stat-lagoon","stat-warning","stat-lagoon","stat-kale"];
-
+  const sc = ["stat-lagoon","stat-warning","stat-lagoon","stat-kale"];
   groups.forEach((g,i)=>{
     const tokens=TOKENS[g.key], inF=tokens.filter(t=>t.f).length, total=tokens.length;
-    statHtml+=`<div class="stat-card ${statColors[i]}"><div class="stat-value">${inF}/${total}</div><div class="stat-label">${g.title}</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(inF,total)}%;background:${i===1?'var(--warning-amber)':'var(--lagoon)'}"></div></div></div>`;
-
+    statHtml+=`<div class="stat-card ${sc[i]}"><div class="stat-value">${inF}/${total}</div><div class="stat-label">${g.title}</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(inF,total)}%;background:${i===1?'var(--warning-amber)':'var(--lagoon)'}"></div></div></div>`;
     gridHtml+=`<div class="token-card"><div class="token-card-head">${g.title}<span class="token-count">${inF}/${total} in Figma</span></div><div class="token-card-body">`;
     tokens.forEach(t=>{
-      const swatch = g.key==="colors"?`<span class="token-swatch" style="background:${t.v}"></span>`:"";
-      const fp = t.f ? '<span class="pill pill-done" style="font-size:10px;padding:2px 7px">'+dot()+'Figma</span>' : '<span class="pill pill-missing" style="font-size:10px;padding:2px 7px">'+dot()+'Missing</span>';
-      const wp = '<span class="pill pill-na" style="font-size:10px;padding:2px 7px">'+dot()+'Audit</span>';
+      const swatch=g.key==="colors"?`<span class="token-swatch" style="background:${t.v}"></span>`:"";
+      const fp=t.f?'<span class="pill pill-done" style="font-size:10px;padding:2px 7px">'+dot()+'Figma</span>':'<span class="pill pill-missing" style="font-size:10px;padding:2px 7px">'+dot()+'Missing</span>';
+      const wp='<span class="pill pill-na" style="font-size:10px;padding:2px 7px">'+dot()+'Audit</span>';
       gridHtml+=`<div class="token-row"><span class="token-name">${swatch}${t.n}</span><span style="display:flex;gap:6px;align-items:center"><span class="token-val">${t.v}</span><span class="token-pills">${fp}${wp}</span></span></div>`;
     });
     gridHtml+=`</div></div>`;
   });
-
-  document.getElementById('token-stats').innerHTML = statHtml;
-  document.getElementById('tokens-grid').innerHTML = gridHtml;
+  document.getElementById('token-stats').innerHTML=statHtml;
+  document.getElementById('tokens-grid').innerHTML=gridHtml;
 }
 
-// ═══════════════════════════════════
-// RENDER: SIDEBAR CATEGORIES
-// ═══════════════════════════════════
 function renderCategoryNav() {
-  const cats = [...new Set(C.map(c=>c.cat))];
-  document.getElementById('category-nav').innerHTML = cats.map(cat=>{
-    const count = C.filter(c=>c.cat===cat).length;
-    return `<div class="nav-item" onclick="filterCategory('${cat}')">
-      <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/></svg></span>
-      ${cat}
-      <span class="nav-badge">${count}</span>
-    </div>`;
-  }).join('');
+  const cats=[...new Set(C.map(c=>c.cat))];
+  document.getElementById('category-nav').innerHTML=cats.map(cat=>`<div class="nav-item" onclick="filterCategory('${cat}')"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/></svg></span>${cat}<span class="nav-badge">${C.filter(c=>c.cat===cat).length}</span></div>`).join('');
 }
 
-// ═══════════════════════════════════
-// INTERACTIONS
-// ═══════════════════════════════════
 function setFilter(btn, group, value) {
-  filters[group] = value;
-  const pills = group==="tier"
-    ? document.querySelectorAll('.filter-pill:nth-child(-n+7)')
-    : document.querySelectorAll('.filter-pill:nth-last-child(-n+4)');
-  btn.closest('.filters').querySelectorAll('.filter-pill').forEach(p=>{
-    const isTier = ['All','Tier 1','Tier 2','Tier 3','Solid'].includes(p.textContent);
-    const isStatus = ['All Statuses','Done','Partial','Missing'].includes(p.textContent);
-    if(group==='tier'&&isTier) p.classList.remove('active');
-    if(group==='status'&&isStatus) p.classList.remove('active');
-  });
+  filters[group]=value;
+  btn.closest('.filters').querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   applyFilters();
 }
-
-function applyFilters() { renderTable(); renderCards(); }
-
-function setView(view) {
-  currentView = view;
+function applyFilters(){renderTable();renderCards();}
+function setView(view){
+  currentView=view;
   document.querySelectorAll('.view-toggle-btn').forEach(b=>b.classList.remove('active'));
-  if(view==='table'){
-    document.querySelector('.view-toggle-btn:first-child').classList.add('active');
-    document.getElementById('table-view').style.display='block';
-    document.getElementById('card-view').style.display='none';
-  } else {
-    document.querySelector('.view-toggle-btn:last-child').classList.add('active');
-    document.getElementById('table-view').style.display='none';
-    document.getElementById('card-view').style.display='grid';
-  }
+  if(view==='table'){document.querySelector('.view-toggle-btn:first-child').classList.add('active');document.getElementById('table-view').style.display='block';document.getElementById('card-view').style.display='none';}
+  else{document.querySelector('.view-toggle-btn:last-child').classList.add('active');document.getElementById('table-view').style.display='none';document.getElementById('card-view').style.display='grid';}
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify({components:C,tokens:TOKENS,phases:PHASES,backlog},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='design-system-data.json';a.click();
 }
 
-function exportData() {
-  const blob = new Blob([JSON.stringify({components:C,tokens:TOKENS,phases:PHASES},null,2)],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='design-system-data.json'; a.click();
-}
-
-// ═══════════════════════════════════
-// INIT
-// ═══════════════════════════════════
 renderCategoryNav();
 renderOverview();
 renderComponents();
 renderTokens();
+renderPrioritize();
 </script>
 </body>
 </html>
