@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --lagoon: #05727A;
+      --lagoon-dark: #045B62;
+      --lagoon-light: #E8F5F5;
+      --blueberry: #15333D;
+      --blueberry-light: #E0EAED;
+      --skylight: #DCF5F0;
+      --sky: #B4E0D8;
+      --off-white: #F6F4EE;
+      --sand: #E4DECE;
+      --black: #191717;
+      --white: #FFFFFF;
+      --grey1: #E8E8E8;
+      --grey2: #AAAAAA;
+      --grey3: #666666;
+      --grey4: #444444;
+      --grey5: #F4F4F4;
+      --kale: #316700;
+      --mint: #C8E3B1;
+      --mint-light: #E3F1D8;
+      --error-red: #C13515;
+      --error-light: #FFEBEE;
+      --warning-amber: #B8860B;
+      --warning-light: #FFF3E0;
+      --purple: #7C3AED;
+      --purple-light: #F3E8FF;
+      --blue: #1565C0;
+      --blue-light: #E8F0FE;
+      --orange: #E65100;
+      --orange-light: #FFF3E0;
+      --font-headline: 'Untitled Serif', Georgia, serif;
+      --font-body: 'Untitled Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-label: 'Untitled Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-pill: 25px;
+      --sidebar-width: 220px;
+      --shadow: 0px 0px 4px 1px rgba(0,0,0,0.06), 1px 2px 6px 0px rgba(0,0,0,0.08);
+      --shadow-lg: 0px 4px 16px rgba(0,0,0,0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background: var(--grey5); color: var(--black); min-height: 100vh; display: flex; }
+
+    /* ── Sidebar ─────────────────────────────── */
+    .sidebar { width: var(--sidebar-width); background: var(--white); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; border-right: 1px solid var(--grey1); }
+    .sidebar-header { padding: 28px 20px 20px; }
+    .sidebar-header h1 { font-family: var(--font-headline); font-size: 18px; font-weight: 500; color: var(--black); line-height: 1.3; }
+    .sidebar-header p { font-family: var(--font-label); font-size: 10px; font-weight: 300; color: var(--grey2); margin-top: 2px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .sidebar-nav { flex: 1; padding: 8px 10px; overflow-y: auto; }
+    .nav-section-label { font-family: var(--font-label); font-size: 10px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey2); padding: 16px 10px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; font-weight: 400; color: var(--grey3); transition: all 0.15s ease; user-select: none; }
+    .nav-item:hover { background: var(--grey5); color: var(--black); }
+    .nav-item.active { background: var(--grey5); color: var(--black); font-weight: 500; }
+    .nav-icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--grey2); }
+    .nav-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-item.active .nav-icon { color: var(--black); }
+    .nav-badge { margin-left: auto; font-family: var(--font-label); font-size: 11px; font-weight: 300; color: var(--grey2); padding: 1px 6px; border-radius: var(--radius-pill); }
+    .nav-item.active .nav-badge { color: var(--black); font-weight: 600; }
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--grey1); font-size: 11px; color: var(--grey2); }
+
+    /* ── Main ─────────────────────────────────── */
+    .main { margin-left: var(--sidebar-width); flex: 1; min-height: 100vh; }
+    .top-bar { background: var(--white); border-bottom: 1px solid var(--grey1); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .top-bar-left h2 { font-family: var(--font-body); font-size: 20px; font-weight: 600; line-height: 1.3; }
+    .top-bar-left .team-prefix { font-family: var(--font-label); font-size: 11px; font-weight: 300; letter-spacing: 0.06em; text-transform: uppercase; color: var(--grey2); display: block; margin-bottom: 2px; }
+    .top-bar-actions { display: flex; gap: 8px; align-items: center; }
+    .content { padding: 32px 40px 64px; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── Buttons ──────────────────────────────── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-body); font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: var(--radius-md); border: none; cursor: pointer; transition: all 0.15s ease; user-select: none; }
+    .btn-primary { background: var(--black); color: var(--white); }
+    .btn-primary:hover { background: var(--grey4); }
+    .btn-secondary { background: var(--white); color: var(--black); border: 1px solid var(--grey1); }
+    .btn-secondary:hover { background: var(--grey5); }
+    .btn-sm { font-size: 12px; padding: 5px 12px; }
+
+    /* ── Stat Cards ───────────────────────────── */
+    .stat-row { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
+    .stat-card { background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); padding: 16px 20px; flex: 1; min-width: 140px; }
+    .stat-card .stat-value { font-family: var(--font-body); font-size: 28px; font-weight: 600; color: var(--black); }
+    .stat-card .stat-label { font-family: var(--font-label); font-size: 11px; font-weight: 300; color: var(--grey2); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .stat-card .stat-sub { font-size: 12px; color: var(--grey3); margin-top: 6px; }
+    .stat-card .stat-bar { height: 4px; background: var(--grey1); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+    .stat-card .stat-bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+    .stat-card.stat-lagoon { border-left: 3px solid var(--lagoon); } .stat-card.stat-lagoon .stat-value { color: var(--lagoon); }
+    .stat-card.stat-kale { border-left: 3px solid var(--kale); } .stat-card.stat-kale .stat-value { color: var(--kale); }
+    .stat-card.stat-warning { border-left: 3px solid var(--warning-amber); } .stat-card.stat-warning .stat-value { color: var(--warning-amber); }
+    .stat-card.stat-error { border-left: 3px solid var(--error-red); } .stat-card.stat-error .stat-value { color: var(--error-red); }
+
+    /* ── Section Headers ─────────────────────── */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .section-header h3 { font-family: var(--font-label); font-size: 12px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey3); }
+    .section-count { font-size: 12px; color: var(--grey2); }
+
+    /* ── Filters ──────────────────────────────── */
+    .filters { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+    .search-input { padding: 7px 12px; border: 1px solid var(--grey1); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 13px; background: var(--white); color: var(--black); outline: none; width: 240px; transition: border-color 0.15s; }
+    .search-input::placeholder { color: var(--grey2); }
+    .search-input:focus { border-color: var(--lagoon); }
+    .filter-pill { padding: 5px 14px; border-radius: var(--radius-pill); border: 1px solid var(--grey1); background: var(--white); font-family: var(--font-label); font-size: 12px; font-weight: 300; color: var(--grey3); cursor: pointer; transition: all 0.15s; }
+    .filter-pill:hover { border-color: var(--grey2); color: var(--grey4); }
+    .filter-pill.active { background: var(--black); color: var(--white); border-color: var(--black); }
+    .filter-divider { width: 1px; height: 20px; background: var(--grey1); }
+    .spacer { flex: 1; }
+    .view-toggle { display: flex; }
+    .view-toggle-btn { background: none; border: 1px solid var(--grey1); cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: var(--grey2); transition: all 0.15s; }
+    .view-toggle-btn:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+    .view-toggle-btn:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; border-left: none; }
+    .view-toggle-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+
+    /* ── Add Component Form ────────────────────── */
+    .add-comp-form { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); margin-bottom: 12px; }
+    .add-comp-input { font-family: var(--font-body); font-size: 13px; padding: 6px 12px; border: 1px solid var(--grey1); border-radius: var(--radius-sm); background: var(--white); color: var(--black); outline: none; transition: border-color 0.15s; }
+    .add-comp-input:focus { border-color: var(--lagoon); }
+    .add-comp-input::placeholder { color: var(--grey2); }
+    .add-comp-select { font-family: var(--font-body); font-size: 13px; padding: 6px 12px; border: 1px solid var(--grey1); border-radius: var(--radius-sm); background: var(--white); color: var(--black); outline: none; cursor: pointer; }
+    .add-comp-select:focus { border-color: var(--lagoon); }
+
+    /* ── Tables ───────────────────────────────── */
+    .table-wrap { background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { text-align: left; font-family: var(--font-label); font-size: 10px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey2); padding: 12px 16px; border-bottom: 1px solid var(--grey1); white-space: nowrap; position: sticky; top: 0; background: var(--white); z-index: 10; }
+    thead th:first-child { padding-left: 20px; }
+    tbody tr { transition: background 0.1s; }
+    tbody tr:hover { background: var(--grey5); }
+    tbody tr.detail-row { background: var(--grey5); }
+    tbody tr.detail-row:hover { background: var(--grey5); }
+    tbody td { padding: 10px 16px; font-size: 13px; border-bottom: 1px solid var(--grey5); vertical-align: middle; }
+    tbody td:first-child { padding-left: 20px; }
+    tbody tr:last-child td { border-bottom: none; }
+    .comp-name { font-weight: 600; color: var(--black); white-space: nowrap; }
+    .category-label { font-family: var(--font-label); font-size: 11px; font-weight: 300; color: var(--grey2); text-transform: uppercase; letter-spacing: 0.04em; }
+    .group-row td { background: var(--grey5); font-family: var(--font-label); font-weight: 300; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--grey3); padding: 8px 20px; border-bottom: 1px solid var(--grey1); }
+
+    /* ── Status Pills ─────────────────────────── */
+    .pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: var(--radius-pill); font-family: var(--font-label); font-size: 11px; font-weight: 300; letter-spacing: 0.02em; }
+    .pill-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .pill-done { background: var(--mint-light); color: var(--kale); } .pill-done .pill-dot { background: var(--kale); }
+    .pill-partial { background: var(--warning-light); color: var(--warning-amber); } .pill-partial .pill-dot { background: var(--warning-amber); }
+    .pill-in_progress { background: var(--warning-light); color: var(--warning-amber); } .pill-in_progress .pill-dot { background: var(--warning-amber); }
+    .pill-changes_needed { background: var(--orange-light); color: var(--orange); } .pill-changes_needed .pill-dot { background: var(--orange); }
+    .pill-ready_for_eng { background: var(--skylight); color: var(--lagoon); } .pill-ready_for_eng .pill-dot { background: var(--lagoon); }
+    .pill-missing { background: var(--error-light); color: var(--error-red); } .pill-missing .pill-dot { background: var(--error-red); }
+    .pill-no_design { background: var(--error-light); color: var(--error-red); } .pill-no_design .pill-dot { background: var(--error-red); }
+    .pill-na { background: var(--grey5); color: var(--grey2); } .pill-na .pill-dot { background: var(--grey2); }
+
+    /* ── Code Location Badges ────────────────── */
+
+    /* ── Readiness Bar ───────────────────────── */
+    .readiness { display: flex; height: 4px; border-radius: 2px; overflow: hidden; background: var(--grey1); width: 72px; }
+    .readiness-seg { height: 100%; } .readiness-seg.r-done { background: var(--kale); } .readiness-seg.r-partial { background: var(--warning-amber); }
+
+    /* ── Tier Badge ───────────────────────────── */
+    .tier-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; flex-shrink: 0; }
+    .tier-badge.t1 { background: var(--error-light); color: var(--error-red); }
+    .tier-badge.t2 { background: var(--warning-light); color: var(--warning-amber); }
+    .tier-badge.t3 { background: var(--skylight); color: var(--lagoon); }
+    .tier-badge.done { background: var(--mint-light); color: var(--kale); }
+
+    /* ── Card Grid ───────────────────────────── */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+    .comp-card { background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); overflow: hidden; transition: border-color 0.15s; }
+    .comp-card:hover { border-color: var(--grey2); }
+    .comp-card-head { padding: 14px 16px 10px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--grey5); }
+    .comp-card-head .comp-name { font-size: 14px; }
+    .comp-card-body { padding: 12px 16px; }
+    .comp-card-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; font-size: 13px; color: var(--grey4); }
+    .comp-card-row + .comp-card-row { border-top: 1px solid var(--grey5); }
+    .comp-card-row .row-label { font-family: var(--font-label); font-size: 11px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.04em; color: var(--grey2); }
+
+    /* ── Legend ───────────────────────────────── */
+    .legend { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; padding: 12px 16px; background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); }
+    .legend-group { display: flex; align-items: center; gap: 12px; }
+    .legend-title { font-family: var(--font-label); font-size: 10px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey2); }
+    .legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--grey3); }
+
+    /* ── Phase Strip (inside overview page) ──── */
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* ── Owner Badges ────────────────────────── */
+    .owner-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .owner-badge.design { background: var(--skylight); color: var(--lagoon); }
+    .owner-badge.engineering { background: var(--purple-light); color: var(--purple); }
+    .owner-badge.all { background: var(--blueberry-light); color: var(--blueberry); }
+    .owner-badge.product { background: var(--orange-light); color: var(--orange); }
+
+    /* ── Overview: Project Hero ──────────────── */
+    .project-hero { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--grey1); padding: 40px; margin-bottom: 32px; }
+    .project-hero-title { font-size: 24px; font-weight: 600; color: var(--black); background: transparent; border: 1px solid transparent; border-radius: var(--radius-sm); padding: 2px 6px; margin: -2px -6px 10px; outline: none; font-family: var(--font-body); transition: border-color 0.15s; width: 100%; display: block; }
+    .project-hero-title:hover { border-color: var(--grey1); }
+    .project-hero-title:focus { border-color: var(--lagoon); background: var(--white); }
+    .project-hero-desc { font-size: 14px; color: var(--grey4); line-height: 1.7; background: transparent; border: 1px solid transparent; border-radius: var(--radius-sm); padding: 6px; margin: -6px; outline: none; font-family: var(--font-body); transition: border-color 0.15s; width: 100%; min-height: 60px; resize: vertical; display: block; }
+    .project-hero-desc:hover { border-color: var(--grey1); }
+    .project-hero-desc:focus { border-color: var(--lagoon); background: var(--white); }
+
+    /* ── Overview: Roadmap ───────────────────── */
+    .roadmap-title { font-size: 18px; font-weight: 600; color: var(--black); margin-bottom: 20px; }
+    .roadmap { position: relative; padding-left: 40px; margin-bottom: 40px; }
+    .roadmap::before { content: ''; position: absolute; left: 15px; top: 26px; bottom: 20px; width: 2px; background: var(--grey1); }
+    .roadmap-phase { position: relative; margin-bottom: 12px; background: var(--white); border-radius: var(--radius-md); border: 1px solid var(--grey1); padding: 16px 20px; transition: border-color 0.15s; }
+    .roadmap-phase:hover { border-color: var(--grey2); }
+    .roadmap-phase::before { content: ''; position: absolute; left: -33px; top: 20px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--grey2); background: var(--white); }
+    .roadmap-phase.done::before { background: var(--kale); border-color: var(--kale); }
+    .roadmap-phase.active::before { background: var(--lagoon); border-color: var(--lagoon); box-shadow: 0 0 0 4px rgba(5,114,122,0.2); }
+    .roadmap-phase.upcoming::before { background: var(--grey5); border-color: var(--grey2); }
+    .roadmap-phase-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+    .roadmap-phase-num { font-family: var(--font-label); font-size: 11px; font-weight: 300; color: var(--grey2); text-transform: uppercase; letter-spacing: 0.04em; }
+    .roadmap-phase-name { font-size: 14px; font-weight: 600; color: var(--black); }
+    .roadmap-phase-duration { font-size: 12px; color: var(--grey3); margin-left: auto; background: transparent; border: 1px solid transparent; border-radius: var(--radius-sm); padding: 2px 6px; outline: none; font-family: var(--font-body); transition: border-color 0.15s; min-width: 60px; width: auto; text-align: right; }
+    .roadmap-phase-duration:hover { border-color: var(--grey1); }
+    .roadmap-phase-duration:focus { border-color: var(--lagoon); background: var(--white); color: var(--black); }
+    .roadmap-phase-status { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 300; }
+    .roadmap-phase-status.done { background: var(--mint-light); color: var(--kale); }
+    .roadmap-phase-status.active { background: var(--skylight); color: var(--lagoon); }
+    .roadmap-phase-status.upcoming { background: var(--grey5); color: var(--grey3); }
+    .roadmap-phase-name-input { font-size: 14px; font-weight: 600; color: var(--black); background: transparent; border: 1px solid transparent; border-radius: var(--radius-sm); padding: 2px 6px; margin: -2px -6px; outline: none; font-family: var(--font-body); transition: border-color 0.15s; min-width: 80px; width: auto; }
+    .roadmap-phase-name-input:hover { border-color: var(--grey1); }
+    .roadmap-phase-name-input:focus { border-color: var(--lagoon); background: var(--white); }
+    .roadmap-task-list { list-style: none; padding: 0; margin: 0; }
+    .roadmap-task { display: flex; align-items: flex-start; gap: 8px; padding: 3px 0; }
+    .roadmap-task input[type="checkbox"] { margin-top: 3px; accent-color: var(--kale); cursor: pointer; flex-shrink: 0; }
+    .roadmap-task-text { font-size: 12px; color: var(--grey4); line-height: 1.5; flex: 1; border: 1px solid transparent; border-radius: var(--radius-sm); background: transparent; outline: none; font-family: var(--font-body); padding: 2px 4px; margin: -2px -4px; transition: border-color 0.15s; min-width: 0; width: 100%; }
+    .roadmap-task-text:hover { border-color: var(--grey1); color: var(--black); }
+    .roadmap-task-text:focus { border-color: var(--lagoon); color: var(--black); background: var(--white); }
+    .roadmap-task.completed .roadmap-task-text { text-decoration: line-through; color: var(--grey2); }
+    .roadmap-task-remove { background: none; border: none; color: var(--grey2); cursor: pointer; font-size: 14px; padding: 0 4px; line-height: 1; opacity: 0; transition: opacity 0.15s; }
+    .roadmap-task:hover .roadmap-task-remove { opacity: 1; }
+    .roadmap-task-remove:hover { color: var(--error-red); }
+    .roadmap-add-task { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+    .roadmap-add-task input { font-size: 12px; color: var(--grey4); border: 1px dashed var(--grey1); border-radius: var(--radius-sm); padding: 4px 8px; background: transparent; outline: none; font-family: var(--font-body); flex: 1; }
+    .roadmap-add-task input:focus { border-color: var(--lagoon); border-style: solid; }
+    .roadmap-add-task input::placeholder { color: var(--grey2); }
+    .parallel-label { font-size: 10px; font-weight: 300; color: var(--lagoon); background: var(--skylight); padding: 2px 8px; border-radius: 100px; }
+
+    /* ── Overview: Component Status Sections ── */
+    .status-sections { margin-bottom: 40px; }
+    .status-sections-title { font-size: 18px; font-weight: 600; color: var(--black); margin-bottom: 20px; }
+    .status-columns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .status-group { margin-bottom: 12px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--grey1); background: var(--white); }
+    .status-group-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; cursor: pointer; user-select: none; transition: background 0.15s; }
+    .status-group-header:hover { filter: brightness(0.97); }
+    .status-group-header.done-header { background: var(--mint-light); }
+    .status-group-header.inprogress-header { background: var(--skylight); }
+    .status-group-header.backlog-header { background: var(--grey5); }
+    .status-group-label { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .status-group-header.done-header .status-group-label { color: var(--kale); }
+    .status-group-header.inprogress-header .status-group-label { color: var(--lagoon); }
+    .status-group-header.backlog-header .status-group-label { color: var(--grey4); }
+    .status-count { font-size: 11px; font-weight: 300; padding: 2px 8px; border-radius: 100px; background: rgba(255,255,255,0.6); }
+    .chevron-icon { font-size: 11px; transition: transform 0.2s; color: var(--grey3); }
+    .status-group.collapsed .chevron-icon { transform: rotate(-90deg); }
+    .status-group.collapsed .status-group-body { display: none; }
+    .status-group-body { border-top: 1px solid var(--grey1); max-height: 400px; overflow-y: auto; }
+
+    /* ── Component Row (expandable) ──────────── */
+    .comp-row { border-bottom: 1px solid var(--grey1); }
+    .comp-row:last-child { border-bottom: none; }
+    .comp-row-summary { display: flex; align-items: center; padding: 10px 20px; cursor: pointer; gap: 12px; transition: background 0.1s; }
+    .comp-row-summary:hover { background: var(--grey5); }
+    .comp-row-name { font-size: 13px; font-weight: 600; color: var(--black); min-width: 160px; flex-shrink: 0; }
+    .platform-dots { display: flex; gap: 5px; align-items: center; }
+    .platform-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .platform-dot.done { background: var(--kale); }
+    .platform-dot.partial, .platform-dot.in_progress, .platform-dot.ready_for_eng { background: var(--warning-amber); }
+    .platform-dot.missing, .platform-dot.no_design { background: var(--error-red); }
+    .platform-dot.buyflow, .platform-dot.proto { background: var(--warning-amber); }
+    .platform-dot.wax { background: var(--kale); }
+    .platform-dot.none { background: var(--error-red); }
+    .platform-dot.na { background: var(--grey2); }
+    .platform-dot-label { font-family: var(--font-label); font-size: 9px; color: var(--grey2); font-weight: 300; }
+    .comp-row-spacer { flex: 1; }
+    .comp-row-chevron { font-size: 10px; color: var(--grey3); transition: transform 0.2s; flex-shrink: 0; }
+    .comp-row.expanded .comp-row-chevron { transform: rotate(90deg); }
+
+    /* ── Inline Select ───────────────────────── */
+    .inline-select { padding: 4px 8px; border: 1px solid var(--grey1); border-radius: var(--radius-sm); font-size: 11px; font-family: inherit; font-weight: 300; background: var(--white); color: var(--grey4); cursor: pointer; outline: none; transition: border-color 0.15s; flex-shrink: 0; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23AAA' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; padding-right: 20px; }
+    .pill-select { padding: 3px 22px 3px 10px; border: none; border-radius: var(--radius-pill); font-family: var(--font-label); font-size: 11px; font-weight: 300; letter-spacing: 0.02em; cursor: pointer; outline: none; -webkit-appearance: none; appearance: none; background-repeat: no-repeat; background-position: right 6px center; background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 8 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3 3 3-3' stroke='%23999' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+    .pill-select.ps-done { background-color: var(--mint-light); color: var(--kale); }
+    .pill-select.ps-in_progress, .pill-select.ps-partial { background-color: var(--warning-light); color: var(--warning-amber); }
+    .pill-select.ps-changes_needed { background-color: var(--orange-light); color: var(--orange); }
+    .pill-select.ps-ready_for_eng { background-color: var(--skylight); color: var(--lagoon); }
+    .pill-select.ps-missing, .pill-select.ps-no_design { background-color: var(--error-light); color: var(--error-red); }
+    .pill-select.ps-na { background-color: var(--grey5); color: var(--grey2); }
+    .pill-select.ps-wax-done { background-color: var(--mint-light); color: var(--kale); }
+    .pill-select.ps-wax-in_progress { background-color: var(--warning-light); color: var(--warning-amber); }
+    .pill-select.ps-wax-not_started { background-color: var(--grey5); color: var(--grey3); }
+    .pill-select.ps-wax-na { background-color: var(--grey5); color: var(--grey2); }
+    .theme-ready-cb { accent-color: var(--kale); cursor: pointer; width: 16px; height: 16px; }
+    .theme-checks { display: flex; flex-direction: column; gap: 4px; }
+    .theme-check-label { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-label); font-size: 11px; font-weight: 300; color: var(--grey4); cursor: pointer; white-space: nowrap; }
+    .theme-check-label input[type="checkbox"] { accent-color: var(--purple); cursor: pointer; }
+    .detail-theme-section { display: flex; flex-direction: column; gap: 8px; padding: 8px 0; }
+    .theme-checks-detail { display: flex; flex-wrap: wrap; gap: 8px; }
+    .add-theme-row { margin-top: 4px; }
+    .add-theme-input { font-size: 11px; font-family: var(--font-body); padding: 3px 8px; border: 1px dashed var(--grey1); border-radius: var(--radius-sm); background: transparent; outline: none; color: var(--grey4); width: 120px; }
+    .add-theme-input:focus { border-color: var(--lagoon); border-style: solid; }
+    .add-theme-input::placeholder { color: var(--grey2); }
+    .comp-name-cell { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+    .comp-name-cell:hover .comp-name { color: var(--lagoon); }
+    .table-chev { font-size: 10px; color: var(--grey2); transition: transform 0.2s; flex-shrink: 0; }
+    .table-chev.open { transform: rotate(90deg); }
+    .inline-select:focus { border-color: var(--lagoon); }
+    .inline-select.status-done { color: var(--kale); border-color: var(--kale); background-color: var(--mint-light); }
+    .inline-select.status-inprogress { color: var(--lagoon); border-color: var(--lagoon); background-color: var(--skylight); }
+    .inline-select.status-backlog { color: var(--grey3); }
+
+    /* ── Expanded Detail ─────────────────────── */
+    .comp-detail { display: none; padding: 0 20px 16px; background: var(--grey5); border-top: 1px solid var(--grey1); }
+    .comp-row.expanded .comp-detail { display: block; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 14px; }
+    .detail-card { border-radius: var(--radius-md); padding: 14px; border: 1px solid var(--grey1); }
+    .detail-card.design-card { background: var(--skylight); border-color: rgba(5,114,122,0.15); }
+    .detail-card.eng-card { background: var(--purple-light); border-color: rgba(124,58,237,0.12); }
+    .detail-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .detail-card-title { font-family: var(--font-label); font-size: 10px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.06em; }
+    .detail-card.design-card .detail-card-title { color: var(--lagoon); }
+    .detail-card.eng-card .detail-card-title { color: var(--purple); }
+    .detail-notes { width: 100%; min-height: 56px; border: 1px solid rgba(0,0,0,0.08); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 11px; font-family: inherit; line-height: 1.5; color: var(--grey4); background: rgba(255,255,255,0.7); resize: vertical; outline: none; transition: border-color 0.15s; }
+    .detail-notes:focus { border-color: var(--lagoon); background: var(--white); }
+    .assignment-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
+    .assignment-field { display: flex; flex-direction: column; gap: 3px; }
+    .assignment-label { font-family: var(--font-label); font-size: 10px; font-weight: 300; color: var(--grey3); text-transform: uppercase; letter-spacing: 0.04em; }
+    .assignment-input { padding: 6px 10px; border: 1px solid var(--grey1); border-radius: var(--radius-sm); font-size: 12px; font-family: inherit; background: var(--white); outline: none; transition: border-color 0.15s; }
+    .assignment-input:focus { border-color: var(--lagoon); }
+
+    /* ── Next Steps ──────────────────────────── */
+
+    /* ── Tokens ───────────────────────────────── */
+    .tokens-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 12px; }
+    .token-card { background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); overflow: hidden; }
+    .token-card-head { padding: 14px 16px; font-size: 14px; font-weight: 600; border-bottom: 1px solid var(--grey1); display: flex; align-items: center; justify-content: space-between; }
+    .token-card-head .token-count { font-family: var(--font-label); font-size: 11px; font-weight: 300; color: var(--grey2); text-transform: uppercase; letter-spacing: 0.04em; }
+    .token-card-body { padding: 12px 16px; }
+    .token-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; font-size: 13px; }
+    .token-row + .token-row { border-top: 1px solid var(--grey5); }
+    .token-name { font-weight: 500; display: flex; align-items: center; gap: 8px; }
+    .token-val { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; color: var(--grey3); }
+    .token-swatch { width: 16px; height: 16px; border-radius: 3px; border: 1px solid var(--grey1); flex-shrink: 0; }
+
+    /* ── Table Drag & Drop ────────────────────── */
+    tr.dragging-row { opacity: 0.4; }
+    tr.drag-over-row td { border-top: 2px solid var(--lagoon) !important; }
+    .drag-handle { cursor: grab; color: var(--grey2); font-size: 14px; user-select: none; line-height: 1; padding: 0 4px; }
+    .drag-handle:active { cursor: grabbing; }
+
+    /* ── Empty ────────────────────────────────── */
+    .empty { text-align: center; padding: 40px; color: var(--grey2); font-size: 13px; }
+
+    /* ── Responsive ───────────────────────────── */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .content { padding: 24px 16px 48px; }
+      .top-bar { padding: 16px; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .assignment-row { grid-template-columns: 1fr; }
+      .status-columns { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h1>Noom Neo</h1>
+    <p>Design System Dashboard</p>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Views</div>
+    <div class="nav-item active" onclick="navigate('overview')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+      Overview
+    </div>
+    <div class="nav-item" onclick="navigate('components')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+      Components
+      <span class="nav-badge" id="nav-comp-count">0</span>
+    </div>
+    <div class="nav-item" onclick="navigate('tokens')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
+      Tokens
+    </div>
+    <div class="nav-section-label">Filter by Category</div>
+    <div class="nav-item" onclick="filterCategory('all')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>
+      All Categories
+    </div>
+    <div id="category-nav"></div>
+  </nav>
+  <div class="sidebar-footer">Last updated: Mar 6, 2026</div>
+</div>
+
+<div class="main">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <span class="team-prefix">Wax Component Library</span>
+      <h2 id="page-title">Overview</h2>
+    </div>
+    <div class="top-bar-actions" id="top-actions">
+      <button class="btn btn-secondary btn-sm" onclick="exportData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══ OVERVIEW ═══ -->
+    <div class="page active" id="page-overview">
+      <div class="stat-row" id="overview-stats"></div>
+      <div id="overview-content"></div>
+    </div>
+
+    <!-- ═══ COMPONENTS ═══ -->
+    <div class="page" id="page-components">
+      <div class="stat-row" id="comp-stats"></div>
+      <div class="filters">
+        <input type="text" class="search-input" placeholder="Search components..." oninput="applyFilters()" id="comp-search">
+        <span class="filter-divider"></span>
+        <button class="filter-pill active" onclick="setCompFilter(this,'all')">All</button>
+        <button class="filter-pill" onclick="setCompFilter(this,'done')">Done</button>
+        <button class="filter-pill" onclick="setCompFilter(this,'in_progress')">In Progress</button>
+        <button class="filter-pill" onclick="setCompFilter(this,'backlog')">Backlog</button>
+        <span class="spacer"></span>
+        <button class="btn btn-primary btn-sm" onclick="toggleAddComponent()">+ Add Component</button>
+        <div class="view-toggle">
+          <button class="view-toggle-btn active" onclick="setView('table')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18"/></svg></button>
+          <button class="view-toggle-btn" onclick="setView('cards')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
+        </div>
+      </div>
+      <div class="add-comp-form" id="add-comp-form" style="display:none">
+        <input type="text" class="add-comp-input" id="add-comp-name" placeholder="Component name">
+        <select class="add-comp-select" id="add-comp-cat"></select>
+        <input type="text" class="add-comp-input add-comp-cat-new" id="add-comp-cat-new" placeholder="Or type new category" style="display:none">
+        <button class="btn btn-primary btn-sm" onclick="submitAddComponent()">Add</button>
+        <button class="btn btn-secondary btn-sm" onclick="toggleAddComponent()">Cancel</button>
+      </div>
+      <div id="table-view"><div class="table-wrap"><table><thead><tr><th style="width:30px"></th><th>Component</th><th>Figma</th><th>Wax</th><th>Themes</th><th>Agent-ready</th><th>Storybook</th><th>Code Connect</th><th>Status</th></tr></thead><tbody id="table-body"></tbody></table></div></div>
+      <div id="card-view" class="card-grid" style="display:none"></div>
+    </div>
+
+    <!-- ═══ TOKENS ═══ -->
+    <div class="page" id="page-tokens">
+      <div class="stat-row" id="token-stats"></div>
+      <div class="tokens-grid" id="tokens-grid"></div>
+    </div>
+
+  </div>
+</div>
+<script>
+// ═══════════════════════════════════════════
+// ROADMAP DATA
+// ═══════════════════════════════════════════
+
+let ROADMAP = [
+  {
+    phase: 0, name: "Get Wax Into the Workspace", owner: "engineering", duration: "1–2 days", status: "upcoming",
+    tasks: [
+      { text: "Clone hive-ts monorepo and explore wax-component-library package structure", done: false },
+      { text: "Document existing Wax component inventory and theme token structure", done: false },
+      { text: "Create side-by-side comparison: what exists in Wax vs. old buyflow DS vs. Figma", done: false }
+    ]
+  },
+  {
+    phase: 1, name: "Token Alignment", owner: "design", duration: "1–2 weeks", status: "upcoming",
+    tasks: [
+      { text: "Audit and rename Figma variables to match Wax Chakra theme paths", done: false },
+      { text: "Add missing spacing, radius, and shadow tokens as Figma variables", done: false },
+      { text: "Create canonical 3-column token map: Figma name → Wax path → target name", done: false }
+    ]
+  },
+  {
+    phase: 2, name: "Figma Component Completion", owner: "design", duration: "3–4 weeks", status: "upcoming",
+    parallel: true,
+    tasks: [
+      { text: "Build missing Tier 1 components (Input, Checkbox, Radio, Badge, Modal, etc.)", done: false },
+      { text: "Build Tier 2 commerce components from prototype specs", done: false },
+      { text: "Enforce hygiene: Auto Layout, variables, Property=Value naming, all states", done: false }
+    ]
+  },
+  {
+    phase: 3, name: "Wax Component Completion", owner: "engineering", duration: "3–4 weeks", status: "upcoming",
+    parallel: true,
+    tasks: [
+      { text: "Migrate components from old buyflow DS to Wax using Chakra primitives", done: false },
+      { text: "Build new components from Figma specs and HTML prototypes", done: false },
+      { text: "Ensure all components work with both Neo and Legacy Buyflow themes", done: false }
+    ]
+  },
+  {
+    phase: 4, name: "Code Connect Setup", owner: "engineering", duration: "1–2 weeks", status: "upcoming",
+    tasks: [
+      { text: "Install @figma/code-connect in hive-ts", done: false },
+      { text: "Write .figma.tsx mapping files for each Wax component", done: false },
+      { text: "Publish and validate: Figma Dev Mode shows correct Wax imports and props", done: false }
+    ]
+  },
+  {
+    phase: 5, name: "Storybook Alignment", owner: "engineering", duration: "1–2 weeks", status: "upcoming",
+    tasks: [
+      { text: "Extend Storybook in hive-ts with Neo/Legacy theme switching", done: false },
+      { text: "Write stories covering all variants, sizes, states, and responsive at 375px", done: false },
+      { text: "Set up visual snapshot testing with Chromatic or Percy", done: false }
+    ]
+  },
+  {
+    phase: 6, name: "AI Workflow Integration", owner: "all", duration: "1–2 weeks", status: "upcoming",
+    tasks: [
+      { text: "Create shared AI context files (CLAUDE.md, Cursor rules) with token map and component inventory", done: false },
+      { text: "Build prompt templates for Product, Design, and Engineering roles", done: false },
+      { text: "Establish the capture-and-compare loop: Figma → code → Storybook → capture back to Figma", done: false }
+    ]
+  },
+  {
+    phase: 7, name: "Governance & Migration", owner: "all", duration: "Ongoing", status: "upcoming",
+    tasks: [
+      { text: "Enforce change rules: new token = update both systems, new component = Figma first", done: false },
+      { text: "Weekly parity checks, lint rules, no new code in buyflow src/design-system/", done: false },
+      { text: "Track migration progress: incrementally replace old buyflow DS usage with Wax", done: false }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════
+// COMPONENT DATA (with audit notes)
+// ═══════════════════════════════════════════
+
+const COMPONENTS = [
+  // ── Core ──
+  { name: "Button", cat: "Core", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Spec defines ~16 frames: Primary/Secondary/Tertiary/Brand × Default/Disabled/Loading × Large/Medium/Small + Dark mode + Icon left/right + Text link. Verify all states use variables, Property=Value naming, description field filled.",
+    codeNotes: "In buyflow as Button.tsx. Props: designStyle (14 variants including primaryCta, secondaryCta, redesignPrimary, etc.), isSelected, icon, disabled. Needs migration to Wax with Chakra variant/size/colorScheme props.",
+    storybookNotes: "Stories exist but only cover primaryCta, secondaryCta, singleSelect, WithIcon. Missing: disabled state, loading state, all redesign variants, tertiaryCta, premiumPrimaryCta, medPrimaryCta, medSecondaryCta, Brand, Dark mode, icon-right.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx mapping Figma Type/State/Size variants to Wax variant/isDisabled/isLoading/size props.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Input", cat: "Core", tier: "1", figma: "in_progress", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Partial in Figma. Spec defines 6-7 frames: Default, Active, Filled, Error, Disabled, No Label. All need Auto Layout, 343px width, 16px padding, 8px radius, colors via variables.",
+    codeNotes: "In buyflow as TextInput.tsx. Props: label, labelStyle, hasError, errorMessage, suffixElement, type (text/email/number/password), maxLength. Needs migration to Wax using Chakra Input.",
+    storybookNotes: "Stories exist but Default story omits required label prop. Missing: disabled story. Needs stories for all spec states.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx mapping Figma State variants to Wax isDisabled/isInvalid props.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Password Input", cat: "Core", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 2-5 frames: Hidden, Visible, Active, Error. 343px, eye icon toggle, 24px icon.",
+    codeNotes: "In buyflow as PasswordInput.tsx. Extends TextInput with isPasswordVisible, onClickVisibilityToggle, showVisibilityToggle. Needs migration to Wax.",
+    storybookNotes: "Stories exist and cover main variants. Complete.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx once Figma component exists.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Number Input", cat: "Core", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1-4 frames: Default with suffix (e.g. 'lbs'). 343px, row layout.",
+    codeNotes: "In buyflow as NumberInput.tsx. Extends TextInput with min, max, step, suffix, inputMode. Needs migration to Wax.",
+    storybookNotes: "Stories exist. Missing: error story, min/max boundary stories.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx once Figma component exists.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Date Input", cat: "Core", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1-4 frames: Default with calendar icon, MM/DD/YYYY placeholder.",
+    codeNotes: "In buyflow as DateInput.tsx. Props: placeholderText, selectedDate, onDateChange, minDate, maxDate, customDateFormat. Needs migration to Wax.",
+    storybookNotes: "Stories exist. Missing: minDate/maxDate stories, customDateFormat.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx once Figma component exists.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Text Area", cat: "Core", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1-5 frames: Default, Active, Filled, Error, Disabled. 343px × 120px, 16px padding, 8px radius.",
+    codeNotes: "In buyflow as TextArea.tsx. Props: label, labelStyle, hasError, errorMessage, height, maxLength. Needs migration to Wax using Chakra Textarea.",
+    storybookNotes: "Stories exist. Missing: disabled story, height variant.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx once Figma component exists.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Select / Dropdown", cat: "Core", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Spec defines 7-15 frames: Large/Medium/Small × Default/Active/Selected/Error/Disabled. Verify variables and naming.",
+    codeNotes: "In buyflow as SelectInput.tsx. Uses children (option elements). Needs migration to Wax using Chakra Select.",
+    storybookNotes: "Stories exist. Missing: disabled story, error state.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx mapping Size/State variants to Wax props.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Checkbox", cat: "Core", tier: "1", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 4-7 frames: Unchecked, Checked, Error, Disabled (unchecked/checked), Pill variants. 20×20px box, 4px radius.",
+    codeNotes: "In buyflow as CheckboxButton.tsx. Props: checked, useRedesign, animationCss. hasError exists but always false. Needs migration to Wax using Chakra Checkbox.",
+    storybookNotes: "Stories exist. Missing: useRedesign variant, disabled state, error state.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx mapping Checked/Unchecked/Error/Disabled to Wax isChecked/isDisabled/isInvalid.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Radio", cat: "Core", tier: "1", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 3-4 frames: Unselected, Selected, Disabled. 20px circle, 10px inner dot.",
+    codeNotes: "In buyflow as RadioButton.tsx. Props: checked, groupName, designStyle (lagoon/grey/minimalistLagoon), useRedesign. Needs migration to Wax using Chakra Radio.",
+    storybookNotes: "Stories exist. Missing: designStyle variants (grey, minimalistLagoon), disabled story.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx mapping Selected/Unselected/Disabled to Wax props.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Switch", cat: "Core", tier: "1", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 2-4 frames: Off, On, Off-labeled, On-labeled. 48×28px track, 24px thumb.",
+    codeNotes: "In buyflow as ToggleSwitch.tsx. Props: value, onToggle, activeBgColor. Needs migration to Wax using Chakra Switch.",
+    storybookNotes: "Stories exist. Missing: disabled story, keyboard-focus, loading state.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx once Figma component exists.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Segmented Control", cat: "Core", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 2-3 frames: 2 segments (first/second selected), 3 segments. 343px, Off-White bg, pill radius, Neo Shadow on selected.",
+    codeNotes: "In buyflow as Toggle.tsx. Props: name, value, options array. Needs migration to Wax.",
+    storybookNotes: "Stories exist. Missing: disabled story.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx once Figma component exists.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Chip", cat: "Core", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Spec defines 4 frames: Unselected, Selected, Unselected+icon, Selected+icon. Verify variables and naming.",
+    codeNotes: "No code component exists. Needs to be built in Wax from scratch.",
+    storybookNotes: "No stories. Needs stories for all 4 variants once Wax component is built.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx once Wax component exists.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Tag", cat: "Core", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Spec defines 2-4 frames: On image, Not on image, with/without icon. Verify variables.",
+    codeNotes: "No code component exists. Needs to be built in Wax from scratch.",
+    storybookNotes: "No stories. Needs stories once Wax component is built.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx once Wax component exists.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Label", cat: "Core", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Large and Small variants. Verify variables.",
+    codeNotes: "No code component exists. Needs to be built in Wax.",
+    storybookNotes: "No stories. Needs stories once Wax component is built.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx once Wax component exists.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Badge / Pill", cat: "Core", tier: "1", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 7-10 frames: Savings, Best Value, Most Popular, Active, Paused, Cancelled, Trial, Info. Various bg colors and sizes.",
+    codeNotes: "Exists only in HTML prototypes. No React component. Needs full build in Wax.",
+    storybookNotes: "No stories. Needs stories for all variants once built.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx once both Figma and Wax exist.",
+    project: "", team: "", engineer: "" },
+
+  // ── Navigation ──
+  { name: "iOS Status Bar", cat: "Navigation", tier: "done", figma: "done", waxStatus: "na", themeReady: false, themes: [], storybook: "na", codeConnect: "na", workflowStatus: "done",
+    figmaNotes: "Solid in Figma. Light and Dark variants. No code needed (native element).",
+    codeNotes: "N/A — native iOS element, not a code component.",
+    storybookNotes: "N/A.", codeConnectNotes: "N/A.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Page Header", cat: "Navigation", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Spec defines 4-6 frames: Page (no shadow, shadow), Lesson, With small button. 375px, 24px back chevron.",
+    codeNotes: "No code component exists. Needs to be built in Wax.",
+    storybookNotes: "No stories. Needs stories once Wax component is built.",
+    codeConnectNotes: "Not set up. Needs .figma.tsx once Wax component exists.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Tab Bar", cat: "Navigation", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Spec defines 1-7 frames: 2/3/4 tabs with various active states. 375×83px, icons + labels.",
+    codeNotes: "No code component exists. Needs to be built in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "iOS Home Indicator", cat: "Navigation", tier: "done", figma: "done", waxStatus: "na", themeReady: false, themes: [], storybook: "na", codeConnect: "na", workflowStatus: "done",
+    figmaNotes: "Solid in Figma. Single variant. No code needed (native element).",
+    codeNotes: "N/A — native iOS element.", storybookNotes: "N/A.", codeConnectNotes: "N/A.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Bottom Pagination", cat: "Navigation", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Spec defines 1-4 frames: 3/4/5 dots with various active positions. Pill shape for active.",
+    codeNotes: "No code component exists. Needs to be built in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Subpage Header", cat: "Navigation", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. With/without icons variants.",
+    codeNotes: "No code component exists. Needs to be built in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  // ── Feedback ──
+  { name: "Toast", cat: "Feedback", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Spec defines 3-6 frames: Confirm, Error, Info, Text button, Icon button. 343px, Black bg, 12px radius.",
+    codeNotes: "No code component exists. Needs to be built in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Status Banner", cat: "Feedback", tier: "1", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 4 frames: Success (Mint Light), Warning (Warning Light), Error (Error Light), Info (Off-White). 343px, 8px radius.",
+    codeNotes: "Exists only in HTML prototypes. Needs full build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Spinner", cat: "Feedback", tier: "1", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1-3 frames: Small (16px), Medium (32px), Large (48px). Grey 1 track, Lagoon fill arc.",
+    codeNotes: "No code component exists. Needs to be built in Wax using Chakra Spinner.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Empty State", cat: "Feedback", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1-2 frames: With CTA, Without CTA. 343px, centered, 48px icon, 16px gap.",
+    codeNotes: "No code component exists. Needs to be built in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  // ── Layout ──
+  { name: "Card", cat: "Layout", tier: "2", figma: "in_progress", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Partial in Figma. Spec defines 3 frames: Elevated (Neo Shadow), Bordered (Sand border), Filled (Off-White). 343px, 16px padding, 8-12px radius.",
+    codeNotes: "No code component exists. Needs to be built in Wax using Chakra Box/Card.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Modal", cat: "Layout", tier: "1", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1-3 frames: Standard, With close button, Destructive. 375×812px overlay, 343px dialog, 16px radius.",
+    codeNotes: "In buyflow as Modal.tsx. Props: onClose, includeCloseButton, width, skrimColor, blurredBackground. Needs migration to Wax using Chakra Modal.",
+    storybookNotes: "Stories exist. Missing: width, skrimColor, blurredBackground stories.",
+    codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Bottom Sheet", cat: "Layout", tier: "done", figma: "in_progress", waxStatus: "done", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Partial in Figma. Spec defines 1-2 frames: Standard, With close button. 375px, 16px top radius, handle bar.",
+    codeNotes: "Already in Wax (BottomSheet). Only Wax component currently adopted in buyflow-client.",
+    storybookNotes: "No stories in hive-ts. Needs Storybook coverage.",
+    codeConnectNotes: "Not set up. High priority since Wax component already exists.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Divider", cat: "Layout", tier: "1", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 3 frames: Thin (1px Sand), Thick (2px Black), Inset (16px horizontal padding).",
+    codeNotes: "Exists only in prototypes. Needs build in Wax using Chakra Divider.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Section Header", cat: "Layout", tier: "1", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 5 frames: Active (Lagoon circle), Completed (Kale checkmark), Upcoming (Sand circle), Label, Headline.",
+    codeNotes: "Exists only in prototypes. Needs full build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  // ── Data Display ──
+  { name: "List / Line Item", cat: "Data Display", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Spec defines 4-6 frames: Standard, Icon, Chevron, Value, Toggle on/off. 343px, row layout.",
+    codeNotes: "In buyflow as List.tsx (layout). Props: gap, horizontalAlign. Needs migration to Wax.",
+    storybookNotes: "Stories exist. Missing: horizontalAlign 'left' story.",
+    codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Meal List Item", cat: "Data Display", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Specialized component for meal tracking.",
+    codeNotes: "No standalone code component.", storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Meal Review", cat: "Data Display", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Specialized component.",
+    codeNotes: "No standalone code component.", storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Food Search", cat: "Data Display", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Specialized component.",
+    codeNotes: "No standalone code component.", storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Amount Pill", cat: "Data Display", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma.",
+    codeNotes: "No standalone code component.", storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Bullet List", cat: "Data Display", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1-2 frames: Checkmarks, Custom icons. Column, 16px gap, 24px Lagoon checkmark icon.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Comparison Table", cat: "Data Display", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1-2 frames: 2-3 columns, alternating row bg, Accent/sm headers.",
+    codeNotes: "In buyflow codebase. Needs migration to Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  // ── Progress ──
+  { name: "Progress Bar", cat: "Progress", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Spec defines 3-7 frames: Default 0%/50%, Checkout thin 25%/50%/75%/100%. Sand track, Lagoon fill.",
+    codeNotes: "In buyflow as ProgressBar.tsx. Props: duration, easing, showProgressValue, color, height. Needs migration to Wax using Chakra Progress.",
+    storybookNotes: "Stories exist. Missing: onLoadComplete, easing stories.",
+    codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Progress Steps", cat: "Progress", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1-10 frames: 3/4/5 steps with various active positions.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Circular Progress", cat: "Progress", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1-6 frames: Small (40px), Medium (64px), Large (96px) with/without label.",
+    codeNotes: "In buyflow codebase. Needs migration to Wax using Chakra CircularProgress.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Progress + Loading Text", cat: "Progress", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "done", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Combines ProgressBar with animated loading text.",
+    codeNotes: "In buyflow as ProgressBarWithLoadingText.tsx + LoadingText.tsx. Needs migration to Wax.",
+    storybookNotes: "Stories exist. Complete.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  // ── Media ──
+  { name: "Hero Image Area", cat: "Media", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1-2 frames: Default, Product. 375×250px, Off-White bg.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Image Pagination Dots", cat: "Media", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 2-6 frames: 3/4/5 dots with various active positions.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Image + Text Overlay", cat: "Media", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 4 frames: Bottom/Top gradient, Center scrim, Bottom bar.",
+    codeNotes: "In buyflow as ImageWithTextOverlay.tsx. Needs migration to Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  // ── Commerce ──
+  { name: "Trust Badges Bar", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 3 frames: Biomarkers, Supplements, Medications.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Price Display", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 5-6 frames: Full price, Discounted, Subscription, Starting at.",
+    codeNotes: "Exists only in prototypes. Needs full build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Pricing Module", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 13 variant frames: One-time, Subscription, Trial, Multi-cadence. Composed of sub-components.",
+    codeNotes: "Exists only in HTML prototypes. No React component. Needs full build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Pricing Tier Card", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 9 frames: Default/Selected × no discount/discounted, savings pill, most popular badge.",
+    codeNotes: "Exists only in prototypes. Needs full build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Radio Selection Card", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 2 frames: Default, Selected. 343px, 8px radius.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Tabs (Purchase)", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 2 frames: Subscribe selected, One-time selected.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax using Chakra Tabs.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "CTA Module", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 10 variant frames: Checkout, Eligibility, Add to cart, Choose quantity.",
+    codeNotes: "Exists only in prototypes. Needs full build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Sticky CTA Footer", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 5 frames: One-time, Subscription, Eligibility, Trial.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Order Summary Card", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1 frame: Header + line items + tax + total.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Order Line Item", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 3 frames: Standard, Discounted, With badge.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Future Charges Card", cat: "Commerce", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1 frame: Off-White bg, upcoming charges.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Promo Code", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 3-4 frames: Collapsed, Expanded, Applied, Error.",
+    codeNotes: "In buyflow codebase. Needs migration to Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Payment Selector", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1 frame: Card/PayPal tab selector.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Saved Payment", cat: "Commerce", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1 frame: Card icon + Visa ending in XXXX + Edit link.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Consent Checkbox", cat: "Commerce", tier: "2", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 2-3 frames: Unchecked, Checked, Error.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  // ── Checkout ──
+  { name: "Checkout Accordion", cat: "Checkout", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 3 frames: In progress, Locked, Complete.",
+    codeNotes: "In buyflow codebase. Needs migration to Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Section Header (Checkout)", cat: "Checkout", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Checkout-specific section header.",
+    codeNotes: "Exists only in prototypes.", storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Address Display", cat: "Checkout", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1 frame: Name + address lines + Edit link.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Trust Signals", cat: "Checkout", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Spec defines 1 frame: Email reminder + cancel anytime rows.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Legal Text Block", cat: "Checkout", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Subscription terms text block.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Billing Timeline", cat: "Checkout", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Vertical timeline with 3 steps.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  // ── Survey ──
+  { name: "Survey Question Layout", cat: "Survey", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Full screen with progress steps, question, radio options, CTA.",
+    codeNotes: "In buyflow codebase. Needs migration to Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Question Progress Bar", cat: "Survey", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Thin progress bar for survey question flow.",
+    codeNotes: "In buyflow codebase. Needs migration to Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Interstitial Screen", cat: "Survey", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Text and Loading variants.",
+    codeNotes: "In buyflow codebase. Needs migration to Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Weight Graph", cat: "Survey", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Specialized visualization component.",
+    codeNotes: "In buyflow codebase. Specialized chart component.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Testimonial Card", cat: "Survey", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Quote + attribution + optional photo.",
+    codeNotes: "In buyflow codebase. Needs migration to Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Plan Selection Card", cat: "Survey", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Default, Selected, Recommended variants.",
+    codeNotes: "In buyflow codebase. Needs migration to Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  // ── Social Proof ──
+  { name: "Social Proof Bar", cat: "Social Proof", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Subscriber count and Star rating variants.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Money-Back Guarantee", cat: "Social Proof", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Shield icon + guarantee text.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Reservation Timer", cat: "Social Proof", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Countdown timer for urgency.",
+    codeNotes: "In buyflow codebase. Needs migration to Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  // ── Subscription ──
+  { name: "Subscription Status Card", cat: "Subscription", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Active, Paused, Cancelled badge variants.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  // ── Content ──
+  { name: "Accordion", cat: "Content", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Expandable content sections.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax using Chakra Accordion.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Step Card", cat: "Content", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Numbered step with title and description.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Benefit Card", cat: "Content", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Icon + title + description benefit callout.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Pillar Card", cat: "Content", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Content pillar showcase card.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Stat Callout", cat: "Content", tier: "3", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Missing from Figma. Large number + label callout.",
+    codeNotes: "Exists only in prototypes. Needs build in Wax.",
+    storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  // ── Specialized ──
+  { name: "Full Screen Interstitial", cat: "Specialized", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Specialized full-screen layout.",
+    codeNotes: "No standalone code component.", storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Chat Components", cat: "Specialized", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Chat bubbles, input, typing indicator.",
+    codeNotes: "No standalone code component.", storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Med Lockups", cat: "Specialized", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Medication display lockups.",
+    codeNotes: "No standalone code component.", storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Animation", cat: "Specialized", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Motion/animation specs.",
+    codeNotes: "No standalone code component.", storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Data / Charts", cat: "Specialized", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Chart and data visualization components.",
+    codeNotes: "No standalone code component.", storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+
+  { name: "Calorie Budget Bar", cat: "Specialized", tier: "done", figma: "done", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "Solid in Figma. Specialized calorie tracking visualization.",
+    codeNotes: "No standalone code component.", storybookNotes: "No stories.", codeConnectNotes: "Not set up.",
+    project: "", team: "", engineer: "" },
+];
+
+// ═══════════════════════════════════════════
+// TOKENS DATA
+// ═══════════════════════════════════════════
+
+const TOKENS = {
+  colors: [{n:"Lagoon",v:"#05727A",f:true},{n:"Lagoon Dark",v:"#045B62",f:true},{n:"Blueberry",v:"#15333D",f:true},{n:"Skylight",v:"#DCF5F0",f:true},{n:"Sky",v:"#B4E0D8",f:false},{n:"Off-White",v:"#F6F4EE",f:true},{n:"Sand",v:"#E4DECE",f:true},{n:"Black",v:"#191717",f:true},{n:"White",v:"#FFFFFF",f:true},{n:"Grey 1",v:"#DEDEDE",f:true},{n:"Grey 2",v:"#AAAAAA",f:true},{n:"Grey 3",v:"#666666",f:true},{n:"Grey 4",v:"#444444",f:true},{n:"Grey 5",v:"#F4F4F4",f:true},{n:"Kale",v:"#316700",f:false},{n:"Mint",v:"#C8E3B1",f:true},{n:"Mint Light",v:"#E3F1D8",f:false},{n:"Error Red",v:"#C13515",f:false},{n:"Warning Amber",v:"#B8860B",f:false},{n:"Warning Light",v:"#FFF3E0",f:false}],
+  spacing: [{n:"4",v:"4px",f:false},{n:"8",v:"8px",f:false},{n:"12",v:"12px",f:false},{n:"16",v:"16px",f:true},{n:"20",v:"20px",f:false},{n:"24",v:"24px",f:false},{n:"32",v:"32px",f:false},{n:"40",v:"40px",f:false},{n:"48",v:"48px",f:false}],
+  typography: [{n:"Headline/2xl",v:"Serif 64px",f:true},{n:"Headline/xl",v:"Serif 56px",f:true},{n:"Headline/lg",v:"Serif 40px",f:true},{n:"Headline/md",v:"Serif 32px",f:true},{n:"Headline/sm",v:"Serif 28px",f:true},{n:"Headline/xs",v:"Serif 24px",f:true},{n:"Headline/2xs",v:"Serif 20px",f:true},{n:"Paragraph/lg",v:"Sans 18px",f:true},{n:"Paragraph/md",v:"Sans 16px",f:true},{n:"Paragraph/sm",v:"Sans 14px",f:true},{n:"Paragraph/xs",v:"Sans 12px",f:true},{n:"Accent/lg",v:"Brown 16px",f:true},{n:"Accent/md",v:"Brown 14px",f:true},{n:"Accent/sm",v:"Brown 12px",f:true},{n:"Accent/xs",v:"Brown 10px",f:true}],
+  radii: [{n:"sm",v:"6px",f:true},{n:"md",v:"8px",f:true},{n:"lg",v:"12px",f:true},{n:"xl",v:"16px",f:true},{n:"pill",v:"25px",f:false},{n:"full",v:"56px",f:true},{n:"circle",v:"100px",f:true}],
+};
+
+// ═══════════════════════════════════════════
+// LOCALSTORAGE LAYER
+// ═══════════════════════════════════════════
+
+const LS_KEY = 'ds-component-overrides';
+
+function loadOverrides() {
+  try { const raw = localStorage.getItem(LS_KEY); return raw ? JSON.parse(raw) : {}; }
+  catch { return {}; }
+}
+function saveOverrides(overrides) { localStorage.setItem(LS_KEY, JSON.stringify(overrides)); }
+
+function applyOverrides() {
+  const overrides = loadOverrides();
+  COMPONENTS.forEach(c => {
+    const o = overrides[c.name];
+    if (!o) return;
+    if (o.figma !== undefined) c.figma = o.figma;
+    if (o.waxStatus !== undefined) c.waxStatus = o.waxStatus;
+    if (o.themeReady !== undefined) c.themeReady = o.themeReady;
+    if (o.agentReady !== undefined) c.agentReady = o.agentReady;
+    if (o.themes !== undefined) c.themes = o.themes;
+    if (o.storybook !== undefined) c.storybook = o.storybook;
+    if (o.codeConnect !== undefined) c.codeConnect = o.codeConnect;
+    if (o.workflowStatus !== undefined) c.workflowStatus = o.workflowStatus;
+    if (o.figmaNotes !== undefined) c.figmaNotes = o.figmaNotes;
+    if (o.codeNotes !== undefined) c.codeNotes = o.codeNotes;
+    if (o.storybookNotes !== undefined) c.storybookNotes = o.storybookNotes;
+    if (o.codeConnectNotes !== undefined) c.codeConnectNotes = o.codeConnectNotes;
+    if (o.project !== undefined) c.project = o.project;
+    if (o.team !== undefined) c.team = o.team;
+    if (o.engineer !== undefined) c.engineer = o.engineer;
+  });
+}
+
+function updateComponent(name, field, value) {
+  const comp = COMPONENTS.find(c => c.name === name);
+  if (comp) comp[field] = value;
+  const overrides = loadOverrides();
+  if (!overrides[name]) overrides[name] = {};
+  overrides[name][field] = value;
+  saveOverrides(overrides);
+}
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+
+let currentPage = "overview";
+let currentView = "table";
+let statusFilter = "all";
+let catFilter = "all";
+
+let THEME_OPTIONS = JSON.parse(localStorage.getItem('ds-theme-options') || 'null') || ["Neo", "Legacy BF"];
+
+let projectHero = JSON.parse(localStorage.getItem('ds-project-hero') || 'null') || {
+  title: "Noom Neo Design System",
+  description: "We are migrating from a bespoke design system in buyflow-client/src/design-system/ to Wax (@noom/wax-component-library), built on Chakra UI v2. The goal: align Figma and code libraries so that product, design, and engineering can work in a seamless AI-assisted loop."
+};
+
+// ═══════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════
+
+const SL = { done:"Done", partial:"Partial", in_progress:"In Progress", ready_for_eng:"Ready for ENG", changes_needed:"Changes Needed", missing:"Missing", no_design:"No Design", na:"N/A" };
+const WSL = { not_started:"Not Started", in_progress:"In Progress", in_review:"In Review", done:"Done", blocked:"Blocked" };
+
+function dot() { return '<span class="pill-dot"></span>'; }
+function pill(s) { return `<span class="pill pill-${s}">${dot()}${SL[s]||s}</span>`; }
+function pct(n, d) { return d > 0 ? Math.round(n / d * 100) : 0; }
+function esc(s) { return String(s).replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+
+function tierLabel(t) { return { "1":"T1", "2":"T2", "3":"T3", done:"Solid" }[t] || t; }
+function tierClass(t) { return { "1":"t1", "2":"t2", "3":"t3", done:"done" }[t] || ""; }
+function ownerLabel(o) { return { design:"Design", engineering:"Engineering", all:"All", product:"Product" }[o] || o; }
+function figmaDotClass(s) {
+  if (s === 'done' || s === 'ready_for_eng') return 'done';
+  if (s === 'in_progress' || s === 'partial' || s === 'changes_needed') return 'in_progress';
+  return 'missing';
+}
+
+function score(c) {
+  let s=0,t=0;
+  if(c.figma!=="na"){t+=2;if(c.figma==="done")s+=2;else if(c.figma==="partial"||c.figma==="in_progress"||c.figma==="ready_for_eng"||c.figma==="changes_needed")s+=1;}
+  if(c.waxStatus!=="na"){t+=2;if(c.waxStatus==="done")s+=2;else if(c.waxStatus==="in_progress")s+=1;}
+  if(c.themeReady){s+=1;} t+=1;
+  if(c.storybook!=="na"){t+=1;if(c.storybook==="done")s+=1;}
+  if(c.codeConnect!=="na"){t+=1;if(c.codeConnect==="done")s+=1;}
+  return t>0?s/t:0;
+}
+function overall(c) { const s=score(c); return s>=0.9?"done":s>=0.3?"partial":"missing"; }
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+
+function navigate(page) {
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.sidebar-nav .nav-item').forEach(n => n.classList.remove('active'));
+  const navEl = document.querySelector(`.nav-item[onclick="navigate('${page}')"]`);
+  if (navEl) navEl.classList.add('active');
+  const titles = { overview:"Overview", components:"Components", tokens:"Tokens" };
+  document.getElementById('page-title').textContent = titles[page] || page;
+}
+
+function filterCategory(cat) {
+  catFilter = cat;
+  navigate('components');
+  applyFilters();
+}
+
+// ═══════════════════════════════════════════
+// RENDER — OVERVIEW
+// ═══════════════════════════════════════════
+
+function renderOverview() {
+  const total = COMPONENTS.length;
+  const applicable = COMPONENTS.filter(c => c.figma !== "na").length;
+  const figmaDone = COMPONENTS.filter(c => c.figma === "done" || c.figma === "ready_for_eng").length;
+  const waxDone = COMPONENTS.filter(c => c.waxStatus === "done").length;
+  const agentReadyCount = COMPONENTS.filter(c => c.agentReady).length;
+  const sbDone = COMPONENTS.filter(c => c.storybook === "done").length;
+  const ccDone = COMPONENTS.filter(c => c.codeConnect === "done").length;
+  const vibeReady = COMPONENTS.filter(c => overall(c) === "done").length;
+
+  document.getElementById('overview-stats').innerHTML = `
+    <div class="stat-card stat-lagoon"><div class="stat-value">${figmaDone}/${applicable}</div><div class="stat-label">Figma</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(figmaDone,applicable)}%;background:var(--lagoon)"></div></div></div>
+    <div class="stat-card stat-kale"><div class="stat-value">${waxDone}/${total}</div><div class="stat-label">Wax</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(waxDone,total)}%;background:var(--kale)"></div></div></div>
+    <div class="stat-card" style="border-left:3px solid var(--purple)"><div class="stat-value">${agentReadyCount}/${total}</div><div class="stat-label">Agent-ready</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(agentReadyCount,total)}%;background:var(--purple)"></div></div></div>
+    <div class="stat-card stat-warning"><div class="stat-value">${sbDone}/${total}</div><div class="stat-label">Storybook</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(sbDone,total)}%;background:var(--warning-amber)"></div></div></div>
+    <div class="stat-card stat-error"><div class="stat-value">${ccDone}/${total}</div><div class="stat-label">Code Connect</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(ccDone,total)}%;background:var(--error-red)"></div></div></div>
+    <div class="stat-card" style="border-left:3px solid var(--black)"><div class="stat-value">${vibeReady}/${total}</div><div class="stat-label">Vibe-Ready</div><div class="stat-sub">Figma + Wax + Theming + Stories + CC</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(vibeReady,total)}%;background:var(--black)"></div></div></div>`;
+
+  const done = COMPONENTS.filter(c => c.workflowStatus === 'done');
+  const inProgress = COMPONENTS.filter(c => c.workflowStatus === 'in_progress');
+  const bl = COMPONENTS.filter(c => c.workflowStatus === 'backlog');
+
+  let html = '';
+
+  const heroTitle = projectHero.title;
+  const heroDesc = projectHero.description;
+  html += `<div class="project-hero">
+    <input class="project-hero-title" value="${esc(heroTitle)}" onblur="updateProjectHero('title', this.value)">
+    <textarea class="project-hero-desc" onblur="updateProjectHero('description', this.value)">${heroDesc}</textarea>
+  </div>`;
+
+  html += `<div class="roadmap-title">Roadmap</div><div class="roadmap">`;
+  ROADMAP.forEach((r, pi) => {
+    const doneTasks = r.tasks.filter(t => t.done).length;
+    const totalTasks = r.tasks.length;
+    const autoStatus = totalTasks === 0 ? r.status : doneTasks === totalTasks ? 'done' : doneTasks > 0 ? 'active' : 'upcoming';
+    html += `<div class="roadmap-phase ${autoStatus}">
+      <div class="roadmap-phase-header">
+        <span class="roadmap-phase-num">Phase ${r.phase}</span>
+        <input class="roadmap-phase-name-input" value="${esc(r.name)}" size="${r.name.length + 2}" oninput="this.size=Math.max(10,this.value.length+2)" onblur="updatePhaseName(${pi}, this.value)">
+        ${r.parallel ? '<span class="parallel-label">Parallel</span>' : ''}
+        <span class="owner-badge ${r.owner}">${ownerLabel(r.owner)}</span>
+        <input class="roadmap-phase-duration" value="${esc(r.duration)}" size="${r.duration.length + 1}" oninput="this.size=Math.max(6,this.value.length+1)" onblur="updatePhaseDuration(${pi}, this.value)">
+        <span class="roadmap-phase-status ${autoStatus}">${doneTasks}/${totalTasks} tasks</span>
+      </div>
+      <div class="roadmap-task-list">
+        ${r.tasks.map((t, ti) => `<div class="roadmap-task${t.done ? ' completed' : ''}">
+          <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleRoadmapTask(${pi}, ${ti}, this.checked)">
+          <input class="roadmap-task-text" value="${esc(t.text)}" onblur="updateTaskText(${pi}, ${ti}, this.value)">
+          <button class="roadmap-task-remove" onclick="removeRoadmapTask(${pi}, ${ti})" title="Remove task">&times;</button>
+        </div>`).join('')}
+      </div>
+      <div class="roadmap-add-task">
+        <input placeholder="Add a task…" onkeydown="if(event.key==='Enter'&&this.value.trim()){addRoadmapTask(${pi},this.value.trim());this.value='';}" id="add-task-${pi}">
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  document.getElementById('overview-content').innerHTML = html;
+}
+
+function renderStatusGroup(label, statusKey, components, headerClass) {
+  const isCollapsed = statusKey === 'backlog' && components.length > 20 ? ' collapsed' : '';
+  let html = `<div class="status-group${isCollapsed}" id="group-${statusKey}">
+    <div class="status-group-header ${headerClass}" onclick="toggleGroup('${statusKey}')">
+      <span class="status-group-label">${label} <span class="status-count">${components.length}</span></span>
+      <span class="chevron-icon">&#9654;</span>
+    </div><div class="status-group-body">`;
+  if (components.length === 0) {
+    html += `<div class="empty">No components</div>`;
+  } else {
+    components.forEach(c => { html += renderCompRow(c); });
+  }
+  html += `</div></div>`;
+  return html;
+}
+
+function renderCompRow(c) {
+  const wfClass = c.workflowStatus === 'done' ? 'status-done' : c.workflowStatus === 'in_progress' ? 'status-inprogress' : 'status-backlog';
+  return `<div class="comp-row" data-name="${esc(c.name)}">
+    <div class="comp-row-summary" onclick="toggleCompRow(this)">
+      <span class="comp-row-name">${c.name}</span>
+      <span class="platform-dots">
+        <span class="platform-dot-label">F</span><span class="platform-dot ${figmaDotClass(c.figma)}"></span>
+        <span class="platform-dot-label">W</span><span class="platform-dot ${c.waxStatus === 'done' ? 'done' : c.waxStatus === 'in_progress' ? 'in_progress' : 'missing'}"></span>
+        <span class="platform-dot-label">S</span><span class="platform-dot ${c.storybook}"></span>
+        <span class="platform-dot-label">CC</span><span class="platform-dot ${c.codeConnect}"></span>
+      </span>
+      <span class="comp-row-spacer"></span>
+      <select class="inline-select ${wfClass}" onchange="changeWorkflow('${esc(c.name)}', this.value); event.stopPropagation();" onclick="event.stopPropagation();">
+        <option value="done" ${c.workflowStatus === 'done' ? 'selected' : ''}>Done</option>
+        <option value="in_progress" ${c.workflowStatus === 'in_progress' ? 'selected' : ''}>In Progress</option>
+        <option value="backlog" ${c.workflowStatus === 'backlog' ? 'selected' : ''}>Backlog</option>
+      </select>
+      <span class="comp-row-chevron">&#9654;</span>
+    </div>
+    ${renderCompDetail(c)}
+  </div>`;
+}
+
+function renderCompDetail(c) {
+  return `<div class="comp-detail">
+    <div class="detail-grid">
+      <div class="detail-card design-card">
+        <div class="detail-card-header"><span class="detail-card-title">Figma</span>
+          <select class="inline-select" onchange="changeField('${esc(c.name)}', 'figma', this.value)">
+            <option value="no_design" ${c.figma === 'no_design' ? 'selected' : ''}>No Design</option>
+            <option value="in_progress" ${c.figma === 'in_progress' ? 'selected' : ''}>In Progress</option>
+            <option value="changes_needed" ${c.figma === 'changes_needed' ? 'selected' : ''}>Changes Needed</option>
+            <option value="ready_for_eng" ${c.figma === 'ready_for_eng' ? 'selected' : ''}>Ready for ENG</option>
+            <option value="done" ${c.figma === 'done' ? 'selected' : ''}>Done</option>
+          </select></div>
+        <textarea class="detail-notes" onblur="changeField('${esc(c.name)}', 'figmaNotes', this.value)">${c.figmaNotes || ''}</textarea>
+      </div>
+      <div class="detail-card eng-card">
+        <div class="detail-card-header"><span class="detail-card-title">Wax</span>
+          <select class="inline-select" onchange="changeField('${esc(c.name)}', 'waxStatus', this.value)">
+            <option value="not_started" ${c.waxStatus === 'not_started' ? 'selected' : ''}>Not Started</option>
+            <option value="in_progress" ${c.waxStatus === 'in_progress' ? 'selected' : ''}>In Progress</option>
+            <option value="done" ${c.waxStatus === 'done' ? 'selected' : ''}>Done</option>
+          </select></div>
+        <textarea class="detail-notes" onblur="changeField('${esc(c.name)}', 'codeNotes', this.value)">${c.codeNotes || ''}</textarea>
+      </div>
+      <div class="detail-card eng-card">
+        <div class="detail-card-header"><span class="detail-card-title">Theming</span></div>
+        <div class="detail-theme-section">
+          <label class="theme-check-label"><input type="checkbox" ${c.themeReady ? 'checked' : ''} onchange="changeField('${esc(c.name)}', 'themeReady', this.checked)">Theme-ready</label>
+          <div class="theme-checks-detail">${THEME_OPTIONS.map(t => `<label class="theme-check-label"><input type="checkbox" ${(c.themes||[]).includes(t)?'checked':''} onchange="toggleTheme('${esc(c.name)}','${esc(t)}',this.checked)">${t}</label>`).join('')}</div>
+          <div class="add-theme-row"><input class="add-theme-input" placeholder="+ Add theme" onkeydown="if(event.key==='Enter')addThemeOption(this)"></div>
+        </div>
+      </div>
+      <div class="detail-card eng-card">
+        <div class="detail-card-header"><span class="detail-card-title">Storybook</span>
+          <select class="inline-select" onchange="changeField('${esc(c.name)}', 'storybook', this.value)">
+            <option value="done" ${c.storybook === 'done' ? 'selected' : ''}>Done</option>
+            <option value="missing" ${c.storybook === 'missing' ? 'selected' : ''}>Missing</option>
+          </select></div>
+        <textarea class="detail-notes" onblur="changeField('${esc(c.name)}', 'storybookNotes', this.value)">${c.storybookNotes || ''}</textarea>
+      </div>
+      <div class="detail-card eng-card">
+        <div class="detail-card-header"><span class="detail-card-title">Code Connect</span>
+          <select class="inline-select" onchange="changeField('${esc(c.name)}', 'codeConnect', this.value)">
+            <option value="done" ${c.codeConnect === 'done' ? 'selected' : ''}>Done</option>
+            <option value="missing" ${c.codeConnect === 'missing' ? 'selected' : ''}>Missing</option>
+          </select></div>
+        <textarea class="detail-notes" onblur="changeField('${esc(c.name)}', 'codeConnectNotes', this.value)">${c.codeConnectNotes || ''}</textarea>
+      </div>
+    </div>
+    <div class="assignment-row">
+      <div class="assignment-field"><span class="assignment-label">Project</span><input class="assignment-input" type="text" value="${esc(c.project || '')}" onblur="changeField('${esc(c.name)}', 'project', this.value)" placeholder="e.g. Q1 Biomarkers"></div>
+      <div class="assignment-field"><span class="assignment-label">Team</span><input class="assignment-input" type="text" value="${esc(c.team || '')}" onblur="changeField('${esc(c.name)}', 'team', this.value)" placeholder="e.g. Commerce"></div>
+      <div class="assignment-field"><span class="assignment-label">Engineer</span><input class="assignment-input" type="text" value="${esc(c.engineer || '')}" onblur="changeField('${esc(c.name)}', 'engineer', this.value)" placeholder="e.g. Sarah K."></div>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════
+// INTERACTIONS
+// ═══════════════════════════════════════════
+
+function toggleGroup(statusKey) {
+  const group = document.getElementById('group-' + statusKey);
+  if (group) group.classList.toggle('collapsed');
+}
+
+function toggleCompRow(summaryEl) {
+  summaryEl.closest('.comp-row').classList.toggle('expanded');
+}
+
+function changeWorkflow(name, value) {
+  updateComponent(name, 'workflowStatus', value);
+  renderOverview();
+  renderComponents();
+}
+
+function changeField(name, field, value) {
+  updateComponent(name, field, value);
+  if (field === 'figma' || field === 'waxStatus' || field === 'themeReady' || field === 'agentReady' || field === 'themes' || field === 'storybook' || field === 'codeConnect') {
+    renderComponents();
+  }
+}
+
+function toggleTheme(name, theme, checked) {
+  const comp = COMPONENTS.find(c => c.name === name);
+  if (!comp) return;
+  let themes = [...(comp.themes || [])];
+  if (checked && !themes.includes(theme)) themes.push(theme);
+  if (!checked) themes = themes.filter(t => t !== theme);
+  updateComponent(name, 'themes', themes);
+  renderComponents();
+}
+
+function addThemeOption(inputEl) {
+  const val = inputEl.value.trim();
+  if (!val || THEME_OPTIONS.includes(val)) { inputEl.value = ''; return; }
+  THEME_OPTIONS.push(val);
+  localStorage.setItem('ds-theme-options', JSON.stringify(THEME_OPTIONS));
+  inputEl.value = '';
+  renderComponents();
+  renderOverview();
+}
+
+// ═══════════════════════════════════════════
+// ROADMAP TASK MANAGEMENT
+// ═══════════════════════════════════════════
+
+function saveRoadmap() { localStorage.setItem('ds-roadmap', JSON.stringify(ROADMAP)); }
+
+function loadRoadmap() {
+  const saved = JSON.parse(localStorage.getItem('ds-roadmap') || 'null');
+  if (!saved) return;
+  ROADMAP.length = 0;
+  saved.forEach(p => ROADMAP.push(p));
+}
+
+function toggleRoadmapTask(phaseIdx, taskIdx, checked) {
+  ROADMAP[phaseIdx].tasks[taskIdx].done = checked;
+  saveRoadmap();
+  renderOverview();
+}
+
+function updateTaskText(phaseIdx, taskIdx, text) {
+  ROADMAP[phaseIdx].tasks[taskIdx].text = text;
+  saveRoadmap();
+}
+
+function updateProjectHero(field, value) {
+  projectHero[field] = value;
+  localStorage.setItem('ds-project-hero', JSON.stringify(projectHero));
+}
+
+function updatePhaseName(phaseIdx, name) {
+  ROADMAP[phaseIdx].name = name;
+  saveRoadmap();
+}
+
+function updatePhaseDuration(phaseIdx, duration) {
+  ROADMAP[phaseIdx].duration = duration;
+  saveRoadmap();
+}
+
+function addRoadmapTask(phaseIdx, text) {
+  ROADMAP[phaseIdx].tasks.push({ text, done: false });
+  saveRoadmap();
+  renderOverview();
+}
+
+function removeRoadmapTask(phaseIdx, taskIdx) {
+  ROADMAP[phaseIdx].tasks.splice(taskIdx, 1);
+  saveRoadmap();
+  renderOverview();
+}
+
+// ═══════════════════════════════════════════
+// RENDER — COMPONENTS PAGE
+// ═══════════════════════════════════════════
+
+function renderComponents() {
+  const total = COMPONENTS.length;
+  const figmaDone = COMPONENTS.filter(c => c.figma === 'done' || c.figma === 'ready_for_eng').length;
+  const waxDone = COMPONENTS.filter(c => c.waxStatus === 'done').length;
+  const agentReadyCount = COMPONENTS.filter(c => c.agentReady).length;
+  const sbDone = COMPONENTS.filter(c => c.storybook === 'done').length;
+  const ccDone = COMPONENTS.filter(c => c.codeConnect === 'done').length;
+
+  document.getElementById('comp-stats').innerHTML = `
+    <div class="stat-card stat-lagoon"><div class="stat-value">${figmaDone}/${total}</div><div class="stat-label">Figma</div></div>
+    <div class="stat-card stat-kale"><div class="stat-value">${waxDone}/${total}</div><div class="stat-label">Wax</div></div>
+    <div class="stat-card" style="border-left:3px solid var(--purple)"><div class="stat-value">${agentReadyCount}/${total}</div><div class="stat-label">Agent-ready</div></div>
+    <div class="stat-card stat-warning"><div class="stat-value">${sbDone}/${total}</div><div class="stat-label">Storybook</div></div>
+    <div class="stat-card stat-error"><div class="stat-value">${ccDone}/${total}</div><div class="stat-label">Code Connect</div></div>`;
+
+  document.getElementById('nav-comp-count').textContent = total;
+  renderTable();
+  renderCards();
+}
+
+function matchesFilter(c) {
+  const q = (document.getElementById('comp-search')?.value || '').toLowerCase();
+  if (q && !c.name.toLowerCase().includes(q) && !c.cat.toLowerCase().includes(q)) return false;
+  if (statusFilter !== 'all' && c.workflowStatus !== statusFilter) return false;
+  if (catFilter !== 'all' && c.cat !== catFilter) return false;
+  return true;
+}
+
+function figmaSelectHtml(c) {
+  const n = esc(c.name);
+  return `<select class="pill-select ps-${c.figma}" onchange="changeField('${n}','figma',this.value);this.className='pill-select ps-'+this.value;">
+    <option value="no_design" ${c.figma==='no_design'?'selected':''}>No Design</option>
+    <option value="in_progress" ${c.figma==='in_progress'?'selected':''}>In Progress</option>
+    <option value="changes_needed" ${c.figma==='changes_needed'?'selected':''}>Changes Needed</option>
+    <option value="ready_for_eng" ${c.figma==='ready_for_eng'?'selected':''}>Ready for ENG</option>
+    <option value="done" ${c.figma==='done'?'selected':''}>Done</option>
+  </select>`;
+}
+function waxSelectHtml(c) {
+  const n = esc(c.name);
+  return `<select class="pill-select ps-wax-${c.waxStatus}" onchange="changeField('${n}','waxStatus',this.value);this.className='pill-select ps-wax-'+this.value;">
+    <option value="not_started" ${c.waxStatus==='not_started'?'selected':''}>Not Started</option>
+    <option value="in_progress" ${c.waxStatus==='in_progress'?'selected':''}>In Progress</option>
+    <option value="done" ${c.waxStatus==='done'?'selected':''}>Done</option>
+  </select>`;
+}
+function themeReadyHtml(c) {
+  const n = esc(c.name);
+  return `<input type="checkbox" class="theme-ready-cb" ${c.themeReady?'checked':''} onchange="changeField('${n}','themeReady',this.checked)">`;
+}
+function agentReadyHtml(c) {
+  const n = esc(c.name);
+  return `<input type="checkbox" class="theme-ready-cb" ${c.agentReady?'checked':''} onchange="changeField('${n}','agentReady',this.checked)">`;
+}
+function themeChecksHtml(c) {
+  const n = esc(c.name);
+  return `<span class="theme-checks">${THEME_OPTIONS.map(t =>
+    `<label class="theme-check-label"><input type="checkbox" ${(c.themes||[]).includes(t)?'checked':''} onchange="toggleTheme('${n}','${esc(t)}',this.checked)">${t}</label>`
+  ).join('')}</span>`;
+}
+function sbSelectHtml(c) {
+  const n = esc(c.name);
+  return `<select class="pill-select ps-${c.storybook}" onchange="changeField('${n}','storybook',this.value);this.className='pill-select ps-'+this.value;">
+    <option value="done" ${c.storybook==='done'?'selected':''}>Done</option>
+    <option value="missing" ${c.storybook==='missing'?'selected':''}>Missing</option>
+  </select>`;
+}
+function ccSelectHtml(c) {
+  const n = esc(c.name);
+  return `<select class="pill-select ps-${c.codeConnect}" onchange="changeField('${n}','codeConnect',this.value);this.className='pill-select ps-'+this.value;">
+    <option value="done" ${c.codeConnect==='done'?'selected':''}>Done</option>
+    <option value="missing" ${c.codeConnect==='missing'?'selected':''}>Missing</option>
+  </select>`;
+}
+
+function renderTable() {
+  const filtered = COMPONENTS.filter(matchesFilter);
+  if (!filtered.length) {
+    document.getElementById('table-body').innerHTML = '<tr><td colspan="9" class="empty">No components match.</td></tr>';
+    return;
+  }
+  let lastCat = '', html = '';
+  filtered.forEach((c, fi) => {
+    const compIdx = COMPONENTS.indexOf(c);
+    if (c.cat !== lastCat) { lastCat = c.cat; html += `<tr class="group-row"><td colspan="9">${c.cat}</td></tr>`; }
+    const wfClass = c.workflowStatus === 'done' ? 'status-done' : c.workflowStatus === 'in_progress' ? 'status-inprogress' : 'status-backlog';
+    const detailId = 'detail-' + c.name.replace(/[\s\/()]/g, '_');
+    html += `<tr draggable="true" data-comp-idx="${compIdx}" ondragstart="compDragStart(event)" ondragend="compDragEnd(event)" ondragover="compDragOver(event)" ondrop="compDrop(event)">
+      <td><span class="drag-handle">&#x2807;</span></td>
+      <td><span class="comp-name-cell" onclick="toggleTableDetail('${esc(c.name)}')"><span class="table-chev" id="chev-${detailId}">&#9654;</span><span class="comp-name">${c.name}</span></span></td>
+      <td>${figmaSelectHtml(c)}</td>
+      <td>${waxSelectHtml(c)}</td>
+      <td>${themeChecksHtml(c)}</td>
+      <td style="text-align:center">${agentReadyHtml(c)}</td>
+      <td>${sbSelectHtml(c)}</td>
+      <td>${ccSelectHtml(c)}</td>
+      <td><select class="inline-select ${wfClass}" onchange="changeWorkflow('${esc(c.name)}', this.value);">
+        <option value="done" ${c.workflowStatus === 'done' ? 'selected' : ''}>Done</option>
+        <option value="in_progress" ${c.workflowStatus === 'in_progress' ? 'selected' : ''}>In Progress</option>
+        <option value="backlog" ${c.workflowStatus === 'backlog' ? 'selected' : ''}>Backlog</option>
+      </select></td>
+    </tr>
+    <tr class="detail-row" id="${detailId}" style="display:none">
+      <td colspan="9" style="padding:0"><div style="padding:16px 20px;background:var(--grey5);">
+        <div class="detail-grid">
+          <div class="detail-card design-card"><div class="detail-card-header"><span class="detail-card-title">Figma</span>${figmaSelectHtml(c)}</div><textarea class="detail-notes" onblur="changeField('${esc(c.name)}','figmaNotes',this.value)">${c.figmaNotes||''}</textarea></div>
+          <div class="detail-card eng-card"><div class="detail-card-header"><span class="detail-card-title">Wax</span>${waxSelectHtml(c)}</div><textarea class="detail-notes" onblur="changeField('${esc(c.name)}','codeNotes',this.value)">${c.codeNotes||''}</textarea></div>
+          <div class="detail-card eng-card"><div class="detail-card-header"><span class="detail-card-title">Theming</span></div><div class="detail-theme-section"><label class="theme-check-label"><input type="checkbox" ${c.themeReady?'checked':''} onchange="changeField('${esc(c.name)}','themeReady',this.checked)">Theme-ready</label><div class="theme-checks-detail">${THEME_OPTIONS.map(t => `<label class="theme-check-label"><input type="checkbox" ${(c.themes||[]).includes(t)?'checked':''} onchange="toggleTheme('${esc(c.name)}','${esc(t)}',this.checked)">${t}</label>`).join('')}</div><div class="add-theme-row"><input class="add-theme-input" placeholder="+ Add theme" onkeydown="if(event.key==='Enter')addThemeOption(this)"></div></div></div>
+          <div class="detail-card eng-card"><div class="detail-card-header"><span class="detail-card-title">Storybook</span>${sbSelectHtml(c)}</div><textarea class="detail-notes" onblur="changeField('${esc(c.name)}','storybookNotes',this.value)">${c.storybookNotes||''}</textarea></div>
+          <div class="detail-card eng-card"><div class="detail-card-header"><span class="detail-card-title">Code Connect</span>${ccSelectHtml(c)}</div><textarea class="detail-notes" onblur="changeField('${esc(c.name)}','codeConnectNotes',this.value)">${c.codeConnectNotes||''}</textarea></div>
+        </div>
+        <div class="assignment-row">
+          <div class="assignment-field"><span class="assignment-label">Project</span><input class="assignment-input" type="text" value="${esc(c.project||'')}" onblur="changeField('${esc(c.name)}','project',this.value)" placeholder="e.g. Q1 Biomarkers"></div>
+          <div class="assignment-field"><span class="assignment-label">Team</span><input class="assignment-input" type="text" value="${esc(c.team||'')}" onblur="changeField('${esc(c.name)}','team',this.value)" placeholder="e.g. Commerce"></div>
+          <div class="assignment-field"><span class="assignment-label">Engineer</span><input class="assignment-input" type="text" value="${esc(c.engineer||'')}" onblur="changeField('${esc(c.name)}','engineer',this.value)" placeholder="e.g. Sarah K."></div>
+        </div>
+      </div></td>
+    </tr>`;
+  });
+  document.getElementById('table-body').innerHTML = html;
+}
+
+function renderCards() {
+  const filtered = COMPONENTS.filter(matchesFilter);
+  if (!filtered.length) { document.getElementById('card-view').innerHTML = '<div class="empty" style="grid-column:1/-1">No components match.</div>'; return; }
+  document.getElementById('card-view').innerHTML = filtered.map(c =>
+    `<div class="comp-card"><div class="comp-card-head"><span class="comp-name">${c.name}</span><span class="category-label">${c.cat}</span></div>
+    <div class="comp-card-body">
+      <div class="comp-card-row"><span class="row-label">Figma</span>${pill(c.figma)}</div>
+      <div class="comp-card-row"><span class="row-label">Wax</span>${pill(c.waxStatus === 'done' ? 'done' : c.waxStatus === 'in_progress' ? 'partial' : 'missing')}</div>
+      <div class="comp-card-row"><span class="row-label">Storybook</span>${pill(c.storybook)}</div>
+      <div class="comp-card-row"><span class="row-label">Code Connect</span>${pill(c.codeConnect)}</div>
+    </div></div>`
+  ).join('');
+}
+
+function toggleTableDetail(name) {
+  const id = 'detail-' + name.replace(/[\s\/()]/g, '_');
+  const row = document.getElementById(id);
+  const chev = document.getElementById('chev-' + id);
+  if (row) {
+    const open = row.style.display === 'none';
+    row.style.display = open ? 'table-row' : 'none';
+    if (chev) chev.classList.toggle('open', open);
+  }
+}
+
+let compDragIdx = null;
+
+function compDragStart(e) {
+  const row = e.currentTarget;
+  compDragIdx = parseInt(row.dataset.compIdx, 10);
+  row.classList.add('dragging-row');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function compDragEnd(e) {
+  compDragIdx = null;
+  document.querySelectorAll('#table-body tr').forEach(r => r.classList.remove('dragging-row', 'drag-over-row'));
+}
+
+function compDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const row = e.currentTarget;
+  document.querySelectorAll('#table-body tr').forEach(r => r.classList.remove('drag-over-row'));
+  if (row.dataset.compIdx !== undefined && parseInt(row.dataset.compIdx, 10) !== compDragIdx) {
+    row.classList.add('drag-over-row');
+  }
+}
+
+function compDrop(e) {
+  e.preventDefault();
+  const targetIdx = parseInt(e.currentTarget.dataset.compIdx, 10);
+  if (compDragIdx === null || compDragIdx === targetIdx) return;
+  const item = COMPONENTS.splice(compDragIdx, 1)[0];
+  COMPONENTS.splice(targetIdx, 0, item);
+  saveComponentOrder();
+  renderTable();
+  renderOverview();
+}
+
+function saveComponentOrder() {
+  const order = COMPONENTS.map(c => c.name);
+  localStorage.setItem('ds-comp-order', JSON.stringify(order));
+}
+
+function loadComponentOrder() {
+  const saved = JSON.parse(localStorage.getItem('ds-comp-order') || 'null');
+  if (!saved) return;
+  const byName = {};
+  COMPONENTS.forEach(c => byName[c.name] = c);
+  const reordered = [];
+  saved.forEach(name => { if (byName[name]) { reordered.push(byName[name]); delete byName[name]; } });
+  Object.values(byName).forEach(c => reordered.push(c));
+  COMPONENTS.length = 0;
+  reordered.forEach(c => COMPONENTS.push(c));
+}
+
+function toggleAddComponent() {
+  const form = document.getElementById('add-comp-form');
+  const visible = form.style.display !== 'none';
+  form.style.display = visible ? 'none' : 'flex';
+  if (!visible) {
+    const cats = [...new Set(COMPONENTS.map(c => c.cat))];
+    const sel = document.getElementById('add-comp-cat');
+    sel.innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join('') + '<option value="__new__">+ New category…</option>';
+    sel.onchange = function() {
+      document.getElementById('add-comp-cat-new').style.display = this.value === '__new__' ? 'inline-block' : 'none';
+    };
+    document.getElementById('add-comp-name').value = '';
+    document.getElementById('add-comp-cat-new').value = '';
+    document.getElementById('add-comp-cat-new').style.display = 'none';
+    document.getElementById('add-comp-name').focus();
+  }
+}
+
+function submitAddComponent() {
+  const nameInput = document.getElementById('add-comp-name');
+  const name = nameInput.value.trim();
+  if (!name) { nameInput.focus(); return; }
+  if (COMPONENTS.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+    alert('A component with that name already exists.');
+    nameInput.focus();
+    return;
+  }
+  const catSel = document.getElementById('add-comp-cat');
+  let cat = catSel.value;
+  if (cat === '__new__') {
+    cat = document.getElementById('add-comp-cat-new').value.trim();
+    if (!cat) { document.getElementById('add-comp-cat-new').focus(); return; }
+  }
+  const newComp = {
+    name, cat, tier: "1", figma: "no_design", waxStatus: "not_started", themeReady: false, themes: [], storybook: "missing", codeConnect: "missing", workflowStatus: "backlog",
+    figmaNotes: "", codeNotes: "", storybookNotes: "", codeConnectNotes: "",
+    project: "", team: "", engineer: ""
+  };
+  COMPONENTS.push(newComp);
+  saveComponentOrder();
+  const overrides = loadOverrides();
+  overrides[name] = { ...newComp };
+  saveOverrides(overrides);
+  localStorage.setItem('ds-added-components', JSON.stringify(
+    JSON.parse(localStorage.getItem('ds-added-components') || '[]').concat([newComp])
+  ));
+  toggleAddComponent();
+  renderCategoryNav();
+  renderComponents();
+  renderOverview();
+}
+
+function loadAddedComponents() {
+  const added = JSON.parse(localStorage.getItem('ds-added-components') || '[]');
+  added.forEach(ac => {
+    if (!COMPONENTS.some(c => c.name === ac.name)) {
+      COMPONENTS.push(ac);
+    }
+  });
+}
+
+function setCompFilter(btn, value) {
+  statusFilter = value;
+  btn.closest('.filters').querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() { renderTable(); renderCards(); }
+
+function setView(view) {
+  currentView = view;
+  document.querySelectorAll('.view-toggle-btn').forEach(b => b.classList.remove('active'));
+  if (view === 'table') {
+    document.querySelector('.view-toggle-btn:first-child').classList.add('active');
+    document.getElementById('table-view').style.display = 'block';
+    document.getElementById('card-view').style.display = 'none';
+  } else {
+    document.querySelector('.view-toggle-btn:last-child').classList.add('active');
+    document.getElementById('table-view').style.display = 'none';
+    document.getElementById('card-view').style.display = 'grid';
+  }
+}
+
+// ═══════════════════════════════════════════
+// RENDER — TOKENS
+// ═══════════════════════════════════════════
+
+function renderTokens() {
+  const groups = [{key:"colors",title:"Color Tokens"},{key:"spacing",title:"Spacing Tokens"},{key:"typography",title:"Typography Tokens"},{key:"radii",title:"Radius Tokens"}];
+  let statHtml = '', gridHtml = '';
+  const sc = ["stat-lagoon","stat-warning","stat-lagoon","stat-kale"];
+  groups.forEach((g, i) => {
+    const tokens = TOKENS[g.key], inF = tokens.filter(t => t.f).length, total = tokens.length;
+    statHtml += `<div class="stat-card ${sc[i]}"><div class="stat-value">${inF}/${total}</div><div class="stat-label">${g.title}</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(inF,total)}%;background:${i===1?'var(--warning-amber)':'var(--lagoon)'}"></div></div></div>`;
+    gridHtml += `<div class="token-card"><div class="token-card-head">${g.title}<span class="token-count">${inF}/${total} in Figma</span></div><div class="token-card-body">`;
+    tokens.forEach(t => {
+      const swatch = g.key === "colors" ? `<span class="token-swatch" style="background:${t.v}"></span>` : "";
+      const fp = t.f ? `<span class="pill pill-done" style="font-size:10px;padding:2px 7px">${dot()}Figma</span>` : `<span class="pill pill-missing" style="font-size:10px;padding:2px 7px">${dot()}Missing</span>`;
+      const wp = `<span class="pill pill-na" style="font-size:10px;padding:2px 7px">${dot()}Audit</span>`;
+      gridHtml += `<div class="token-row"><span class="token-name">${swatch}${t.n}</span><span style="display:flex;gap:6px;align-items:center"><span class="token-val">${t.v}</span><span style="display:flex;gap:4px">${fp}${wp}</span></span></div>`;
+    });
+    gridHtml += `</div></div>`;
+  });
+  document.getElementById('token-stats').innerHTML = statHtml;
+  document.getElementById('tokens-grid').innerHTML = gridHtml;
+}
+
+// ═══════════════════════════════════════════
+// CATEGORY NAV + EXPORT
+// ═══════════════════════════════════════════
+
+function renderCategoryNav() {
+  const cats = [...new Set(COMPONENTS.map(c => c.cat))];
+  document.getElementById('category-nav').innerHTML = cats.map(cat =>
+    `<div class="nav-item" onclick="filterCategory('${cat}')"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/></svg></span>${cat}<span class="nav-badge">${COMPONENTS.filter(c => c.cat === cat).length}</span></div>`
+  ).join('');
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify({ components: COMPONENTS, tokens: TOKENS, phases: ROADMAP }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'design-system-data.json'; a.click();
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+
+loadRoadmap();
+loadAddedComponents();
+loadComponentOrder();
+applyOverrides();
+renderCategoryNav();
+renderOverview();
+renderComponents();
+renderTokens();
+</script>
+</body>
+</html>
