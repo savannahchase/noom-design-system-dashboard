@@ -445,7 +445,7 @@
         <button class="btn btn-primary btn-sm" onclick="submitAddComponent()">Add</button>
         <button class="btn btn-secondary btn-sm" onclick="toggleAddComponent()">Cancel</button>
       </div>
-      <div id="table-view"><div class="table-wrap"><table><thead><tr><th style="width:30px"></th><th>Component</th><th>Figma</th><th>Wax</th><th>Theme-ready</th><th>Themes</th><th>Storybook</th><th>Code Connect</th><th>Status</th></tr></thead><tbody id="table-body"></tbody></table></div></div>
+      <div id="table-view"><div class="table-wrap"><table><thead><tr><th style="width:30px"></th><th>Component</th><th>Figma</th><th>Wax</th><th>Themes</th><th>Agent-ready</th><th>Storybook</th><th>Code Connect</th><th>Status</th></tr></thead><tbody id="table-body"></tbody></table></div></div>
       <div id="card-view" class="card-grid" style="display:none"></div>
     </div>
 
@@ -1106,6 +1106,7 @@ function applyOverrides() {
     if (o.figma !== undefined) c.figma = o.figma;
     if (o.waxStatus !== undefined) c.waxStatus = o.waxStatus;
     if (o.themeReady !== undefined) c.themeReady = o.themeReady;
+    if (o.agentReady !== undefined) c.agentReady = o.agentReady;
     if (o.themes !== undefined) c.themes = o.themes;
     if (o.storybook !== undefined) c.storybook = o.storybook;
     if (o.codeConnect !== undefined) c.codeConnect = o.codeConnect;
@@ -1138,7 +1139,7 @@ let currentView = "table";
 let statusFilter = "all";
 let catFilter = "all";
 
-let THEME_OPTIONS = JSON.parse(localStorage.getItem('ds-theme-options') || 'null') || ["Neo", "Buyflow V1", "Buyflow V2"];
+let THEME_OPTIONS = JSON.parse(localStorage.getItem('ds-theme-options') || 'null') || ["Neo", "Legacy BF"];
 
 let projectHero = JSON.parse(localStorage.getItem('ds-project-hero') || 'null') || {
   title: "Noom Neo Design System",
@@ -1207,7 +1208,7 @@ function renderOverview() {
   const applicable = COMPONENTS.filter(c => c.figma !== "na").length;
   const figmaDone = COMPONENTS.filter(c => c.figma === "done" || c.figma === "ready_for_eng").length;
   const waxDone = COMPONENTS.filter(c => c.waxStatus === "done").length;
-  const themeReadyCount = COMPONENTS.filter(c => c.themeReady).length;
+  const agentReadyCount = COMPONENTS.filter(c => c.agentReady).length;
   const sbDone = COMPONENTS.filter(c => c.storybook === "done").length;
   const ccDone = COMPONENTS.filter(c => c.codeConnect === "done").length;
   const vibeReady = COMPONENTS.filter(c => overall(c) === "done").length;
@@ -1215,7 +1216,7 @@ function renderOverview() {
   document.getElementById('overview-stats').innerHTML = `
     <div class="stat-card stat-lagoon"><div class="stat-value">${figmaDone}/${applicable}</div><div class="stat-label">Figma</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(figmaDone,applicable)}%;background:var(--lagoon)"></div></div></div>
     <div class="stat-card stat-kale"><div class="stat-value">${waxDone}/${total}</div><div class="stat-label">Wax</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(waxDone,total)}%;background:var(--kale)"></div></div></div>
-    <div class="stat-card" style="border-left:3px solid var(--purple)"><div class="stat-value">${themeReadyCount}/${total}</div><div class="stat-label">Theme-ready</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(themeReadyCount,total)}%;background:var(--purple)"></div></div></div>
+    <div class="stat-card" style="border-left:3px solid var(--purple)"><div class="stat-value">${agentReadyCount}/${total}</div><div class="stat-label">Agent-ready</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(agentReadyCount,total)}%;background:var(--purple)"></div></div></div>
     <div class="stat-card stat-warning"><div class="stat-value">${sbDone}/${total}</div><div class="stat-label">Storybook</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(sbDone,total)}%;background:var(--warning-amber)"></div></div></div>
     <div class="stat-card stat-error"><div class="stat-value">${ccDone}/${total}</div><div class="stat-label">Code Connect</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(ccDone,total)}%;background:var(--error-red)"></div></div></div>
     <div class="stat-card" style="border-left:3px solid var(--black)"><div class="stat-value">${vibeReady}/${total}</div><div class="stat-label">Vibe-Ready</div><div class="stat-sub">Figma + Wax + Theming + Stories + CC</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(vibeReady,total)}%;background:var(--black)"></div></div></div>`;
@@ -1380,7 +1381,7 @@ function changeWorkflow(name, value) {
 
 function changeField(name, field, value) {
   updateComponent(name, field, value);
-  if (field === 'figma' || field === 'waxStatus' || field === 'themeReady' || field === 'themes' || field === 'storybook' || field === 'codeConnect') {
+  if (field === 'figma' || field === 'waxStatus' || field === 'themeReady' || field === 'agentReady' || field === 'themes' || field === 'storybook' || field === 'codeConnect') {
     renderComponents();
   }
 }
@@ -1464,14 +1465,14 @@ function renderComponents() {
   const total = COMPONENTS.length;
   const figmaDone = COMPONENTS.filter(c => c.figma === 'done' || c.figma === 'ready_for_eng').length;
   const waxDone = COMPONENTS.filter(c => c.waxStatus === 'done').length;
-  const themeReadyCount = COMPONENTS.filter(c => c.themeReady).length;
+  const agentReadyCount = COMPONENTS.filter(c => c.agentReady).length;
   const sbDone = COMPONENTS.filter(c => c.storybook === 'done').length;
   const ccDone = COMPONENTS.filter(c => c.codeConnect === 'done').length;
 
   document.getElementById('comp-stats').innerHTML = `
     <div class="stat-card stat-lagoon"><div class="stat-value">${figmaDone}/${total}</div><div class="stat-label">Figma</div></div>
     <div class="stat-card stat-kale"><div class="stat-value">${waxDone}/${total}</div><div class="stat-label">Wax</div></div>
-    <div class="stat-card" style="border-left:3px solid var(--purple)"><div class="stat-value">${themeReadyCount}/${total}</div><div class="stat-label">Theme-ready</div></div>
+    <div class="stat-card" style="border-left:3px solid var(--purple)"><div class="stat-value">${agentReadyCount}/${total}</div><div class="stat-label">Agent-ready</div></div>
     <div class="stat-card stat-warning"><div class="stat-value">${sbDone}/${total}</div><div class="stat-label">Storybook</div></div>
     <div class="stat-card stat-error"><div class="stat-value">${ccDone}/${total}</div><div class="stat-label">Code Connect</div></div>`;
 
@@ -1509,6 +1510,10 @@ function waxSelectHtml(c) {
 function themeReadyHtml(c) {
   const n = esc(c.name);
   return `<input type="checkbox" class="theme-ready-cb" ${c.themeReady?'checked':''} onchange="changeField('${n}','themeReady',this.checked)">`;
+}
+function agentReadyHtml(c) {
+  const n = esc(c.name);
+  return `<input type="checkbox" class="theme-ready-cb" ${c.agentReady?'checked':''} onchange="changeField('${n}','agentReady',this.checked)">`;
 }
 function themeChecksHtml(c) {
   const n = esc(c.name);
@@ -1548,8 +1553,8 @@ function renderTable() {
       <td><span class="comp-name-cell" onclick="toggleTableDetail('${esc(c.name)}')"><span class="table-chev" id="chev-${detailId}">&#9654;</span><span class="comp-name">${c.name}</span></span></td>
       <td>${figmaSelectHtml(c)}</td>
       <td>${waxSelectHtml(c)}</td>
-      <td style="text-align:center">${themeReadyHtml(c)}</td>
       <td>${themeChecksHtml(c)}</td>
+      <td style="text-align:center">${agentReadyHtml(c)}</td>
       <td>${sbSelectHtml(c)}</td>
       <td>${ccSelectHtml(c)}</td>
       <td><select class="inline-select ${wfClass}" onchange="changeWorkflow('${esc(c.name)}', this.value);">
