@@ -2341,16 +2341,18 @@ function setView(view) {
 // RENDER — TOKENS
 // ═══════════════════════════════════════════
 
-function setTokenFilter(btn, val) {
+function setTokenFilter(val) {
   tokenStatusFilter = val;
-  btn.closest('.filters').querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  renderTokens();
+  // Update pill active states
+  document.querySelectorAll('#tok-filter-bar .filter-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.val === val);
+  });
+  renderTokenRows();
 }
 
 function setTokenSearch(val) {
   tokenSearch = val.toLowerCase();
-  renderTokens();
+  renderTokenRows();
 }
 
 function toggleLegacySection() {
@@ -2358,6 +2360,37 @@ function toggleLegacySection() {
   if (sec) sec.classList.toggle('collapsed');
 }
 
+function tokBadge(s) {
+  const labels = {match:'Match',value_mismatch:'Value Mismatch',naming_mismatch:'Naming Mismatch',figma_only:'Figma Only',wax_only:'Wax Only'};
+  return `<span class="tok-badge ${s}">${labels[s]||s}</span>`;
+}
+function colorSwatch(val) {
+  return /^#[0-9a-fA-F]{3,8}$/.test(val) ? `<span class="token-swatch" style="background:${val}"></span>` : '';
+}
+function buildTokenRows(list) {
+  return list.filter(t => {
+    if (tokenStatusFilter !== 'all' && t.s !== tokenStatusFilter) return false;
+    if (tokenSearch) return t.n.toLowerCase().includes(tokenSearch) || t.wt.toLowerCase().includes(tokenSearch) || t.col.toLowerCase().includes(tokenSearch);
+    return true;
+  }).map(t => `<tr class="tok-row-${t.s}">
+    <td><span class="tok-name">${esc(t.n)}</span></td>
+    <td><span class="tok-col">${t.col}</span></td>
+    <td><span class="tok-val">${colorSwatch(t.fv)}${esc(t.fv)}</span></td>
+    <td><span class="tok-wax">${esc(t.wt)}</span></td>
+    <td><span class="tok-val">${colorSwatch(t.wv)}${esc(t.wv)}</span></td>
+    <td>${tokBadge(t.s)}</td>
+  </tr>`).join('');
+}
+
+// Renders only the tbody rows — called on filter/search change without touching the input
+function renderTokenRows() {
+  const mainEl = document.getElementById('tok-main-tbody');
+  const legacyEl = document.getElementById('tok-legacy-tbody');
+  if (mainEl) mainEl.innerHTML = buildTokenRows(TOKEN_AUDIT) || '<tr><td colspan="6" class="empty">No tokens match.</td></tr>';
+  if (legacyEl) legacyEl.innerHTML = buildTokenRows(LEGACY_TOKENS) || '<tr><td colspan="6" class="empty">No tokens match.</td></tr>';
+}
+
+// Full render: summary bar + static shell (filter bar, table structure) + rows
 function renderTokens() {
   // ── Summary bar ──
   document.getElementById('token-stats').innerHTML = `
@@ -2370,85 +2403,56 @@ function renderTokens() {
     <div class="tok-sum-card" style="border-left:3px solid var(--lagoon)"><div class="tok-sum-val" style="color:var(--lagoon)">~56</div><div class="tok-sum-label">Wax Only (Neo)</div></div>
     <div class="tok-sum-card" style="border-left:3px solid var(--grey2)"><div class="tok-sum-val" style="color:var(--grey3)">~77</div><div class="tok-sum-label">Wax Only (Legacy)</div></div>`;
 
-  // ── Filter + search bar ──
-  const activeFilter = tokenStatusFilter;
-  const filterBar = `<div class="filters" style="margin-bottom:16px">
-    <input type="text" class="search-input" placeholder="Search tokens…" oninput="setTokenSearch(this.value)" value="${esc(tokenSearch)}" style="width:220px">
-    <span class="filter-divider"></span>
-    <button class="filter-pill ${activeFilter==='all'?'active':''}" onclick="setTokenFilter(this,'all')">All</button>
-    <button class="filter-pill ${activeFilter==='match'?'active':''}" onclick="setTokenFilter(this,'match')">Match</button>
-    <button class="filter-pill ${activeFilter==='value_mismatch'?'active':''}" onclick="setTokenFilter(this,'value_mismatch')">Value Mismatch</button>
-    <button class="filter-pill ${activeFilter==='naming_mismatch'?'active':''}" onclick="setTokenFilter(this,'naming_mismatch')">Naming Mismatch</button>
-    <button class="filter-pill ${activeFilter==='figma_only'?'active':''}" onclick="setTokenFilter(this,'figma_only')">Figma Only</button>
-    <button class="filter-pill ${activeFilter==='wax_only'?'active':''}" onclick="setTokenFilter(this,'wax_only')">Wax Only</button>
-  </div>`;
-
-  // ── Table rows ──
-  function tokBadge(s) {
-    const labels = {match:'Match',value_mismatch:'Value Mismatch',naming_mismatch:'Naming Mismatch',figma_only:'Figma Only',wax_only:'Wax Only'};
-    return `<span class="tok-badge ${s}">${labels[s]||s}</span>`;
-  }
-  function colorSwatch(val) {
-    const isHex = /^#[0-9a-fA-F]{3,8}$/.test(val);
-    if (!isHex) return '';
-    return `<span class="token-swatch" style="background:${val}"></span>`;
-  }
-  function buildRows(list) {
-    return list
-      .filter(t => {
-        if (activeFilter !== 'all' && t.s !== activeFilter) return false;
-        if (tokenSearch) return t.n.toLowerCase().includes(tokenSearch) || t.wt.toLowerCase().includes(tokenSearch) || t.col.toLowerCase().includes(tokenSearch);
-        return true;
-      })
-      .map(t => `<tr class="tok-row-${t.s}">
-        <td><span class="tok-name">${esc(t.n)}</span></td>
-        <td><span class="tok-col">${t.col}</span></td>
-        <td><span class="tok-val">${colorSwatch(t.fv)}${esc(t.fv)}</span></td>
-        <td><span class="tok-wax">${esc(t.wt)}</span></td>
-        <td><span class="tok-val">${colorSwatch(t.wv)}${esc(t.wv)}</span></td>
-        <td>${tokBadge(t.s)}</td>
-      </tr>`).join('');
-  }
-
-  const mainRows = buildRows(TOKEN_AUDIT);
-  const legacyRows = buildRows(LEGACY_TOKENS);
-
-  const tableHtml = `<div class="token-table-wrap">
-    <table>
-      <thead><tr>
-        <th style="min-width:200px">Token</th>
-        <th>Collection</th>
-        <th>Figma Value</th>
-        <th>Wax Token</th>
-        <th>Wax Value</th>
-        <th>Status</th>
-      </tr></thead>
-      <tbody>${mainRows || '<tr><td colspan="6" class="empty">No tokens match.</td></tr>'}</tbody>
-    </table>
-  </div>
-  <div class="legacy-section collapsed" id="legacy-section">
-    <div class="legacy-toggle" onclick="toggleLegacySection()">
-      <span class="chev">&#9654;</span>
-      Legacy / Deprecated — Color &amp; CompassColor palettes (WAX ONLY, ~77 tokens)
+  // ── Static shell: filter bar + table containers ──
+  document.getElementById('tokens-grid').innerHTML = `
+    <div class="filters" id="tok-filter-bar" style="margin-bottom:16px">
+      <input type="text" class="search-input" placeholder="Search tokens…" id="tok-search"
+             oninput="setTokenSearch(this.value)" style="width:220px">
+      <span class="filter-divider"></span>
+      <button class="filter-pill active" data-val="all" onclick="setTokenFilter('all')">All</button>
+      <button class="filter-pill" data-val="match" onclick="setTokenFilter('match')">Match</button>
+      <button class="filter-pill" data-val="value_mismatch" onclick="setTokenFilter('value_mismatch')">Value Mismatch</button>
+      <button class="filter-pill" data-val="naming_mismatch" onclick="setTokenFilter('naming_mismatch')">Naming Mismatch</button>
+      <button class="filter-pill" data-val="figma_only" onclick="setTokenFilter('figma_only')">Figma Only</button>
+      <button class="filter-pill" data-val="wax_only" onclick="setTokenFilter('wax_only')">Wax Only</button>
     </div>
-    <div class="legacy-body">
-      <div class="token-table-wrap" style="margin-top:8px">
-        <table>
-          <thead><tr>
-            <th style="min-width:200px">Token</th>
-            <th>Collection</th>
-            <th>Figma Value</th>
-            <th>Wax Token</th>
-            <th>Wax Value</th>
-            <th>Status</th>
-          </tr></thead>
-          <tbody>${legacyRows || '<tr><td colspan="6" class="empty">No tokens match.</td></tr>'}</tbody>
-        </table>
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr>
+          <th style="min-width:200px">Token</th>
+          <th>Collection</th>
+          <th>Figma Value</th>
+          <th>Wax Token</th>
+          <th>Wax Value</th>
+          <th>Status</th>
+        </tr></thead>
+        <tbody id="tok-main-tbody"></tbody>
+      </table>
+    </div>
+    <div class="legacy-section collapsed" id="legacy-section">
+      <div class="legacy-toggle" onclick="toggleLegacySection()">
+        <span class="chev">&#9654;</span>
+        Legacy / Deprecated — Color &amp; CompassColor palettes (WAX ONLY, ~77 tokens)
       </div>
-    </div>
-  </div>`;
+      <div class="legacy-body">
+        <div class="token-table-wrap" style="margin-top:8px">
+          <table>
+            <thead><tr>
+              <th style="min-width:200px">Token</th>
+              <th>Collection</th>
+              <th>Figma Value</th>
+              <th>Wax Token</th>
+              <th>Wax Value</th>
+              <th>Status</th>
+            </tr></thead>
+            <tbody id="tok-legacy-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
 
-  document.getElementById('tokens-grid').innerHTML = filterBar + tableHtml;
+  // ── Populate rows ──
+  renderTokenRows();
 }
 
 // ═══════════════════════════════════════════
