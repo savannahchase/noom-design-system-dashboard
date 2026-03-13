@@ -338,16 +338,41 @@
     /* ── Next Steps ──────────────────────────── */
 
     /* ── Tokens ───────────────────────────────── */
-    .tokens-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 12px; }
-    .token-card { background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); overflow: hidden; }
-    .token-card-head { padding: 14px 16px; font-size: 14px; font-weight: 600; border-bottom: 1px solid var(--grey1); display: flex; align-items: center; justify-content: space-between; }
-    .token-card-head .token-count { font-family: var(--font-label); font-size: 11px; font-weight: 300; color: var(--grey2); text-transform: uppercase; letter-spacing: 0.04em; }
-    .token-card-body { padding: 12px 16px; }
-    .token-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; font-size: 13px; }
-    .token-row + .token-row { border-top: 1px solid var(--grey5); }
-    .token-name { font-weight: 500; display: flex; align-items: center; gap: 8px; }
-    .token-val { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; color: var(--grey3); }
-    .token-swatch { width: 16px; height: 16px; border-radius: 3px; border: 1px solid var(--grey1); flex-shrink: 0; }
+    .token-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.12); flex-shrink: 0; display: inline-block; vertical-align: middle; }
+    .token-table-wrap { background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); overflow: hidden; }
+    .token-table-wrap table { width: 100%; border-collapse: collapse; }
+    .token-table-wrap thead th { text-align: left; font-family: var(--font-label); font-size: 10px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey2); padding: 10px 14px; border-bottom: 1px solid var(--grey1); white-space: nowrap; background: var(--white); position: sticky; top: 0; z-index: 5; }
+    .token-table-wrap tbody tr { transition: background 0.1s; }
+    .token-table-wrap tbody tr:hover { filter: brightness(0.97); }
+    .token-table-wrap tbody td { padding: 8px 14px; font-size: 12px; border-bottom: 1px solid var(--grey5); vertical-align: middle; }
+    .token-table-wrap tbody tr:last-child td { border-bottom: none; }
+    .tok-name { font-family: 'SF Mono','Fira Code',monospace; font-size: 11px; font-weight: 600; color: var(--black); }
+    .tok-val { font-family: 'SF Mono','Fira Code',monospace; font-size: 11px; color: var(--grey3); display: flex; align-items: center; gap: 5px; }
+    .tok-wax { font-family: 'SF Mono','Fira Code',monospace; font-size: 10px; color: var(--grey3); }
+    .tok-col { font-family: var(--font-label); font-size: 10px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.04em; color: var(--grey2); }
+    /* status row tints */
+    .tok-row-value_mismatch { background: #fff5f5; border-left: 3px solid var(--error-red) !important; }
+    .tok-row-naming_mismatch { background: #fffbf0; border-left: 3px solid var(--warning-amber) !important; }
+    .tok-row-figma_only { background: var(--purple-light); border-left: 3px solid var(--purple) !important; }
+    .tok-row-wax_only { background: var(--skylight); border-left: 3px solid var(--lagoon) !important; }
+    /* status badges for token table */
+    .tok-badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: var(--radius-pill); font-family: var(--font-label); font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
+    .tok-badge.match { background: var(--mint-light); color: var(--kale); }
+    .tok-badge.value_mismatch { background: var(--error-light); color: var(--error-red); }
+    .tok-badge.naming_mismatch { background: var(--warning-light); color: var(--warning-amber); }
+    .tok-badge.figma_only { background: var(--purple-light); color: var(--purple); }
+    .tok-badge.wax_only { background: var(--skylight); color: var(--lagoon); }
+    /* legacy section */
+    .legacy-toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 12px 0; font-family: var(--font-label); font-size: 11px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey3); user-select: none; border-top: 1px solid var(--grey1); margin-top: 24px; }
+    .legacy-toggle:hover { color: var(--grey4); }
+    .legacy-toggle .chev { font-size: 10px; transition: transform 0.2s; }
+    .legacy-section.collapsed .chev { transform: rotate(-90deg); }
+    .legacy-section.collapsed .legacy-body { display: none; }
+    /* token summary bar */
+    .tok-summary { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    .tok-sum-card { background: var(--white); border: 1px solid var(--grey1); border-radius: var(--radius-md); padding: 12px 16px; flex: 1; min-width: 100px; text-align: center; }
+    .tok-sum-val { font-size: 22px; font-weight: 600; color: var(--black); }
+    .tok-sum-label { font-family: var(--font-label); font-size: 10px; font-weight: 300; color: var(--grey2); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
 
     /* ── Table Drag & Drop ────────────────────── */
     tr.dragging-row { opacity: 0.4; }
@@ -545,9 +570,10 @@ const DEFAULT_ROADMAP = [
     ]
   },
   {
-    phase: 2, name: "Figma Component Completion", owner: "design", duration: "3–4 weeks", status: "upcoming",
+    phase: 2, name: "Figma Component Completion", owner: "design", duration: "3–4 weeks", status: "active",
     parallel: true,
     tasks: [
+      { text: "Neo Components Figma file: https://www.figma.com/design/0mbAQLFR6QyIq1kz7lbHAs/Neo-Components", done: false },
       { text: "Build missing Tier 1 components (Input, Checkbox, Radio, Badge, Modal, etc.)", done: false },
       { text: "Build Tier 2 commerce components from prototype specs", done: false },
       { text: "Enforce hygiene: Auto Layout, variables, Property=Value naming, all states", done: false },
@@ -577,11 +603,12 @@ const DEFAULT_ROADMAP = [
     ]
   },
   {
-    phase: 5, name: "Storybook Alignment", owner: "engineering", duration: "1–2 weeks", status: "upcoming",
+    phase: 5, name: "Storybook Alignment", owner: "engineering", duration: "1–2 weeks", status: "done",
     tasks: [
-      { text: "Extend Storybook in hive-ts with Neo/Legacy theme switching", done: false },
-      { text: "Write stories covering all variants, sizes, states, and responsive at 375px", done: false },
-      { text: "Set up visual snapshot testing with Chromatic or Percy", done: false }
+      { text: "Wax Storybook live at https://wax.int.wsli.dev", done: true },
+      { text: "Extend Storybook in hive-ts with Neo/Legacy theme switching", done: true },
+      { text: "Write stories covering all variants, sizes, states, and responsive at 375px", done: true },
+      { text: "Set up visual snapshot testing with Chromatic or Percy", done: true }
     ]
   },
   {
@@ -1361,12 +1388,282 @@ const COMPONENTS = [
 // TOKENS DATA
 // ═══════════════════════════════════════════
 
-const TOKENS = {
-  colors: [{n:"Lagoon",v:"#05727A",f:true},{n:"Lagoon Dark",v:"#045B62",f:true},{n:"Blueberry",v:"#15333D",f:true},{n:"Skylight",v:"#DCF5F0",f:true},{n:"Sky",v:"#B4E0D8",f:false},{n:"Off-White",v:"#F6F4EE",f:true},{n:"Sand",v:"#E4DECE",f:true},{n:"Black",v:"#191717",f:true},{n:"White",v:"#FFFFFF",f:true},{n:"Grey 1",v:"#DEDEDE",f:true},{n:"Grey 2",v:"#AAAAAA",f:true},{n:"Grey 3",v:"#666666",f:true},{n:"Grey 4",v:"#444444",f:true},{n:"Grey 5",v:"#F4F4F4",f:true},{n:"Kale",v:"#316700",f:false},{n:"Mint",v:"#C8E3B1",f:true},{n:"Mint Light",v:"#E3F1D8",f:false},{n:"Error Red",v:"#C13515",f:false},{n:"Warning Amber",v:"#B8860B",f:false},{n:"Warning Light",v:"#FFF3E0",f:false}],
-  spacing: [{n:"4",v:"4px",f:false},{n:"8",v:"8px",f:false},{n:"12",v:"12px",f:false},{n:"16",v:"16px",f:true},{n:"20",v:"20px",f:false},{n:"24",v:"24px",f:false},{n:"32",v:"32px",f:false},{n:"40",v:"40px",f:false},{n:"48",v:"48px",f:false}],
-  typography: [{n:"Headline/2xl",v:"Serif 64px",f:true},{n:"Headline/xl",v:"Serif 56px",f:true},{n:"Headline/lg",v:"Serif 40px",f:true},{n:"Headline/md",v:"Serif 32px",f:true},{n:"Headline/sm",v:"Serif 28px",f:true},{n:"Headline/xs",v:"Serif 24px",f:true},{n:"Headline/2xs",v:"Serif 20px",f:true},{n:"Paragraph/lg",v:"Sans 18px",f:true},{n:"Paragraph/md",v:"Sans 16px",f:true},{n:"Paragraph/sm",v:"Sans 14px",f:true},{n:"Paragraph/xs",v:"Sans 12px",f:true},{n:"Accent/lg",v:"Brown 16px",f:true},{n:"Accent/md",v:"Brown 14px",f:true},{n:"Accent/sm",v:"Brown 12px",f:true},{n:"Accent/xs",v:"Brown 10px",f:true}],
-  radii: [{n:"sm",v:"6px",f:true},{n:"md",v:"8px",f:true},{n:"lg",v:"12px",f:true},{n:"xl",v:"16px",f:true},{n:"pill",v:"25px",f:false},{n:"full",v:"56px",f:true},{n:"circle",v:"100px",f:true}],
-};
+// ═══════════════════════════════════════════
+// TOKEN AUDIT DATA (from token-alignment-audit.md)
+// Fields: n=name, col=collection, fv=figmaValue, wt=waxToken, wv=waxValue, s=status
+// Status: match | value_mismatch | naming_mismatch | figma_only | wax_only
+// ═══════════════════════════════════════════
+const TOKEN_AUDIT = [
+  // ── BASE PALETTE: Greyscale ──
+  {n:'base.greyscale.black',col:'Colors',fv:'#191717',wt:'NeoColor.greyscale.black',wv:'#191717',s:'match'},
+  {n:'base.greyscale.white',col:'Colors',fv:'#ffffff',wt:'NeoColor.greyscale.white',wv:'#ffffff',s:'match'},
+  {n:'base.greyscale.gray4',col:'Colors',fv:'#444444',wt:'NeoColor.greyscale.gray4',wv:'#444444',s:'match'},
+  {n:'base.greyscale.gray3',col:'Colors',fv:'#666666',wt:'NeoColor.greyscale.gray3',wv:'#666666',s:'match'},
+  {n:'base.greyscale.gray2',col:'Colors',fv:'#aaaaaa',wt:'NeoColor.greyscale.gray2',wv:'#aaaaaa',s:'match'},
+  {n:'base.greyscale.gray1',col:'Colors',fv:'#dedede',wt:'NeoColor.greyscale.gray1',wv:'#dedede',s:'match'},
+  {n:'base.greyscale.lightGray',col:'Colors',fv:'#f4f4f4',wt:'NeoColor.greyscale.lightGray',wv:'#f4f4f4',s:'match'},
+  {n:'base.greyscale.offWhite',col:'Colors',fv:'#f6f4ee',wt:'NeoColor.greyscale.offWhite',wv:'#f6f4ee',s:'match'},
+  {n:'base.greyscale.clear',col:'Colors',fv:'rgba(255,255,255,0)',wt:'NeoColor.greyscale.clear',wv:'#ffffff',s:'value_mismatch'},
+  // ── BASE PALETTE: Red ──
+  {n:'base.red.plum',col:'Colors',fv:'#671d48',wt:'NeoColor.red.plum',wv:'#671d48',s:'match'},
+  {n:'base.red.berry',col:'Colors',fv:'#a82f67',wt:'NeoColor.red.berry',wv:'#a82f67',s:'match'},
+  {n:'base.red.blossom',col:'Colors',fv:'#f2aacd',wt:'NeoColor.red.blossom',wv:'#f2aacd',s:'match'},
+  {n:'base.red.conch',col:'Colors',fv:'#ebccd9',wt:'NeoColor.red.conch',wv:'#ebccd9',s:'match'},
+  {n:'base.red.pumpkin',col:'Colors',fv:'#c05100',wt:'NeoColor.red.pumpkin',wv:'#c05100',s:'match'},
+  {n:'base.red.papaya',col:'Colors',fv:'#ff774b',wt:'NeoColor.red.papaya',wv:'#ff774b',s:'match'},
+  {n:'base.red.cherry',col:'Colors',fv:'#5f110e',wt:'NeoColor.red.cherry',wv:'#5f110e',s:'match'},
+  {n:'base.red.cinnamon',col:'Colors',fv:'#aa3521',wt:'NeoColor.red.cinnamon',wv:'#aa3521',s:'match'},
+  {n:'base.red.taroccoShade1',col:'Colors',fv:'#c9412f',wt:'NeoColor.red.taroccoShade1',wv:'#c9412f',s:'match'},
+  {n:'base.red.tarocco',col:'Colors',fv:'#fb513b',wt:'NeoColor.red.tarocco',wv:'#fb513b',s:'match'},
+  {n:'base.red.taroccoTint1',col:'Colors',fv:'#fc7462',wt:'NeoColor.red.taroccoTint1',wv:'#fc7462',s:'match'},
+  {n:'base.red.salmon',col:'Colors',fv:'#f4beae',wt:'NeoColor.red.salmon',wv:'#f4beae',s:'match'},
+  // ── BASE PALETTE: Green ──
+  {n:'base.green.pine',col:'Colors',fv:'#2b4010',wt:'NeoColor.green.pine',wv:'#2b4010',s:'match'},
+  {n:'base.green.kale',col:'Colors',fv:'#316700',wt:'NeoColor.green.kale',wv:'#316700',s:'match'},
+  {n:'base.green.avocado',col:'Colors',fv:'#799f2d',wt:'NeoColor.green.avocado',wv:'#799f2d',s:'match'},
+  {n:'base.green.sprout',col:'Colors',fv:'#a9d15a',wt:'NeoColor.green.sprout',wv:'#a9d15a',s:'match'},
+  {n:'base.green.mint',col:'Colors',fv:'#c8e3b1',wt:'NeoColor.green.mint',wv:'#c8e3b1',s:'match'},
+  {n:'base.green.mintLight',col:'Colors',fv:'#e3f1d8',wt:'NeoColor.green.mintLight',wv:'#e3f1d8',s:'match'},
+  // ── BASE PALETTE: Blue ──
+  {n:'base.blue.blackberry',col:'Colors',fv:'#10262e',wt:'NeoColor.blue.blackberry',wv:'#10262e',s:'match'},
+  {n:'base.blue.blueberry',col:'Colors',fv:'#15333d',wt:'NeoColor.blue.blueberry',wv:'#15333d',s:'match'},
+  {n:'base.blue.blueberryLight',col:'Colors',fv:'#1d3a44',wt:'NeoColor.blue.blueberryLight',wv:'#1d3a44',s:'match'},
+  {n:'base.blue.lagoonShade1',col:'Colors',fv:'#045b62',wt:'NeoColor.blue.lagoonShade1',wv:'#045b62',s:'match'},
+  {n:'base.blue.lagoon',col:'Colors',fv:'#05727a',wt:'NeoColor.blue.lagoon',wv:'#05727a',s:'match'},
+  {n:'base.blue.lagoonTint1',col:'Colors',fv:'#378e95',wt:'NeoColor.blue.lagoonTint1',wv:'#378e95',s:'match'},
+  {n:'base.blue.stream',col:'Colors',fv:'#6cc1b6',wt:'NeoColor.blue.stream',wv:'#6cc1b6',s:'match'},
+  {n:'base.blue.sky',col:'Colors',fv:'#b4e0d8',wt:'NeoColor.blue.sky',wv:'#b4e0d8',s:'match'},
+  {n:'base.blue.skyLight',col:'Colors',fv:'#dcf5f0',wt:'NeoColor.blue.skyLight',wv:'#dcf5f0',s:'match'},
+  {n:'base.blue.denim',col:'Colors',fv:'#2457c5',wt:'NeoColor.blue.denim',wv:'#2457c5',s:'match'},
+  // ── BASE PALETTE: Yellow ──
+  {n:'base.yellow.sand2',col:'Colors',fv:'#d3c9b4',wt:'NeoColor.yellow.sand2',wv:'#d3c9b4',s:'match'},
+  {n:'base.yellow.sand1',col:'Colors',fv:'#e4dece',wt:'NeoColor.yellow.sand1',wv:'#e4dece',s:'match'},
+  {n:'base.yellow.goldDark',col:'Colors',fv:'#8a7347',wt:'NeoColor.yellow.goldDark',wv:'#8a7347',s:'match'},
+  {n:'base.yellow.gold',col:'Colors',fv:'#ad925e',wt:'NeoColor.yellow.gold',wv:'#ad925e',s:'match'},
+  {n:'base.yellow.goldLight',col:'Colors',fv:'#eed39d',wt:'NeoColor.yellow.goldLight',wv:'#eed39d',s:'match'},
+  {n:'base.yellow.highlighter',col:'Colors',fv:'#fff5d8',wt:'NeoColor.yellow.highlighter',wv:'#fff5d8',s:'match'},
+  {n:'base.yellow.sunflower',col:'Colors',fv:'#f6cf03',wt:'NeoColor.yellow.sunflower',wv:'#f6cf03',s:'match'},
+  {n:'base.yellow.yolk',col:'Colors',fv:'#eaaf00',wt:'NeoColor.yellow.yolk',wv:'#eaaf00',s:'match'},
+  // ── SEMANTIC COLORS: Surface ──
+  {n:'surface.primary (light/dark/premium)',col:'Colors',fv:'#05727a / #ffffff / #ad925e',wt:'semanticColors.surface.primary',wv:'NeoColor refs',s:'match'},
+  {n:'surface.secondary (all modes)',col:'Colors',fv:'rgba(255,255,255,0)',wt:'semanticColors.surface.secondary',wv:'NeoColor.greyscale.clear = #ffffff',s:'value_mismatch'},
+  {n:'surface.secondaryPressed (all modes)',col:'Colors',fv:'rgba(255,255,255,0)',wt:'semanticColors.surface.secondaryPressed',wv:'NeoColor.greyscale.clear = #ffffff',s:'value_mismatch'},
+  {n:'surface.tertiary (light / premium)',col:'Colors',fv:'#f4f4f4',wt:'semanticColors.surface.tertiary.light/premium',wv:'NeoColor.greyscale.lightGray = #f4f4f4',s:'match'},
+  {n:'surface.tertiary (dark mode)',col:'Colors',fv:'#f4f4f4',wt:'semanticColors.surface.tertiary.dark',wv:'NeoColor.blue.blackberry = #10262e',s:'value_mismatch'},
+  {n:'surface.brand',col:'Colors',fv:'#fb513b',wt:'semanticColors.surface.brand',wv:'NeoColor.red.tarocco = #fb513b',s:'match'},
+  {n:'surface.disabled',col:'Colors',fv:'#aaaaaa',wt:'semanticColors.surface.disabled',wv:'NeoColor.greyscale.gray2 = #aaaaaa',s:'match'},
+  // ── SEMANTIC COLORS: Background ──
+  {n:'background.primary',col:'Colors',fv:'#ffffff / #191717 / #ffffff',wt:'semanticColors.background.primary',wv:'NeoColor refs',s:'match'},
+  {n:'background.secondary',col:'Colors',fv:'#f4f4f4 / #10262e / #f4f4f4',wt:'semanticColors.background.secondary',wv:'NeoColor refs',s:'match'},
+  {n:'background.scrim (all 3 modes)',col:'Colors',fv:'rgba(0,0,0,0.4)',wt:'semanticColors.background.scrim',wv:'#000000CC = rgba(0,0,0,0.8)',s:'value_mismatch'},
+  // ── SEMANTIC COLORS: Content ──
+  {n:'content.primary',col:'Colors',fv:'#ffffff / #191717 / #ffffff',wt:'semanticColors.content.primary',wv:'NeoColor refs',s:'match'},
+  {n:'content.secondary',col:'Colors',fv:'#191717 / #ffffff / #191717',wt:'semanticColors.content.secondary',wv:'NeoColor refs',s:'match'},
+  {n:'content.tertiary',col:'Colors',fv:'#191717 / #191717 / #191717',wt:'semanticColors.content.tertiary',wv:'NeoColor refs',s:'match'},
+  {n:'content.brand',col:'Colors',fv:'#ffffff',wt:'semanticColors.content.brand',wv:'NeoColor.greyscale.white',s:'match'},
+  {n:'content.premium',col:'Colors',fv:'#15333d',wt:'semanticColors.content.premium',wv:'NeoColor.blue.blueberry',s:'match'},
+  {n:'content.disabled',col:'Colors',fv:'#ffffff',wt:'semanticColors.content.disabled',wv:'NeoColor.greyscale.white',s:'match'},
+  // ── SEMANTIC COLORS: Border & Typography ──
+  {n:'border.secondary',col:'Colors',fv:'varies by mode',wt:'semanticColors.border.secondary',wv:'NeoColor refs',s:'match'},
+  {n:'border.tertiaryPressed',col:'Colors',fv:'#05727a',wt:'semanticColors.border.tertiary.pressed',wv:'NeoColor.blue.lagoon',s:'match'},
+  {n:'typography.primary',col:'Colors',fv:'varies by mode',wt:'semanticColors.typography.primary',wv:'NeoColor refs',s:'match'},
+  {n:'typography.secondary',col:'Colors',fv:'varies by mode',wt:'semanticColors.typography.secondary',wv:'NeoColor refs',s:'match'},
+  {n:'typography.tertiary',col:'Colors',fv:'varies by mode',wt:'semanticColors.typography.tertiary',wv:'NeoColor refs',s:'match'},
+  {n:'typography.faded',col:'Colors',fv:'varies by mode',wt:'semanticColors.typography.faded',wv:'NeoColor refs',s:'match'},
+  {n:'typography.link',col:'Colors',fv:'#05727a / #378e95 / #05727a',wt:'semanticColors.typography.link',wv:'NeoColor refs',s:'match'},
+  // ── TYPOGRAPHY: Font Family ──
+  {n:'family.headline',col:'Typography',fv:'"Untitled Serif"',wt:'fonts.heading',wv:'"Untitled Serif", serif',s:'match'},
+  {n:'family.paragraph',col:'Typography',fv:'"Untitled Sans"',wt:'fonts.body',wv:'"Untitled Sans", sans-serif',s:'match'},
+  {n:'family.accent',col:'Typography',fv:'"Brown LL"',wt:'fonts.mono',wv:'"Brown LL", sans-serif',s:'naming_mismatch'},
+  // ── TYPOGRAPHY: Font Weight (Figma-only) ──
+  {n:'weight.regular (mobile)',col:'Typography',fv:'"Regular"',wt:'(none)',wv:'400 in Fonts.tsx',s:'figma_only'},
+  {n:'weight.medium (mobile)',col:'Typography',fv:'"Medium"',wt:'(none)',wv:'500 in Fonts.tsx',s:'figma_only'},
+  {n:'weight.bold (mobile)',col:'Typography',fv:'"Bold"',wt:'(none)',wv:'700 in Fonts.tsx',s:'figma_only'},
+  {n:'weight.regular (desktop)',col:'Typography',fv:'"Regular"',wt:'(none)',wv:'400 in Fonts.tsx',s:'figma_only'},
+  {n:'weight.medium (desktop)',col:'Typography',fv:'"Medium"',wt:'(none)',wv:'500 in Fonts.tsx',s:'figma_only'},
+  {n:'weight.bold (desktop)',col:'Typography',fv:'"Bold"',wt:'(none)',wv:'700 in Fonts.tsx',s:'figma_only'},
+  // ── TYPOGRAPHY: Font Size (mobile) ──
+  {n:'size.xxs (mobile)',col:'Typography',fv:'10',wt:'fontSizes.xxs',wv:'"10px"',s:'match'},
+  {n:'size.xs (mobile)',col:'Typography',fv:'12',wt:'fontSizes.xs',wv:'"12px"',s:'match'},
+  {n:'size.sm (mobile)',col:'Typography',fv:'14',wt:'fontSizes.sm',wv:'"14px"',s:'match'},
+  {n:'size.md (mobile)',col:'Typography',fv:'16',wt:'fontSizes.md',wv:'"16px"',s:'match'},
+  {n:'size.lg (mobile)',col:'Typography',fv:'18',wt:'fontSizes.lg',wv:'"18px"',s:'match'},
+  {n:'size.xl (mobile)',col:'Typography',fv:'20',wt:'fontSizes.xl',wv:'"20px"',s:'match'},
+  {n:'size.2xl (mobile)',col:'Typography',fv:'24',wt:'fontSizes["2xl"]',wv:'"24px"',s:'match'},
+  {n:'size.3xl (mobile)',col:'Typography',fv:'28',wt:'fontSizes["3xl"]',wv:'"28px"',s:'match'},
+  {n:'size.4xl (mobile)',col:'Typography',fv:'32',wt:'fontSizes["4xl"]',wv:'"32px"',s:'match'},
+  {n:'size.5xl (mobile)',col:'Typography',fv:'40',wt:'fontSizes["5xl"]',wv:'"40px"',s:'match'},
+  {n:'size.6xl (mobile)',col:'Typography',fv:'56',wt:'fontSizes["6xl"]',wv:'"56px"',s:'match'},
+  {n:'size.7xl (mobile)',col:'Typography',fv:'64',wt:'fontSizes["7xl"]',wv:'"64px"',s:'match'},
+  // ── TYPOGRAPHY: Font Size (desktop — one step up) ──
+  {n:'size.xxs (desktop)',col:'Typography',fv:'12',wt:'fontSizes.xs',wv:'"12px"',s:'match'},
+  {n:'size.xs (desktop)',col:'Typography',fv:'14',wt:'fontSizes.sm',wv:'"14px"',s:'match'},
+  {n:'size.sm (desktop)',col:'Typography',fv:'16',wt:'fontSizes.md',wv:'"16px"',s:'match'},
+  {n:'size.md (desktop)',col:'Typography',fv:'18',wt:'fontSizes.lg',wv:'"18px"',s:'match'},
+  {n:'size.lg (desktop)',col:'Typography',fv:'20',wt:'fontSizes.xl',wv:'"20px"',s:'match'},
+  {n:'size.xl (desktop)',col:'Typography',fv:'24',wt:'fontSizes["2xl"]',wv:'"24px"',s:'match'},
+  {n:'size.2xl (desktop)',col:'Typography',fv:'28',wt:'fontSizes["3xl"]',wv:'"28px"',s:'match'},
+  {n:'size.3xl (desktop)',col:'Typography',fv:'32',wt:'fontSizes["4xl"]',wv:'"32px"',s:'match'},
+  {n:'size.4xl (desktop)',col:'Typography',fv:'40',wt:'fontSizes["5xl"]',wv:'"40px"',s:'match'},
+  {n:'size.5xl (desktop)',col:'Typography',fv:'56',wt:'fontSizes["6xl"]',wv:'"56px"',s:'match'},
+  {n:'size.6xl (desktop)',col:'Typography',fv:'64',wt:'fontSizes["7xl"]',wv:'"64px"',s:'match'},
+  {n:'size.7xl (desktop)',col:'Typography',fv:'72',wt:'fontSizes["8xl"]',wv:'"72px"',s:'match'},
+  // ── TYPOGRAPHY: Line Height (mobile) ──
+  {n:'lineHeight.xxs (mobile)',col:'Typography',fv:'14',wt:'lineHeights.xxs',wv:'"14px"',s:'match'},
+  {n:'lineHeight.xs (mobile)',col:'Typography',fv:'18',wt:'lineHeights.xs',wv:'"18px"',s:'match'},
+  {n:'lineHeight.sm (mobile)',col:'Typography',fv:'22',wt:'lineHeights.sm',wv:'"22px"',s:'match'},
+  {n:'lineHeight.md (mobile)',col:'Typography',fv:'24',wt:'lineHeights.md',wv:'"24px"',s:'match'},
+  {n:'lineHeight.lg (mobile)',col:'Typography',fv:'26',wt:'lineHeights.lg',wv:'"26px"',s:'match'},
+  {n:'lineHeight.xl (mobile)',col:'Typography',fv:'28',wt:'lineHeights.xl',wv:'"28px"',s:'match'},
+  {n:'lineHeight.2xl (mobile)',col:'Typography',fv:'30',wt:'lineHeights["2xl"]',wv:'"30px"',s:'match'},
+  {n:'lineHeight.3xl (mobile)',col:'Typography',fv:'34',wt:'lineHeights["3xl"]',wv:'"34px"',s:'match'},
+  {n:'lineHeight.4xl (mobile)',col:'Typography',fv:'36',wt:'lineHeights["4xl"]',wv:'"36px"',s:'match'},
+  {n:'lineHeight.5xl (mobile)',col:'Typography',fv:'48',wt:'lineHeights["5xl"]',wv:'"48px"',s:'match'},
+  {n:'lineHeight.6xl (mobile)',col:'Typography',fv:'58',wt:'lineHeights["6xl"]',wv:'"58px"',s:'match'},
+  {n:'lineHeight.7xl (mobile)',col:'Typography',fv:'60',wt:'lineHeights["7xl"]',wv:'"60px"',s:'match'},
+  // ── TYPOGRAPHY: Line Height (desktop) ──
+  {n:'lineHeight.xxs (desktop)',col:'Typography',fv:'18',wt:'lineHeights.xs',wv:'"18px"',s:'match'},
+  {n:'lineHeight.xs (desktop)',col:'Typography',fv:'22',wt:'lineHeights.sm',wv:'"22px"',s:'match'},
+  {n:'lineHeight.sm (desktop)',col:'Typography',fv:'24',wt:'lineHeights.md',wv:'"24px"',s:'match'},
+  {n:'lineHeight.md (desktop)',col:'Typography',fv:'26',wt:'lineHeights.lg',wv:'"26px"',s:'match'},
+  {n:'lineHeight.lg (desktop)',col:'Typography',fv:'28',wt:'lineHeights.xl',wv:'"28px"',s:'match'},
+  {n:'lineHeight.xl (desktop)',col:'Typography',fv:'30',wt:'lineHeights["2xl"]',wv:'"30px"',s:'match'},
+  {n:'lineHeight.2xl (desktop)',col:'Typography',fv:'34',wt:'lineHeights["3xl"]',wv:'"34px"',s:'match'},
+  {n:'lineHeight.3xl (desktop)',col:'Typography',fv:'36',wt:'lineHeights["4xl"]',wv:'"36px"',s:'match'},
+  {n:'lineHeight.4xl (desktop)',col:'Typography',fv:'48',wt:'lineHeights["5xl"]',wv:'"48px"',s:'match'},
+  {n:'lineHeight.5xl (desktop)',col:'Typography',fv:'58',wt:'lineHeights["6xl"]',wv:'"58px"',s:'match'},
+  {n:'lineHeight.6xl (desktop)',col:'Typography',fv:'60',wt:'lineHeights["7xl"]',wv:'"60px"',s:'match'},
+  {n:'lineHeight.7xl (desktop)',col:'Typography',fv:'64',wt:'lineHeights["8xl"]',wv:'"64px"',s:'match'},
+  // ── UNITS: Spacing ──
+  {n:'spacing.half',col:'Units',fv:'2',wt:'spacing[0.5]',wv:'"2px"',s:'naming_mismatch'},
+  {n:'spacing.1x',col:'Units',fv:'4',wt:'spacing[1]',wv:'"4px"',s:'naming_mismatch'},
+  {n:'spacing.2x',col:'Units',fv:'8',wt:'spacing[2]',wv:'"8px"',s:'naming_mismatch'},
+  {n:'spacing.3x',col:'Units',fv:'12',wt:'spacing[3]',wv:'"12px"',s:'naming_mismatch'},
+  {n:'spacing.4x',col:'Units',fv:'16',wt:'spacing[4]',wv:'"16px"',s:'naming_mismatch'},
+  {n:'spacing.6x',col:'Units',fv:'24',wt:'spacing[6]',wv:'"24px"',s:'naming_mismatch'},
+  {n:'spacing.8x',col:'Units',fv:'32',wt:'spacing[8]',wv:'"32px"',s:'naming_mismatch'},
+  {n:'spacing.10x',col:'Units',fv:'40',wt:'spacing[10]',wv:'"40px"',s:'naming_mismatch'},
+  // ── UNITS: Border Width ──
+  {n:'border.weak',col:'Units',fv:'0.5',wt:'border.weak',wv:'"0.5px"',s:'match'},
+  {n:'border.normal',col:'Units',fv:'1',wt:'border.normal',wv:'"1px"',s:'match'},
+  {n:'border.strong',col:'Units',fv:'2',wt:'border.strong',wv:'"2px"',s:'match'},
+  // ── UNITS: Border Radius ──
+  {n:'radius.00',col:'Units',fv:'0',wt:'radius.none',wv:'"0px"',s:'naming_mismatch'},
+  {n:'radius.02',col:'Units',fv:'2',wt:'radius.sm',wv:'"2px"',s:'naming_mismatch'},
+  {n:'radius.04',col:'Units',fv:'4',wt:'radius.md',wv:'"4px"',s:'naming_mismatch'},
+  {n:'radius.08',col:'Units',fv:'8',wt:'radius.lg',wv:'"8px"',s:'naming_mismatch'},
+  {n:'radius.12',col:'Units',fv:'12',wt:'radius.xl',wv:'"12px"',s:'naming_mismatch'},
+  {n:'radius.16',col:'Units',fv:'16',wt:'radius["2xl"]',wv:'"16px"',s:'naming_mismatch'},
+  {n:'radius.24',col:'Units',fv:'24',wt:'radius["3xl"]',wv:'"24px"',s:'naming_mismatch'},
+  {n:'radius.32',col:'Units',fv:'32',wt:'radius["4xl"]',wv:'"32px"',s:'naming_mismatch'},
+  {n:'radius.40',col:'Units',fv:'40',wt:'radius["5xl"]',wv:'"40px"',s:'naming_mismatch'},
+  {n:'radius.56',col:'Units',fv:'56',wt:'radius["6xl"]',wv:'"56px"',s:'naming_mismatch'},
+  // ── UNITS: Icon Sizes ──
+  {n:'size.icon.micro',col:'Units',fv:'16',wt:'iconSizes.micro',wv:'"16px"',s:'match'},
+  {n:'size.icon.mini',col:'Units',fv:'20',wt:'iconSizes.mini',wv:'"20px"',s:'match'},
+  {n:'size.icon.regular',col:'Units',fv:'24',wt:'iconSizes.regular',wv:'"24px"',s:'match'},
+  {n:'size.icon.large',col:'Units',fv:'32',wt:'iconSizes.large',wv:'"32px"',s:'match'},
+  {n:'size.icon.taskContainer',col:'Units',fv:'48',wt:'iconSizes.hero',wv:'"48px"',s:'naming_mismatch'},
+  // ── WAX ONLY: NeoTheme extras ──
+  {n:'fontSizes["8xl"]',col:'Typography',fv:'—',wt:'fontSizes["8xl"]',wv:'"72px"',s:'wax_only'},
+  {n:'fontSizes["accent-xs/sm/md/lg/xl"]',col:'Typography',fv:'—',wt:'fontSizes["accent-*"]',wv:'10–18px',s:'wax_only'},
+  {n:'lineHeights["8xl"]',col:'Typography',fv:'—',wt:'lineHeights["8xl"]',wv:'"64px"',s:'wax_only'},
+  {n:'lineHeights["accent-xs/sm/md/lg/xl"]',col:'Typography',fv:'—',wt:'lineHeights["accent-*"]',wv:'14–26px',s:'wax_only'},
+  {n:'lineHeights.normal',col:'Typography',fv:'—',wt:'lineHeights.normal',wv:'"normal"',s:'wax_only'},
+  {n:'lineHeights.none',col:'Typography',fv:'—',wt:'lineHeights.none',wv:'1',s:'wax_only'},
+  {n:'spacing[0]',col:'Units',fv:'—',wt:'spacing[0]',wv:'"0px"',s:'wax_only'},
+  {n:'radius.full',col:'Units',fv:'—',wt:'radius.full',wv:'"9999px"',s:'wax_only'},
+  {n:'colors.brand[50–900]',col:'Colors',fv:'—',wt:'colors.brand[50–900]',wv:'10-step scale',s:'wax_only'},
+  {n:'colors.primary[50–900]',col:'Colors',fv:'—',wt:'colors.primary[50–900]',wv:'10-step scale',s:'wax_only'},
+  {n:'colors.secondary[50–900]',col:'Colors',fv:'—',wt:'colors.secondary[50–900]',wv:'10-step scale',s:'wax_only'},
+  {n:'colors.tertiary[50–900]',col:'Colors',fv:'—',wt:'colors.tertiary[50–900]',wv:'10-step scale',s:'wax_only'},
+];
+
+// Legacy palettes — collapsed by default (WAX ONLY, no Figma equivalent)
+const LEGACY_TOKENS = [
+  // Color palette (legacy internal, ~40 tokens)
+  {n:'Color.gray.dark',col:'Colors',fv:'—',wt:'Color.gray.dark',wv:'#4D4D4D',s:'wax_only'},
+  {n:'Color.gray.main',col:'Colors',fv:'—',wt:'Color.gray.main',wv:'#969696',s:'wax_only'},
+  {n:'Color.gray.light',col:'Colors',fv:'—',wt:'Color.gray.light',wv:'#CACACA',s:'wax_only'},
+  {n:'Color.gray.lightest',col:'Colors',fv:'—',wt:'Color.gray.lightest',wv:'#F2F2F2',s:'wax_only'},
+  {n:'Color.sun.dark',col:'Colors',fv:'—',wt:'Color.sun.dark',wv:'#C28800',s:'wax_only'},
+  {n:'Color.sun.main',col:'Colors',fv:'—',wt:'Color.sun.main',wv:'#FFCF04',s:'wax_only'},
+  {n:'Color.sun.light',col:'Colors',fv:'—',wt:'Color.sun.light',wv:'#FFE782',s:'wax_only'},
+  {n:'Color.sun.lightest',col:'Colors',fv:'—',wt:'Color.sun.lightest',wv:'#FFF5CD',s:'wax_only'},
+  {n:'Color.orange.dark',col:'Colors',fv:'—',wt:'Color.orange.dark',wv:'#C36000',s:'wax_only'},
+  {n:'Color.orange.main',col:'Colors',fv:'—',wt:'Color.orange.main',wv:'#FF8A1A',s:'wax_only'},
+  {n:'Color.orange.light',col:'Colors',fv:'—',wt:'Color.orange.light',wv:'#F8BD85',s:'wax_only'},
+  {n:'Color.orange.lightest',col:'Colors',fv:'—',wt:'Color.orange.lightest',wv:'#FFE7CF',s:'wax_only'},
+  {n:'Color.cherry.dark',col:'Colors',fv:'—',wt:'Color.cherry.dark',wv:'#9C0300',s:'wax_only'},
+  {n:'Color.cherry.main',col:'Colors',fv:'—',wt:'Color.cherry.main',wv:'#E73B37',s:'wax_only'},
+  {n:'Color.cherry.light',col:'Colors',fv:'—',wt:'Color.cherry.light',wv:'#EC9694',s:'wax_only'},
+  {n:'Color.cherry.lightest',col:'Colors',fv:'—',wt:'Color.cherry.lightest',wv:'#FFDAD9',s:'wax_only'},
+  {n:'Color.watermelon.dark',col:'Colors',fv:'—',wt:'Color.watermelon.dark',wv:'#B12C37',s:'wax_only'},
+  {n:'Color.watermelon.main',col:'Colors',fv:'—',wt:'Color.watermelon.main',wv:'#F75462',s:'wax_only'},
+  {n:'Color.watermelon.light',col:'Colors',fv:'—',wt:'Color.watermelon.light',wv:'#FBA9B0',s:'wax_only'},
+  {n:'Color.watermelon.lightest',col:'Colors',fv:'—',wt:'Color.watermelon.lightest',wv:'#FFDEE1',s:'wax_only'},
+  {n:'Color.eggplant.dark',col:'Colors',fv:'—',wt:'Color.eggplant.dark',wv:'#6F1056',s:'wax_only'},
+  {n:'Color.eggplant.main',col:'Colors',fv:'—',wt:'Color.eggplant.main',wv:'#BB4F9F',s:'wax_only'},
+  {n:'Color.eggplant.light',col:'Colors',fv:'—',wt:'Color.eggplant.light',wv:'#D6A0C8',s:'wax_only'},
+  {n:'Color.eggplant.lightest',col:'Colors',fv:'—',wt:'Color.eggplant.lightest',wv:'#FDDDF5',s:'wax_only'},
+  {n:'Color.violet.dark',col:'Colors',fv:'—',wt:'Color.violet.dark',wv:'#2F0062',s:'wax_only'},
+  {n:'Color.violet.main',col:'Colors',fv:'—',wt:'Color.violet.main',wv:'#7A00FD',s:'wax_only'},
+  {n:'Color.violet.light',col:'Colors',fv:'—',wt:'Color.violet.light',wv:'#B578F7',s:'wax_only'},
+  {n:'Color.violet.lightest',col:'Colors',fv:'—',wt:'Color.violet.lightest',wv:'#F1E4FF',s:'wax_only'},
+  {n:'Color.pbr.dark',col:'Colors',fv:'—',wt:'Color.pbr.dark',wv:'#183C78',s:'wax_only'},
+  {n:'Color.pbr.main',col:'Colors',fv:'—',wt:'Color.pbr.main',wv:'#447AD4',s:'wax_only'},
+  {n:'Color.pbr.light',col:'Colors',fv:'—',wt:'Color.pbr.light',wv:'#A1BCE9',s:'wax_only'},
+  {n:'Color.pbr.lightest',col:'Colors',fv:'—',wt:'Color.pbr.lightest',wv:'#ECF2FB',s:'wax_only'},
+  {n:'Color.sea.dark',col:'Colors',fv:'—',wt:'Color.sea.dark',wv:'#005254',s:'wax_only'},
+  {n:'Color.sea.main',col:'Colors',fv:'—',wt:'Color.sea.main',wv:'#30C1C5',s:'wax_only'},
+  {n:'Color.sea.light',col:'Colors',fv:'—',wt:'Color.sea.light',wv:'#90D9DB',s:'wax_only'},
+  {n:'Color.sea.lightest',col:'Colors',fv:'—',wt:'Color.sea.lightest',wv:'#E4FEFF',s:'wax_only'},
+  {n:'Color.apple.dark',col:'Colors',fv:'—',wt:'Color.apple.dark',wv:'#123806',s:'wax_only'},
+  {n:'Color.apple.main',col:'Colors',fv:'—',wt:'Color.apple.main',wv:'#16AA00',s:'wax_only'},
+  {n:'Color.apple.light',col:'Colors',fv:'—',wt:'Color.apple.light',wv:'#83CD78',s:'wax_only'},
+  {n:'Color.apple.lightest',col:'Colors',fv:'—',wt:'Color.apple.lightest',wv:'#E9FFE3',s:'wax_only'},
+  // CompassColor palette (~37 tokens)
+  {n:'CompassColor.cherry',col:'Colors',fv:'—',wt:'CompassColor.cherry',wv:'#5F110E',s:'wax_only'},
+  {n:'CompassColor.cinnamon',col:'Colors',fv:'—',wt:'CompassColor.cinnamon',wv:'#AA3521',s:'wax_only'},
+  {n:'CompassColor.tarocco',col:'Colors',fv:'—',wt:'CompassColor.tarocco',wv:'#FB513B',s:'wax_only'},
+  {n:'CompassColor.taroccoTint',col:'Colors',fv:'—',wt:'CompassColor.taroccoTint',wv:'#FC7462',s:'wax_only'},
+  {n:'CompassColor.taroccoShade',col:'Colors',fv:'—',wt:'CompassColor.taroccoShade',wv:'#C9412F',s:'wax_only'},
+  {n:'CompassColor.salmon',col:'Colors',fv:'—',wt:'CompassColor.salmon',wv:'#F4BEAE',s:'wax_only'},
+  {n:'CompassColor.plum',col:'Colors',fv:'—',wt:'CompassColor.plum',wv:'#671D48',s:'wax_only'},
+  {n:'CompassColor.berry',col:'Colors',fv:'—',wt:'CompassColor.berry',wv:'#A82F67',s:'wax_only'},
+  {n:'CompassColor.blossom',col:'Colors',fv:'—',wt:'CompassColor.blossom',wv:'#F2AACD',s:'wax_only'},
+  {n:'CompassColor.conch',col:'Colors',fv:'—',wt:'CompassColor.conch',wv:'#EBCCD9',s:'wax_only'},
+  {n:'CompassColor.pine',col:'Colors',fv:'—',wt:'CompassColor.pine',wv:'#2B4010',s:'wax_only'},
+  {n:'CompassColor.kale',col:'Colors',fv:'—',wt:'CompassColor.kale',wv:'#316700',s:'wax_only'},
+  {n:'CompassColor.avocado',col:'Colors',fv:'—',wt:'CompassColor.avocado',wv:'#799F2D',s:'wax_only'},
+  {n:'CompassColor.sprout',col:'Colors',fv:'—',wt:'CompassColor.sprout',wv:'#A9D15A',s:'wax_only'},
+  {n:'CompassColor.mint',col:'Colors',fv:'—',wt:'CompassColor.mint',wv:'#C8E3B1',s:'wax_only'},
+  {n:'CompassColor.mintLight',col:'Colors',fv:'—',wt:'CompassColor.mintLight',wv:'#E3F1D8',s:'wax_only'},
+  {n:'CompassColor.blueberry',col:'Colors',fv:'—',wt:'CompassColor.blueberry',wv:'#1D3A44',s:'wax_only'},
+  {n:'CompassColor.denim',col:'Colors',fv:'—',wt:'CompassColor.denim',wv:'#2457C5',s:'wax_only'},
+  {n:'CompassColor.lagoon',col:'Colors',fv:'—',wt:'CompassColor.lagoon',wv:'#05727A',s:'wax_only'},
+  {n:'CompassColor.lagoonTint',col:'Colors',fv:'—',wt:'CompassColor.lagoonTint',wv:'#378e95',s:'wax_only'},
+  {n:'CompassColor.lagoonShade',col:'Colors',fv:'—',wt:'CompassColor.lagoonShade',wv:'#045B62',s:'wax_only'},
+  {n:'CompassColor.stream',col:'Colors',fv:'—',wt:'CompassColor.stream',wv:'#6CC1B6',s:'wax_only'},
+  {n:'CompassColor.sky',col:'Colors',fv:'—',wt:'CompassColor.sky',wv:'#B4E0D8',s:'wax_only'},
+  {n:'CompassColor.sunflower',col:'Colors',fv:'—',wt:'CompassColor.sunflower',wv:'#F6CF03',s:'wax_only'},
+  {n:'CompassColor.yolk',col:'Colors',fv:'—',wt:'CompassColor.yolk',wv:'#EAAF00',s:'wax_only'},
+  {n:'CompassColor.gold',col:'Colors',fv:'—',wt:'CompassColor.gold',wv:'#AD925E',s:'wax_only'},
+  {n:'CompassColor.sand01',col:'Colors',fv:'—',wt:'CompassColor.sand01',wv:'#E4DECE',s:'wax_only'},
+  {n:'CompassColor.sand02',col:'Colors',fv:'—',wt:'CompassColor.sand02',wv:'#D3C9B4',s:'wax_only'},
+  {n:'CompassColor.offWhite',col:'Colors',fv:'—',wt:'CompassColor.offWhite',wv:'#F6F4EE',s:'wax_only'},
+  {n:'CompassColor.white',col:'Colors',fv:'—',wt:'CompassColor.white',wv:'#FFFFFF',s:'wax_only'},
+  {n:'CompassColor.grey1',col:'Colors',fv:'—',wt:'CompassColor.grey1',wv:'#DEDEDE',s:'wax_only'},
+  {n:'CompassColor.grey2',col:'Colors',fv:'—',wt:'CompassColor.grey2',wv:'#AAAAAA',s:'wax_only'},
+  {n:'CompassColor.stone',col:'Colors',fv:'—',wt:'CompassColor.stone',wv:'#666666',s:'wax_only'},
+  {n:'CompassColor.grey3',col:'Colors',fv:'—',wt:'CompassColor.grey3',wv:'#666666',s:'wax_only'},
+  {n:'CompassColor.grey4',col:'Colors',fv:'—',wt:'CompassColor.grey4',wv:'#444444',s:'wax_only'},
+  {n:'CompassColor.lightGrey',col:'Colors',fv:'—',wt:'CompassColor.lightGrey',wv:'#F4F4F4',s:'wax_only'},
+  {n:'CompassColor.black',col:'Colors',fv:'—',wt:'CompassColor.black',wv:'#191717',s:'wax_only'},
+];
+
+let tokenStatusFilter = 'all';
+let tokenSearch = '';
 
 // ═══════════════════════════════════════════
 // LOCALSTORAGE LAYER
@@ -2044,24 +2341,114 @@ function setView(view) {
 // RENDER — TOKENS
 // ═══════════════════════════════════════════
 
+function setTokenFilter(btn, val) {
+  tokenStatusFilter = val;
+  btn.closest('.filters').querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  renderTokens();
+}
+
+function setTokenSearch(val) {
+  tokenSearch = val.toLowerCase();
+  renderTokens();
+}
+
+function toggleLegacySection() {
+  const sec = document.getElementById('legacy-section');
+  if (sec) sec.classList.toggle('collapsed');
+}
+
 function renderTokens() {
-  const groups = [{key:"colors",title:"Color Tokens"},{key:"spacing",title:"Spacing Tokens"},{key:"typography",title:"Typography Tokens"},{key:"radii",title:"Radius Tokens"}];
-  let statHtml = '', gridHtml = '';
-  const sc = ["stat-lagoon","stat-warning","stat-lagoon","stat-kale"];
-  groups.forEach((g, i) => {
-    const tokens = TOKENS[g.key], inF = tokens.filter(t => t.f).length, total = tokens.length;
-    statHtml += `<div class="stat-card ${sc[i]}"><div class="stat-value">${inF}/${total}</div><div class="stat-label">${g.title}</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct(inF,total)}%;background:${i===1?'var(--warning-amber)':'var(--lagoon)'}"></div></div></div>`;
-    gridHtml += `<div class="token-card"><div class="token-card-head">${g.title}<span class="token-count">${inF}/${total} in Figma</span></div><div class="token-card-body">`;
-    tokens.forEach(t => {
-      const swatch = g.key === "colors" ? `<span class="token-swatch" style="background:${t.v}"></span>` : "";
-      const fp = t.f ? `<span class="pill pill-done" style="font-size:10px;padding:2px 7px">${dot()}Figma</span>` : `<span class="pill pill-missing" style="font-size:10px;padding:2px 7px">${dot()}Missing</span>`;
-      const wp = `<span class="pill pill-na" style="font-size:10px;padding:2px 7px">${dot()}Audit</span>`;
-      gridHtml += `<div class="token-row"><span class="token-name">${swatch}${t.n}</span><span style="display:flex;gap:6px;align-items:center"><span class="token-val">${t.v}</span><span style="display:flex;gap:4px">${fp}${wp}</span></span></div>`;
-    });
-    gridHtml += `</div></div>`;
-  });
-  document.getElementById('token-stats').innerHTML = statHtml;
-  document.getElementById('tokens-grid').innerHTML = gridHtml;
+  // ── Summary bar ──
+  document.getElementById('token-stats').innerHTML = `
+    <div class="tok-sum-card"><div class="tok-sum-val">218</div><div class="tok-sum-label">Figma tokens</div></div>
+    <div class="tok-sum-card"><div class="tok-sum-val">241</div><div class="tok-sum-label">Wax NeoTheme</div></div>
+    <div class="tok-sum-card" style="border-left:3px solid var(--kale)"><div class="tok-sum-val" style="color:var(--kale)">182</div><div class="tok-sum-label">Match</div></div>
+    <div class="tok-sum-card" style="border-left:3px solid var(--error-red)"><div class="tok-sum-val" style="color:var(--error-red)">5</div><div class="tok-sum-label">Value Mismatch</div></div>
+    <div class="tok-sum-card" style="border-left:3px solid var(--warning-amber)"><div class="tok-sum-val" style="color:var(--warning-amber)">13</div><div class="tok-sum-label">Naming Mismatch</div></div>
+    <div class="tok-sum-card" style="border-left:3px solid var(--purple)"><div class="tok-sum-val" style="color:var(--purple)">6</div><div class="tok-sum-label">Figma Only</div></div>
+    <div class="tok-sum-card" style="border-left:3px solid var(--lagoon)"><div class="tok-sum-val" style="color:var(--lagoon)">~56</div><div class="tok-sum-label">Wax Only (Neo)</div></div>
+    <div class="tok-sum-card" style="border-left:3px solid var(--grey2)"><div class="tok-sum-val" style="color:var(--grey3)">~77</div><div class="tok-sum-label">Wax Only (Legacy)</div></div>`;
+
+  // ── Filter + search bar ──
+  const activeFilter = tokenStatusFilter;
+  const filterBar = `<div class="filters" style="margin-bottom:16px">
+    <input type="text" class="search-input" placeholder="Search tokens…" oninput="setTokenSearch(this.value)" value="${esc(tokenSearch)}" style="width:220px">
+    <span class="filter-divider"></span>
+    <button class="filter-pill ${activeFilter==='all'?'active':''}" onclick="setTokenFilter(this,'all')">All</button>
+    <button class="filter-pill ${activeFilter==='match'?'active':''}" onclick="setTokenFilter(this,'match')">Match</button>
+    <button class="filter-pill ${activeFilter==='value_mismatch'?'active':''}" onclick="setTokenFilter(this,'value_mismatch')">Value Mismatch</button>
+    <button class="filter-pill ${activeFilter==='naming_mismatch'?'active':''}" onclick="setTokenFilter(this,'naming_mismatch')">Naming Mismatch</button>
+    <button class="filter-pill ${activeFilter==='figma_only'?'active':''}" onclick="setTokenFilter(this,'figma_only')">Figma Only</button>
+    <button class="filter-pill ${activeFilter==='wax_only'?'active':''}" onclick="setTokenFilter(this,'wax_only')">Wax Only</button>
+  </div>`;
+
+  // ── Table rows ──
+  function tokBadge(s) {
+    const labels = {match:'Match',value_mismatch:'Value Mismatch',naming_mismatch:'Naming Mismatch',figma_only:'Figma Only',wax_only:'Wax Only'};
+    return `<span class="tok-badge ${s}">${labels[s]||s}</span>`;
+  }
+  function colorSwatch(val) {
+    const isHex = /^#[0-9a-fA-F]{3,8}$/.test(val);
+    if (!isHex) return '';
+    return `<span class="token-swatch" style="background:${val}"></span>`;
+  }
+  function buildRows(list) {
+    return list
+      .filter(t => {
+        if (activeFilter !== 'all' && t.s !== activeFilter) return false;
+        if (tokenSearch) return t.n.toLowerCase().includes(tokenSearch) || t.wt.toLowerCase().includes(tokenSearch) || t.col.toLowerCase().includes(tokenSearch);
+        return true;
+      })
+      .map(t => `<tr class="tok-row-${t.s}">
+        <td><span class="tok-name">${esc(t.n)}</span></td>
+        <td><span class="tok-col">${t.col}</span></td>
+        <td><span class="tok-val">${colorSwatch(t.fv)}${esc(t.fv)}</span></td>
+        <td><span class="tok-wax">${esc(t.wt)}</span></td>
+        <td><span class="tok-val">${colorSwatch(t.wv)}${esc(t.wv)}</span></td>
+        <td>${tokBadge(t.s)}</td>
+      </tr>`).join('');
+  }
+
+  const mainRows = buildRows(TOKEN_AUDIT);
+  const legacyRows = buildRows(LEGACY_TOKENS);
+
+  const tableHtml = `<div class="token-table-wrap">
+    <table>
+      <thead><tr>
+        <th style="min-width:200px">Token</th>
+        <th>Collection</th>
+        <th>Figma Value</th>
+        <th>Wax Token</th>
+        <th>Wax Value</th>
+        <th>Status</th>
+      </tr></thead>
+      <tbody>${mainRows || '<tr><td colspan="6" class="empty">No tokens match.</td></tr>'}</tbody>
+    </table>
+  </div>
+  <div class="legacy-section collapsed" id="legacy-section">
+    <div class="legacy-toggle" onclick="toggleLegacySection()">
+      <span class="chev">&#9654;</span>
+      Legacy / Deprecated — Color &amp; CompassColor palettes (WAX ONLY, ~77 tokens)
+    </div>
+    <div class="legacy-body">
+      <div class="token-table-wrap" style="margin-top:8px">
+        <table>
+          <thead><tr>
+            <th style="min-width:200px">Token</th>
+            <th>Collection</th>
+            <th>Figma Value</th>
+            <th>Wax Token</th>
+            <th>Wax Value</th>
+            <th>Status</th>
+          </tr></thead>
+          <tbody>${legacyRows || '<tr><td colspan="6" class="empty">No tokens match.</td></tr>'}</tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
+
+  document.getElementById('tokens-grid').innerHTML = filterBar + tableHtml;
 }
 
 // ═══════════════════════════════════════════
